@@ -1,6 +1,8 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
-import * as User from '../models/user';
-import IUser from '../interfaces/IUser';
+import * as User from '../models/userInit';
+import * as Address from '../models/addressInit';
+import IUser from '../interfaces/IUserInit';
+import IAddress from '../interfaces/IAddressInit';
 import { ErrorHandler } from '../helpers/errors';
 import { formatSortString } from '../helpers/functions';
 import Joi from 'joi';
@@ -13,18 +15,12 @@ const validateUser = (req: Request, res: Response, next: NextFunction) => {
     required = 'required';
   }
   const errors = Joi.object({
-    firstname: Joi.string().max(50).presence(required),
+    firstname: Joi.string().max(100).presence(required),
     lastname: Joi.string().max(100).presence(required),
-    email: Joi.string().email().max(150).presence(required),
-    password: Joi.string().min(8).max(100).presence(required),
-    streetNumber: Joi.number().max(5).presence(required),
-    address: Joi.string().max(100).presence(required),
-    zipCode: Joi.number().max(5).presence(required),
-    city: Joi.string().max(100).presence(required),
-    phoneNumber: Joi.number().max(10).presence(required),
-    isAdmin: Joi.boolean().presence(required),
-    isIntervenant: Joi.boolean().presence(required),
-    isAdherent: Joi.boolean().presence(required),
+    email: Joi.string().email().max(255).presence(required),
+    password: Joi.string().min(8).max(15).presence(required),
+    admin: Joi.number().min(0).max(1).optional(),
+    id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
     next(new ErrorHandler(422, errors.message));
@@ -33,6 +29,7 @@ const validateUser = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+// Sends an error if the email is already registered in the database
 const emailIsFree = async (
   req: Request,
   _res: Response,
@@ -48,28 +45,6 @@ const emailIsFree = async (
       next(new ErrorHandler(400, `This user already exists`));
     } else {
       // if email is free, next
-      next();
-    }
-  } catch (err) {
-    next(err);
-  }
-};
-
-const phoneNumberIsFree = async (
-  req: Request,
-  _res: Response,
-  next: NextFunction
-) => {
-  try {
-    // get phoneNumber from req.body
-    const { phoneNumber } = req.body as IUser;
-    // Checks if phoneNumber already belongs to a registered user
-    const userExists = await User.getUserByPhoneNumber(phoneNumber);
-    // If phoneNumber isn't free = Send an error
-    if (userExists) {
-      next(new ErrorHandler(400, `This user already exists`));
-    } else {
-      // if phoneNumber is free, next
       next();
     }
   } catch (err) {
@@ -121,7 +96,7 @@ const userExists = (async (req: Request, res: Response, next: NextFunction) => {
     }
     // Si oui => next
     else {
-      req.record = userExists; // because we need deleted record to be sent after a delete in react-admin
+      // req.record = userExists; // because we need deleted record to be sent after a delete in react-admin
       next();
     }
   } catch (err) {
@@ -176,6 +151,44 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     next(err);
   }
 };
+
+////////// ADDRESSES BY USER
+const getAddressesByUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idUser } = req.params;
+
+    const addresses: IAddress[] = await Address.getAddressByUser(
+      Number(idUser)
+    );
+    res.status(200).json(addresses);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const deleteAddressesByUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idUser } = req.params;
+
+    const addressesDeleted = await Address.deleteAddressByUser(idUser);
+    if (addressesDeleted) {
+      res.status(200).send('Addresses deleted');
+    } else {
+      throw new ErrorHandler(500, `Addresses cannot be deleted`);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   getAllUsers,
   getOneUser,
@@ -185,5 +198,6 @@ export default {
   validateUser,
   addUser,
   updateUser,
-  phoneNumberIsFree,
+  getAddressesByUser,
+  deleteAddressesByUser,
 };
