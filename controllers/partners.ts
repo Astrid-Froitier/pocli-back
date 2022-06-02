@@ -34,11 +34,11 @@ const nameIsFree = async (req: Request, _res: Response, next: NextFunction) => {
     const { name } = req.body as IPartner;
     // Checks if name already belongs to a registered partner
     const partnerExists = await Partner.getPartnerByName(name);
-    // If email isn't free = Send an error
+    // If name isn't free = Send an error
     if (partnerExists) {
       next(new ErrorHandler(400, `This partner already exists`));
     } else {
-      // if email is free, next
+      // if name is free, next
       next();
     }
   } catch (err) {
