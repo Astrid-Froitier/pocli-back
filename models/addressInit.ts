@@ -1,6 +1,6 @@
 import connection from '../db-config.js';
 import { ResultSetHeader } from 'mysql2';
-import IAddress from '../interfaces/IAddress';
+import IAddress from '../interfaces/IAddressInit';
 
 const getAllAddresses = async (sortBy = ''): Promise<IAddress[]> => {
   let sql = 'SELECT * FROM addresses';
