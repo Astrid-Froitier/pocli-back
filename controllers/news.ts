@@ -30,6 +30,26 @@ const validateNew = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const newExists = (async (req: Request, res: Response, next: NextFunction) => {
+  // Récupèrer l'id New de req.params
+  const { idNew } = req.params;
+  // Vérifier si le New existe
+  try {
+    const newExists = await New.getNewById(Number(idNew));
+    // Si non, => erreur
+    if (!newExists) {
+      next(new ErrorHandler(404, `This new doesn't exist`));
+    }
+    // Si oui => next
+    else {
+      req.record = newExists; // because we need deleted record to be sent after a delete in react-admin
+      next();
+    }
+  } catch (err) {
+    next(err);
+  }
+}) as RequestHandler;
+
 // get all news
 const getAllNews = (async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -104,6 +124,7 @@ const deleteNew = async (req: Request, res: Response, next: NextFunction) => {
 export default {
   validateNew,
   getAllNews,
+  newExists,
   getOneNew,
   addNew,
   updateNew,

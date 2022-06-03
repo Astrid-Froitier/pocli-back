@@ -35,6 +35,32 @@ const validateHistoryNew = (
   }
 };
 
+const historyNewExists = (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // Récupèrer l'id HistoryNew de req.params
+  const { idHistoryNew } = req.params;
+  // Vérifier si le HistoryNew existe
+  try {
+    const historyNewExists = await HistoryNew.getHistoryNewById(
+      Number(idHistoryNew)
+    );
+    // Si non, => erreur
+    if (!historyNewExists) {
+      next(new ErrorHandler(404, `This HistoryNew doesn't exist`));
+    }
+    // Si oui => next
+    else {
+      req.record = historyNewExists; // because we need deleted record to be sent after a delete in react-admin
+      next();
+    }
+  } catch (err) {
+    next(err);
+  }
+}) as RequestHandler;
+
 // get all historyNews
 const getAllHistoryNews = (async (
   req: Request,
@@ -140,6 +166,7 @@ const deleteHistoryNew = async (
 export default {
   validateHistoryNew,
   getAllHistoryNews,
+  historyNewExists,
   getOneHistoryNew,
   addHistoryNew,
   updateHistoryNew,
