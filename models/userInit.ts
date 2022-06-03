@@ -1,5 +1,5 @@
 import connection from '../db-config';
-import IUser from '../interfaces/IUser';
+import IUser from '../interfaces/IUserInit';
 import argon2, { Options } from 'argon2';
 import { ResultSetHeader } from 'mysql2';
 import { NextFunction, Request, Response } from 'express';
@@ -37,26 +37,8 @@ const emailIsFree = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const phoneNumberIsFree = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  // Récupèrer le téléphone dans le req.body
-  const user = req.body as IUser;
-  // Vérifier si le téléphone appartient déjà à un user
-  const userExists: IUser = await getUserByPhoneNumber(user.phoneNumber);
-  // Si oui => erreur
-  if (userExists) {
-    next(new ErrorHandler(409, `This user already exists`));
-  } else {
-    // Si non => next
-    next();
-  }
-};
-
 const getAllUsers = async (sortBy = ''): Promise<IUser[]> => {
-  let sql = `SELECT id, firstname, lastname, email, password, streetNumber, address, zipCode, city, phoneNumber, isAdmin, isIntervenant, isAdherent FROM users`;
+  let sql = `SELECT id, firstname, lastname, email, admin FROM users`;
   if (sortBy) {
     sql += ` ORDER BY ${sortBy}`;
   }
@@ -68,18 +50,8 @@ const getUserById = async (idUser: number): Promise<IUser> => {
   const [results] = await connection
     .promise()
     .query<IUser[]>(
-      'SELECT id, firstname, lastname, email, password, streetNumber, address, zipCode, city, phoneNumber, isAdmin, isIntervenant, isAdherent FROM users WHERE id = ?',
+      'SELECT id, firstname, lastname, email, admin FROM users WHERE id = ?',
       [idUser]
-    );
-  return results[0];
-};
-
-const getUserByPhoneNumber = async (phoneNumber: number): Promise<IUser> => {
-  const [results] = await connection
-    .promise()
-    .query<IUser[]>(
-      'SELECT id, firstname, lastname, email, password, streetNumber, address, zipCode, city, phoneNumber, isAdmin, isIntervenant, isAdherent FROM users WHERE phoneNumber = ?',
-      [phoneNumber]
     );
   return results[0];
 };
@@ -88,7 +60,7 @@ const getUserByEmail = async (email: string): Promise<IUser> => {
   const [results] = await connection
     .promise()
     .query<IUser[]>(
-      'SELECT id, firstname, lastname, email, password, streetNumber, address, zipCode, city, phoneNumber, isAdmin, isIntervenant, isAdherent FROM users WHERE email = ?',
+      'SELECT id, email, password, firstname, admin FROM users WHERE email = ?',
       [email]
     );
   return results[0];
@@ -99,21 +71,8 @@ const addUser = async (user: IUser): Promise<number> => {
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO users (firstname, lastname, email, password, streetNumber, address, zipCode, city, phoneNumber, isAdmin, isIntervenant, isAdherent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [
-        user.firstname,
-        user.lastname,
-        user.email,
-        hashedPassword,
-        user.streetNumber,
-        user.address,
-        user.zipCode,
-        user.city,
-        user.phoneNumber,
-        user.isAdmin,
-        user.isIntervenant,
-        user.isAdherent,
-      ]
+      'INSERT INTO users (firstname, lastname, email, password, admin) VALUES (?, ?, ?, ?, ?)',
+      [user.firstname, user.lastname, user.email, hashedPassword, user.admin]
     );
   return results[0].insertId;
 };
@@ -144,44 +103,9 @@ const updateUser = async (idUser: number, user: IUser): Promise<boolean> => {
     sqlValues.push(hashedPassword);
     oneValue = true;
   }
-  if (user.streetNumber) {
-    sql += oneValue ? ', streetNumber = ? ' : ' streetNumber = ? ';
-    sqlValues.push(user.streetNumber);
-    oneValue = true;
-  }
-  if (user.address) {
-    sql += oneValue ? ', address = ? ' : ' address = ? ';
-    sqlValues.push(user.address);
-    oneValue = true;
-  }
-  if (user.zipCode) {
-    sql += oneValue ? ', zipCode = ? ' : ' zipCode = ? ';
-    sqlValues.push(user.zipCode);
-    oneValue = true;
-  }
-  if (user.city) {
-    sql += oneValue ? ', city = ? ' : ' city = ? ';
-    sqlValues.push(user.city);
-    oneValue = true;
-  }
-  if (user.phoneNumber) {
-    sql += oneValue ? ', phoneNumber = ? ' : ' phoneNumber = ? ';
-    sqlValues.push(user.phoneNumber);
-    oneValue = true;
-  }
-  if (user.isAdmin) {
-    sql += oneValue ? ', isAdmin = ? ' : ' isAdmin = ? ';
-    sqlValues.push(user.isAdmin);
-    oneValue = true;
-  }
-  if (user.isIntervenant) {
-    sql += oneValue ? ', isIntervenant = ? ' : ' isIntervenant = ? ';
-    sqlValues.push(user.isIntervenant);
-    oneValue = true;
-  }
-  if (user.isAdherent) {
-    sql += oneValue ? ', isAdherent = ? ' : ' isAdherent = ? ';
-    sqlValues.push(user.isAdherent);
+  if (user.admin != undefined) {
+    sql += oneValue ? ', admin = ? ' : ' admin = ? ';
+    sqlValues.push(user.admin);
     oneValue = true;
   }
   sql += ' WHERE id = ?';
@@ -202,11 +126,9 @@ const deleteUser = async (idUser: number): Promise<boolean> => {
 
 export {
   verifyPassword,
-  phoneNumberIsFree,
   getAllUsers,
   addUser,
   getUserByEmail,
-  getUserByPhoneNumber,
   getUserById,
   deleteUser,
   updateUser,

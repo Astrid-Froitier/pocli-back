@@ -6,12 +6,5 @@ export default interface IUser extends RowDataPacket {
   lastname: string;
   email: string;
   password: string;
-  streetNumber: number;
-  address: string;
-  zipCode: number;
-  city: string;
-  phoneNumber: number;
-  isAdmin: boolean;
-  isIntervenant: boolean;
-  isAdherent: boolean;
+  admin: number;
 }

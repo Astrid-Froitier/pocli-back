@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
-import * as Address from '../models/address';
-import IAddress from '../interfaces/IAddress';
+import * as Address from '../models/addressInit';
+import IAddress from '../interfaces/IAddressInit';
 import { ErrorHandler } from '../helpers/errors';
 import { formatSortString } from '../helpers/functions';
 import Joi from 'joi';
@@ -42,7 +42,7 @@ const addressExists = async (
   if (!addressExists) {
     next(new ErrorHandler(409, `This address does not exist`));
   } else {
-    req.record = addressExists; // because we need deleted record to be sent after a delete in react-admin
+    // req.record = addressExists; // because we need deleted record to be sent after a delete in react-admin
     next();
   }
 };

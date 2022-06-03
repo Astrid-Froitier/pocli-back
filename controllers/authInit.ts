@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import * as User from '../models/user';
+import * as User from '../models/userInit';
 import { ErrorHandler } from '../helpers/errors';
-import IUserInfo from '../interfaces/IUserInfo';
+import IUserInfo from '../interfaces/IUserInfoInit';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 import Joi from 'joi';
-import IUser from '../interfaces/IUser';
+import IUser from '../interfaces/IUserInit';
 
 // validates login input
 const validateLogin = (req: Request, res: Response, next: NextFunction) => {

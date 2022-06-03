@@ -1,6 +1,6 @@
-import usersController from './controllers/users';
-import addressesController from './controllers/addresses';
-import authController from './controllers/auth';
+import usersController from './controllers/usersInit';
+import addressesController from './controllers/addressesInit';
+import authController from './controllers/authInit';
 import { Express } from 'express';
 
 const setupRoutes = (server: Express) => {

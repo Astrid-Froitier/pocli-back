@@ -1,6 +1,6 @@
 import { RowDataPacket } from 'mysql2';
 
-export default interface IUser extends RowDataPacket {
+export default interface IHistoryUser extends RowDataPacket {
   id: number;
   firstname: string;
   lastname: string;
@@ -14,4 +14,6 @@ export default interface IUser extends RowDataPacket {
   isAdmin: boolean;
   isIntervenant: boolean;
   isAdherent: boolean;
+  idUserPost: number;
+  idUserAdmin: number;
 }
