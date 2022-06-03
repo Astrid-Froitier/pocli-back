@@ -152,7 +152,7 @@ const addHistoryPartner = async (
 ) => {
   try {
     const historyPartner = req.body as IHistoryPartner;
-    historyPartner.id = await historyPartner.addHistorypartner(historyPartner);
+    historyPartner.id = await HistoryPartner.addHistoryPartner(historyPartner);
     res.status(201).json(historyPartner);
   } catch (err) {
     next(err);
@@ -197,7 +197,7 @@ const deleteHistoryPartner = async (
     const historyPartner = await HistoryPartner.getHistoryPartnerById(
       Number(idHistoryPartner)
     );
-    const historyPartnerDeleted = await historyPartner.deleteHistoryPartner(
+    const historyPartnerDeleted = await HistoryPartner.deleteHistoryPartner(
       Number(idHistoryPartner)
     );
     if (historyPartnerDeleted) {

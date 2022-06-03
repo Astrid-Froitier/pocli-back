@@ -3,7 +3,7 @@ import INew from '../interfaces/INew';
 import { ResultSetHeader } from 'mysql2';
 
 const getAllNews = async (sortBy = ''): Promise<INew[]> => {
-  let sql = `SELECT id, date, streetNumber, address, zipCode, city, hours, numberOfParticipants, idUser FROM news`;
+  let sql = `SELECT id, date, streetNumber, address, zipCode, city, hours, numberOfParticipants, idUser, idNewsType FROM news`;
   if (sortBy) {
     sql += ` ORDER BY ${sortBy}`;
   }
@@ -15,7 +15,7 @@ const getNewById = async (idNew: number): Promise<INew> => {
   const [results] = await connection
     .promise()
     .query<INew[]>(
-      'SELECT id, date, streetNumber, address, zipCode, city, hours, numberOfParticipants, idUser FROM news WHERE id = ?',
+      'SELECT id, date, streetNumber, address, zipCode, city, hours, numberOfParticipants, idUser, idNewsType FROM news WHERE id = ?',
       [idNew]
     );
   return results[0];
@@ -25,7 +25,7 @@ const addNew = async (New: INew): Promise<number> => {
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO news (date, streetNumber, address, zipCode, city, hours, numberOfParticipants, idUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO news (date, streetNumber, address, zipCode, city, hours, numberOfParticipants, idUser, idNewsType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
         New.date,
         New.streetNumber,
@@ -35,6 +35,7 @@ const addNew = async (New: INew): Promise<number> => {
         New.hours,
         New.numberOfParticipants,
         New.idUser,
+        New.idNewsType,
       ]
     );
   return results[0].insertId;
@@ -84,6 +85,11 @@ const updateNew = async (idNew: number, New: INew): Promise<boolean> => {
   if (New.idUser) {
     sql += oneValue ? ', idUser = ? ' : ' idUser = ? ';
     sqlValues.push(New.idUser);
+    oneValue = true;
+  }
+  if (New.idNewsType) {
+    sql += oneValue ? ', idNewsType = ? ' : ' idNewsType = ? ';
+    sqlValues.push(New.idNewsType);
     oneValue = true;
   }
   sql += ' WHERE id = ?';
