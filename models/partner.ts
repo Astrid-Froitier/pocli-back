@@ -149,7 +149,7 @@ const updatePartner = async (
   return results[0].affectedRows === 1;
 };
 
-const deletepartner = async (idPartner: number): Promise<boolean> => {
+const deletePartner = async (idPartner: number): Promise<boolean> => {
   const results = await connection
     .promise()
     .query<ResultSetHeader>('DELETE FROM partners WHERE id = ?', [idPartner]);
@@ -165,5 +165,5 @@ export {
   siretNumberIsFree,
   addPartner,
   updatePartner,
-  deletepartner,
+  deletePartner,
 };

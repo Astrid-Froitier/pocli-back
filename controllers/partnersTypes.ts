@@ -117,7 +117,7 @@ const addPartnersType = async (
 ) => {
   try {
     const partnersType = req.body as IPartnersType;
-    partnersType.id = await partnersType.addPartnersType(partnersType);
+    partnersType.id = await PartnersType.addPartnersType(partnersType);
     res.status(201).json(partnersType);
   } catch (err) {
     next(err);
@@ -162,7 +162,7 @@ const deletePartnersType = async (
     const partnersType = await PartnersType.getPartnersTypeById(
       Number(idPartnersType)
     );
-    const partnersTypeDeleted = await partnersType.deletePartnersType(
+    const partnersTypeDeleted = await PartnersType.deletePartnersType(
       Number(idPartnersType)
     );
     if (partnersTypeDeleted) {
