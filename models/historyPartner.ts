@@ -42,7 +42,7 @@ const siretNumberIsFree = async (
 const getAllHistoryPartners = async (
   sortBy = ''
 ): Promise<IHistoryPartner[]> => {
-  let sql = `SELECT id, name, logo, url, description, siretNumber, idHistoryPartnerType, idUserPost, idPartner FROM historyPartners`;
+  let sql = `SELECT id, name, logo, url, description, siretNumber, idType, idUserPost, idPartner FROM historyPartners`;
   if (sortBy) {
     sql += ` ORDER BY ${sortBy}`;
   }
@@ -56,7 +56,7 @@ const getHistoryPartnerById = async (
   const [results] = await connection
     .promise()
     .query<IHistoryPartner[]>(
-      'SELECT id, name, logo, url, description, siretNumber, idHistoryPartnerType, idUserPost, idPartner FROM historyPartners WHERE id = ?',
+      'SELECT id, name, logo, url, description, siretNumber, idType, idUserPost, idPartner FROM historyPartners WHERE id = ?',
       [idHistoryPartner]
     );
   return results[0];
@@ -68,7 +68,7 @@ const getHistoryPartnerByName = async (
   const [results] = await connection
     .promise()
     .query<IHistoryPartner[]>(
-      'SELECT id, name, logo, url, description, siretNumber, idHistoryPartnerType, idUserPost, idPartner FROM historyPartners WHERE name = ?',
+      'SELECT id, name, logo, url, description, siretNumber, idType, idUserPost, idPartner FROM historyPartners WHERE name = ?',
       [nameHistoryPartner]
     );
   return results[0];
@@ -80,7 +80,7 @@ const getHistoryPartnerBySiretNumber = async (
   const [results] = await connection
     .promise()
     .query<IHistoryPartner[]>(
-      'SELECT id, name, logo, url, description, siretNumber, idHistoryPartnerType, idUserPost, idPartners  FROM historyPartners WHERE siretNumber = ?',
+      'SELECT id, name, logo, url, description, siretNumber, idType, idUserPost, idPartners  FROM historyPartners WHERE siretNumber = ?',
       [phoneNumber]
     );
   return results[0];
@@ -92,7 +92,7 @@ const addHistoryPartner = async (
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO historyPartners (name, logo, url, description, siretNumber, idHistoryPartnerType, idUserPost, idPartner) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO historyPartners (name, logo, url, description, siretNumber, idType, idUserPost, idPartner) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [
         historyPartner.name,
         historyPartner.logo,
@@ -100,6 +100,7 @@ const addHistoryPartner = async (
         historyPartner.description,
         historyPartner.siretNumber,
         historyPartner.idHistoryPartnerType,
+        historyPartner.idType,
         historyPartner.idUserPost,
         historyPartner.idPartner,
       ]
@@ -140,21 +141,19 @@ const updateHistoryPartner = async (
     sqlValues.push(historyPartner.siretNumber);
     oneValue = true;
   }
-  if (historyPartner.idHistoryPartnerType) {
-    sql += oneValue
-      ? ', idHistoryPartnerType = ? '
-      : ' idHistoryPartnerType = ? ';
-    sqlValues.push(historyPartner.idHistoryPartnerType);
+  if (historyPartner.idType) {
+    sql += oneValue ? ', idType = ? ' : ' idType = ? ';
+    sqlValues.push(historyPartner.idType);
     oneValue = true;
   }
   if (historyPartner.idUserPost) {
     sql += oneValue ? ', idUserPost = ? ' : ' idUserPost = ? ';
-    sqlValues.push(historyPartner.idUser);
+    sqlValues.push(historyPartner.idUserPost);
     oneValue = true;
   }
   if (historyPartner.idPartner) {
-    sql += oneValue ? ', idUserPost = ? ' : ' idUserPost = ? ';
-    sqlValues.push(historyPartner.idUser);
+    sql += oneValue ? ', idPartner = ? ' : ' idPartner = ? ';
+    sqlValues.push(historyPartner.idPartner);
     oneValue = true;
   }
   sql += ' WHERE id = ?';
@@ -166,7 +165,7 @@ const updateHistoryPartner = async (
   return results[0].affectedRows === 1;
 };
 
-const deleteHistorypartner = async (
+const deleteHistoryPartner = async (
   idHistoryPartner: number
 ): Promise<boolean> => {
   const results = await connection
@@ -186,5 +185,5 @@ export {
   siretNumberIsFree,
   addHistoryPartner,
   updateHistoryPartner,
-  deleteHistorypartner,
+  deleteHistoryPartner,
 };

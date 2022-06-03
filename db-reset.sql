@@ -28,7 +28,7 @@ CONSTRAINT fk_news_user
         FOREIGN KEY (idUser)             
         REFERENCES users(id),
 `idNewsType` INT NOT NULL,
-        CONSTRAINT fk_news_newsType   
+CONSTRAINT fk_news_newsType   
         FOREIGN KEY (idNewsType)             
         REFERENCES newsTypes(id)
 );

@@ -45,9 +45,10 @@ const getPartnersTypeByName = async (
 ): Promise<IPartnersType> => {
   const [results] = await connection
     .promise()
-    .query<IPartnersType[]>('SELECT id, name WHERE name = ?', [
-      namePartnersType,
-    ]);
+    .query<IPartnersType[]>(
+      'SELECT id, name FROM partnersTypes WHERE name = ?',
+      [namePartnersType]
+    );
   return results[0];
 };
 
@@ -64,13 +65,11 @@ const updatePartnersType = async (
   idPartnersType: number,
   partnersType: IPartnersType
 ): Promise<boolean> => {
-  let sql = 'UPDATE partners SET ';
+  let sql = 'UPDATE partnersTypes SET ';
   const sqlValues: Array<string | number | boolean> = [];
-  let oneValue = false;
   if (partnersType.name) {
     sql += 'name = ? ';
     sqlValues.push(partnersType.name);
-    oneValue = true;
   }
   sql += ' WHERE id = ?';
   sqlValues.push(idPartnersType);
@@ -84,7 +83,7 @@ const updatePartnersType = async (
 const deletePartnersType = async (idPartnersType: number): Promise<boolean> => {
   const results = await connection
     .promise()
-    .query<ResultSetHeader>('DELETE FROM partners WHERE id = ?', [
+    .query<ResultSetHeader>('DELETE FROM partnersTypes WHERE id = ?', [
       idPartnersType,
     ]);
   return results[0].affectedRows === 1;

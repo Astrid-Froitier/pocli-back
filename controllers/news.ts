@@ -21,6 +21,7 @@ const validateNew = (req: Request, res: Response, next: NextFunction) => {
     hours: Joi.number().max(5).presence(required),
     numberOfParticipants: Joi.number().max(3).presence(required),
     idUser: Joi.number().max(5).presence(required),
+    idNewsType: Joi.number().max(5).presence(required),
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
     next(new ErrorHandler(422, errors.message));

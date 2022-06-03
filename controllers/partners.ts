@@ -129,10 +129,10 @@ const partnerExists = (async (
 }) as RequestHandler;
 
 // adds a partner
-const addpartner = async (req: Request, res: Response, next: NextFunction) => {
+const addPartner = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const partner = req.body as IPartner;
-    partner.id = await partner.addpartner(partner);
+    partner.id = await Partner.addPartner(partner);
     res.status(201).json(partner);
   } catch (err) {
     next(err);
@@ -173,7 +173,7 @@ const deletePartner = async (
     const { idPartner } = req.params;
     // Vérifier si le partner existe
     const partner = await Partner.getPartnerById(Number(idPartner));
-    const partnerDeleted = await partner.deletePartner(Number(idPartner));
+    const partnerDeleted = await Partner.deletePartner(Number(idPartner));
     if (partnerDeleted) {
       res.status(200).send(partner); // react-admin needs this response
     } else {
@@ -190,7 +190,7 @@ export default {
   nameIsFree,
   deletePartner,
   validatePartner,
-  addpartner,
+  addPartner,
   updatepartner,
   siretNumberIsFree,
 };

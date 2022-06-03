@@ -10,4 +10,5 @@ export default interface INew extends RowDataPacket {
   hours: number;
   numberOfParticipants: number;
   idUser: number;
+  idNewsType: number;
 }

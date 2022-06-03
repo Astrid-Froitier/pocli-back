@@ -117,4 +117,11 @@ const deleteComment = async (
     next(err);
   }
 };
-export default {};
+export default {
+  validateComment,
+  getAllComments,
+  getOneComment,
+  addComment,
+  updateComment,
+  deleteComment,
+};
