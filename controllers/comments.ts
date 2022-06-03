@@ -27,6 +27,30 @@ const validateComment = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const commentExists = (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // Récupèrer l'id Comment de req.params
+  const { idComment } = req.params;
+  // Vérifier si le Comment existe
+  try {
+    const commentExists = await Comment.getCommentById(Number(idComment));
+    // Si non, => erreur
+    if (!commentExists) {
+      next(new ErrorHandler(404, `This Comment doesn't exist`));
+    }
+    // Si oui => next
+    else {
+      req.record = commentExists; // because we need deleted record to be sent after a delete in react-admin
+      next();
+    }
+  } catch (err) {
+    next(err);
+  }
+}) as RequestHandler;
+
 // get all comments
 const getAllComments = (async (
   req: Request,
@@ -119,6 +143,7 @@ const deleteComment = async (
 };
 export default {
   validateComment,
+  commentExists,
   getAllComments,
   getOneComment,
   addComment,
