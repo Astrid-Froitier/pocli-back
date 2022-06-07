@@ -4,6 +4,7 @@ import IUser from '../interfaces/IUser';
 import { ErrorHandler } from '../helpers/errors';
 import { formatSortString } from '../helpers/functions';
 import Joi from 'joi';
+import { error, log } from 'console';
 
 ///////////// USERS ///////////////
 // validates inputs
@@ -17,14 +18,15 @@ const validateUser = (req: Request, res: Response, next: NextFunction) => {
     lastname: Joi.string().max(100).presence(required),
     email: Joi.string().email().max(150).presence(required),
     password: Joi.string().min(8).max(100).presence(required),
-    streetNumber: Joi.number().max(5).presence(required),
+    streetNumber: Joi.number().max(100000).presence(required),
     address: Joi.string().max(100).presence(required),
-    zipCode: Joi.number().max(5).presence(required),
+    zipCode: Joi.number().max(100000).presence(required),
     city: Joi.string().max(100).presence(required),
     phoneNumber: Joi.number().max(10).presence(required),
     isAdmin: Joi.boolean().presence(required),
     isIntervenant: Joi.boolean().presence(required),
     isAdherent: Joi.boolean().presence(required),
+    id: Joi.number().optional(),
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
     next(new ErrorHandler(422, errors.message));
@@ -121,7 +123,7 @@ const userExists = (async (req: Request, res: Response, next: NextFunction) => {
     }
     // Si oui => next
     else {
-      req.record = userExists; // because we need deleted record to be sent after a delete in react-admin
+      // req.record = userExists; // because we need deleted record to be sent after a delete in react-admin
       next();
     }
   } catch (err) {
@@ -133,9 +135,11 @@ const userExists = (async (req: Request, res: Response, next: NextFunction) => {
 const addUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.body as IUser;
+    console.log(user);
     user.id = await User.addUser(user);
     res.status(201).json(user);
   } catch (err) {
+    error(err);
     next(err);
   }
 };
