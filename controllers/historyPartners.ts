@@ -25,6 +25,7 @@ const validateHistoryPartner = (
     idHistoryPartnerType: Joi.number().max(10).presence(required),
     idUserPost: Joi.number().max(10).presence(required),
     idPartner: Joi.number().max(10).presence(required),
+    id: Joi.number().optional(),
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
     next(new ErrorHandler(422, errors.message));
@@ -136,7 +137,7 @@ const historyPartnerExists = (async (
     }
     // Si oui => next
     else {
-      req.record = historyPartnerExists; // because we need deleted record to be sent after a delete in react-admin
+      // req.record = historyPartnerExists; // because we need deleted record to be sent after a delete in react-admin
       next();
     }
   } catch (err) {

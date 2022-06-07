@@ -14,6 +14,7 @@ const validateNewsType = (req: Request, res: Response, next: NextFunction) => {
   }
   const errors = Joi.object({
     name: Joi.string().max(100).presence(required),
+    id: Joi.number().optional(),
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
     next(new ErrorHandler(422, errors.message));
@@ -91,7 +92,7 @@ const newsTypeExists = (async (
     }
     // Si oui => next
     else {
-      req.record = newsTypeExists; // because we need deleted record to be sent after a delete in react-admin
+      // req.record = newsTypeExists; // because we need deleted record to be sent after a delete in react-admin
       next();
     }
   } catch (err) {

@@ -22,6 +22,7 @@ const validateNew = (req: Request, res: Response, next: NextFunction) => {
     numberOfParticipants: Joi.number().max(3).presence(required),
     idUser: Joi.number().max(5).presence(required),
     idNewsType: Joi.number().max(5).presence(required),
+    id: Joi.number().optional(),
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
     next(new ErrorHandler(422, errors.message));
@@ -42,7 +43,7 @@ const newExists = (async (req: Request, res: Response, next: NextFunction) => {
     }
     // Si oui => next
     else {
-      req.record = newExists; // because we need deleted record to be sent after a delete in react-admin
+      // req.record = newExists; // because we need deleted record to be sent after a delete in react-admin
       next();
     }
   } catch (err) {

@@ -30,7 +30,7 @@ const emailIsFree = async (req: Request, res: Response, next: NextFunction) => {
   const userExists: IUser = await getUserByEmail(user.email);
   // Si oui => erreur
   if (userExists) {
-    next(new ErrorHandler(409, `This user already exists`));
+    next(new ErrorHandler(409, `This email already exists`));
   } else {
     // Si non => next
     next();
@@ -99,7 +99,7 @@ const addUser = async (user: IUser): Promise<number> => {
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO users (firstname, lastname, email, password, streetNumber, address, zipCode, city, phoneNumber, isAdmin, isIntervenant, isAdherent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO users (firstname, lastname, email, password, streetNumber, address, zipCode, city, phoneNumber, isAdmin, isIntervenant, isAdherent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
         user.firstname,
         user.lastname,

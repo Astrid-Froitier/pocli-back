@@ -27,6 +27,7 @@ const validateHistoryNew = (
     idUserPost: Joi.number().max(5).presence(required),
     idUserAdmin: Joi.number().max(5).presence(required),
     idNew: Joi.number().max(5).presence(required),
+    id: Joi.number().optional(),
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
     next(new ErrorHandler(422, errors.message));
@@ -53,7 +54,7 @@ const historyNewExists = (async (
     }
     // Si oui => next
     else {
-      req.record = historyNewExists; // because we need deleted record to be sent after a delete in react-admin
+      // req.record = historyNewExists; // because we need deleted record to be sent after a delete in react-admin
       next();
     }
   } catch (err) {

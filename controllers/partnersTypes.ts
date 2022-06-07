@@ -18,6 +18,7 @@ const validatePartnersType = (
   }
   const errors = Joi.object({
     name: Joi.string().max(100).presence(required),
+    id: Joi.number().optional(),
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
     next(new ErrorHandler(422, errors.message));
