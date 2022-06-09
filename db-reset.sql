@@ -29,7 +29,7 @@ CREATE TABLE `communications`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `object` VARCHAR(255) NOT NULL,
     `content` VARCHAR(255) NOT NULL,
-    `isOpened` INT NOT NULL,
+    `isOpened` TINYINT(1) NOT NULL,
     `idAdmin` INT NOT NULL,
     `idCommunicationMembers` INT NOT NULL,
     `isBanner` TINYINT(1) NOT NULL
@@ -78,7 +78,7 @@ CREATE TABLE `families`(
     `password` VARCHAR(255) NOT NULL,
     `idCity` INT NOT NULL,
     `idRecipient` INT NOT NULL,
-    `isActive` INT NOT NULL
+    `isActive` TINYINT(1) NOT NULL
 );
 CREATE TABLE `postTypes`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
