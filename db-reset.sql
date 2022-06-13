@@ -31,7 +31,7 @@ CREATE TABLE `communications`(
     `content` VARCHAR(255) NOT NULL,
     `isOpened` TINYINT(1) NOT NULL,
     `idAdmin` INT NOT NULL,
-    `idCommunicationMembers` INT NOT NULL,
+    `idCommunicationMember` INT NOT NULL,
     `isBanner` TINYINT(1) NOT NULL
 );
 CREATE TABLE `familyMemberActivities`(
