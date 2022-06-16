@@ -86,6 +86,7 @@ const addFamily = async (family: IFamily): Promise<number> => {
     );
   return results[0].insertId;
 };
+
 const updateFamily = async (
   idFamily: number,
   family: IFamily

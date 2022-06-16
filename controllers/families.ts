@@ -58,7 +58,7 @@ const getAllFamilies = (async (
 
     res.setHeader(
       'Content-Range',
-      `users : 0-${families.length}/${families.length + 1}`
+      `families : 0-${families.length}/${families.length + 1}`
     );
     return res.status(200).json(families);
   } catch (err) {
