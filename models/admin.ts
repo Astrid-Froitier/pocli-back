@@ -60,7 +60,7 @@ const getAdminByEmail = async (email: string): Promise<IAdmin> => {
   const [results] = await connection
     .promise()
     .query<IAdmin[]>(
-      'SELECT id, email, password, firstname, admin FROM admins WHERE email = ?',
+      'SELECT id, email, password, firstname FROM admins WHERE email = ?',
       [email]
     );
   return results[0];
