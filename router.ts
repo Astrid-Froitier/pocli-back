@@ -22,6 +22,25 @@ const setupRoutes = (server: Express) => {
   server.get('/api/activities', activitiesController.getAllActivities);
   server.get('/api/activitie/:idActivity', activitiesController.getOneActivity);
 
+  server.post(
+    '/api/activities',
+    activitiesController.validateActivity,
+    activitiesController.addActivity
+  );
+
+  server.put(
+    '/api/activities',
+    activitiesController.validateActivity,
+    activitiesController.activityExitsts,
+    activitiesController.updateActivity
+  );
+
+  server.delete(
+    '/api/activities',
+    activitiesController.activityExitsts,
+    activitiesController.deleteActivity
+  );
+
   // TABLE ADMINS
   server.get('/api/admins', adminsController.getAllAdmins);
   server.get('/api/admin/:idAdmin', adminsController.getOneAdmin);
@@ -46,6 +65,18 @@ const setupRoutes = (server: Express) => {
   // TABLE CITIES
   server.get('/api/cities', citiesController.getAllCities);
   server.get('/api/activitie/:idCity', citiesController.getOneCity);
+
+  server.post(
+    '/api/cities',
+    citiesController.validateCity,
+    citiesController.addCity
+  );
+
+  server.put(
+    '/api/cities',
+    citiesController.validateCity,
+    citiesController.cityExists
+  );
 
   // TABLE COMMUNICATIONMEMBERS
   server.get(
@@ -144,6 +175,22 @@ const setupRoutes = (server: Express) => {
   server.get('/api/partners', partnersController.getAllPartners);
   server.get('/api/partner/:idPartner', partnersController.getOnePartner);
 
+  server.post(
+    '/api/partners',
+    partnersController.validatePartner,
+    partnersController.addPartner
+  );
+  server.put(
+    '/api/partners',
+    partnersController.validatePartner,
+    partnersController.partnerExists
+  );
+  server.delete(
+    '/api/partners,',
+    partnersController.partnerExists,
+    partnersController.deletePartner
+  );
+
   // TABLE PAYMENTMETHODS
   server.get(
     '/api/paymentMethods',
@@ -189,6 +236,21 @@ const setupRoutes = (server: Express) => {
   server.get(
     '/api/recipient/:idRecipient',
     recipientsController.getOneRecipient
+  );
+  server.post(
+    '/api/recipients',
+    recipientsController.validateRecipient,
+    recipientsController.addRecipient
+  );
+  server.put(
+    '/api/recipients',
+    recipientsController.validateRecipient,
+    recipientsController.recipientExists
+  );
+  server.delete(
+    '/api/recipients',
+    recipientsController.recipientExists,
+    recipientsController.deleteRecipient
   );
 };
 

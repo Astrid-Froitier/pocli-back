@@ -3,6 +3,7 @@ import * as City from '../models/city';
 import { ErrorHandler } from '../helpers/errors';
 import { formatSortString } from '../helpers/functions';
 import Joi from 'joi';
+import ICity from '../interfaces/ICity';
 
 // validates inputs
 const validateCity = (req: Request, res: Response, next: NextFunction) => {
@@ -12,6 +13,7 @@ const validateCity = (req: Request, res: Response, next: NextFunction) => {
   }
   const errors = Joi.object({
     name: Joi.string().max(100).presence(required),
+    zipCode: Joi.number().presence(required),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
@@ -52,8 +54,34 @@ const getOneCity = (async (req: Request, res: Response, next: NextFunction) => {
   }
 }) as RequestHandler;
 
+const cityExists = (async (req: Request, res: Response, next: NextFunction) => {
+  const { idCity } = req.params;
+  try {
+    const cityExists = await City.getCityById(Number(idCity));
+    if (!cityExists) {
+      next(new ErrorHandler(404, `This city doesn't exist`));
+    } else {
+      next();
+    }
+  } catch (err) {
+    next(err);
+  }
+}) as RequestHandler;
+
+const addCity = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const city = req.body as ICity;
+    city.id = await City.addCity(city);
+    res.status(201).json(city);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   getOneCity,
   getAllCities,
   validateCity,
+  cityExists,
+  addCity,
 };
