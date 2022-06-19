@@ -41,7 +41,7 @@ const emailIsFree = async (req: Request, res: Response, next: NextFunction) => {
 // return all families
 const getAllFamilies = async (sortBy = ''): Promise<IFamily[]> => {
   let sql =
-    'SELECT id, name, streetNumber, adress, phoneNumber, email, password, idCity, idRecipient, isActive FROM families';
+    'SELECT id, name, streetNumber, address, phoneNumber, email, password, idCity, idRecipient, isActive FROM families';
   if (sortBy) {
     sql += `ORDER BY ${sortBy}`;
   }
@@ -74,7 +74,7 @@ const addFamily = async (family: IFamily): Promise<number> => {
       'INSERT INTO families (name, streetNumber, address, phoneNumber, email, password, idCity, idRecipient, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
         family.name,
-        family.streetnumber,
+        family.streetNumber,
         family.address,
         family.phoneNumber,
         family.email,
@@ -86,11 +86,12 @@ const addFamily = async (family: IFamily): Promise<number> => {
     );
   return results[0].insertId;
 };
+
 const updateFamily = async (
   idFamily: number,
   family: IFamily
 ): Promise<boolean> => {
-  let sql = 'UPDATE family SET';
+  let sql = 'UPDATE families SET';
   const sqlValues: Array<string | number | boolean> = [];
   let oneValue = false;
 

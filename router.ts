@@ -5,6 +5,7 @@ import citiesController from './controllers/cities';
 import documentsController from './controllers/documents';
 import eventsController from './controllers/events';
 import familiesController from './controllers/families';
+import familyMembersController from './controllers/familyMembers';
 import partnersController from './controllers/partners';
 import paymentMethodsController from './controllers/paymentMethods';
 import paymentRecordsController from './controllers/paymentRecords';
@@ -13,9 +14,32 @@ import recipientsController from './controllers/recipients';
 import { Express } from 'express';
 
 const setupRoutes = (server: Express) => {
+  server.get('/coucou', (req, res) => {
+    res.status(200).json('hibou');
+  });
+
   // TABLE ACTIVITIES
   server.get('/api/activities', activitiesController.getAllActivities);
   server.get('/api/activitie/:idActivity', activitiesController.getOneActivity);
+
+  server.post(
+    '/api/activities',
+    activitiesController.validateActivity,
+    activitiesController.addActivity
+  );
+
+  server.put(
+    '/api/activities',
+    activitiesController.validateActivity,
+    activitiesController.activityExitsts,
+    activitiesController.updateActivity
+  );
+
+  server.delete(
+    '/api/activities',
+    activitiesController.activityExitsts,
+    activitiesController.deleteActivity
+  );
 
   // TABLE ADMINS
   server.get('/api/admins', adminsController.getAllAdmins);
@@ -41,6 +65,18 @@ const setupRoutes = (server: Express) => {
   // TABLE CITIES
   server.get('/api/cities', citiesController.getAllCities);
   server.get('/api/activitie/:idCity', citiesController.getOneCity);
+
+  server.post(
+    '/api/cities',
+    citiesController.validateCity,
+    citiesController.addCity
+  );
+
+  server.put(
+    '/api/cities',
+    citiesController.validateCity,
+    citiesController.cityExists
+  );
 
   // TABLE COMMUNICATIONMEMBERS
   server.get(
@@ -113,9 +149,47 @@ const setupRoutes = (server: Express) => {
     familiesController.deleteFamily
   );
 
+  // TABLE FAMILYMEMBERS
+  server.get(
+    '/api/familyMembers',
+    familyMembersController.getAllFamilyMembers,
+    familyMembersController.getOneFamilyMember
+  );
+  server.post(
+    '/api/familyMembers',
+    familyMembersController.validateFamilyMember,
+    familyMembersController.addFamilyMember
+  );
+  server.put(
+    '/api/familyMembers',
+    familyMembersController.validateFamilyMember,
+    familyMembersController.familyMemberExists
+  );
+  server.delete(
+    '/api/familyMembers',
+    familyMembersController.familyMemberExists,
+    familyMembersController.deleteFamilyMember
+  );
+
   // TABLE PARTNERS
   server.get('/api/partners', partnersController.getAllPartners);
   server.get('/api/partner/:idPartner', partnersController.getOnePartner);
+
+  server.post(
+    '/api/partners',
+    partnersController.validatePartner,
+    partnersController.addPartner
+  );
+  server.put(
+    '/api/partners',
+    partnersController.validatePartner,
+    partnersController.partnerExists
+  );
+  server.delete(
+    '/api/partners,',
+    partnersController.partnerExists,
+    partnersController.deletePartner
+  );
 
   // TABLE PAYMENTMETHODS
   server.get(
@@ -162,6 +236,21 @@ const setupRoutes = (server: Express) => {
   server.get(
     '/api/recipient/:idRecipient',
     recipientsController.getOneRecipient
+  );
+  server.post(
+    '/api/recipients',
+    recipientsController.validateRecipient,
+    recipientsController.addRecipient
+  );
+  server.put(
+    '/api/recipients',
+    recipientsController.validateRecipient,
+    recipientsController.recipientExists
+  );
+  server.delete(
+    '/api/recipients',
+    recipientsController.recipientExists,
+    recipientsController.deleteRecipient
   );
 };
 

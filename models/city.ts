@@ -1,3 +1,4 @@
+import { ResultSetHeader } from 'mysql2';
 import connection from '../db-config';
 import ICity from '../interfaces/ICity';
 
@@ -19,4 +20,14 @@ const getCityById = async (idCity: number): Promise<ICity> => {
   return results[0];
 };
 
-export { getAllCities, getCityById };
+const addCity = async (city: ICity): Promise<number> => {
+  const results = await connection
+    .promise()
+    .query<ResultSetHeader>(
+      'INSERT INTO cities (name, zipCode) VALUES (?, ?)',
+      [city.name, city.zipCode]
+    );
+  return results[0].insertId;
+};
+
+export { getAllCities, getCityById, addCity };

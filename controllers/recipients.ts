@@ -56,8 +56,66 @@ const getOneRecipient = (async (
   }
 }) as RequestHandler;
 
+const addRecipient = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const recipient = req.body as IRecipient;
+    recipient.id = await Recipient.addRecipient(recipient);
+    res.status(201).json(recipient);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const recipientExists = (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { idRecipient } = req.params;
+  try {
+    const recipientExists = await Recipient.getRecipientById(
+      Number(idRecipient)
+    );
+    if (!recipientExists) {
+      next(new ErrorHandler(404, `This recipient doesn't exisi`));
+    } else {
+      next();
+    }
+  } catch (err) {
+    next(err);
+  }
+}) as RequestHandler;
+
+const deleteRecipient = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idRecipient } = req.params;
+    const recipient = await Recipient.getRecipientById(Number(idRecipient));
+    const recipientDeleted = await Recipient.deleteRecipient(
+      Number(idRecipient)
+    );
+    if (recipientDeleted) {
+      res.status(200).send(recipient);
+    } else {
+      throw new ErrorHandler(500, `This recipient cannot be deleted`);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   validateRecipient,
   getAllRecipients,
   getOneRecipient,
+  addRecipient,
+  recipientExists,
+  deleteRecipient,
 };

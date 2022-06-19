@@ -56,8 +56,81 @@ const getOnePartner = (async (
   }
 }) as RequestHandler;
 
+const partnerExists = (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { idPartner } = req.params;
+  try {
+    const partnerExists = await Partner.getPartnerById(Number(idPartner));
+    if (!partnerExists) {
+      next(new ErrorHandler(404, `This partner doesn't exist`));
+    } else {
+      next();
+    }
+  } catch (err) {
+    next(err);
+  }
+}) as RequestHandler;
+
+const addPartner = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const partner = req.body as IPartner;
+    partner.id = await Partner.addPartner(partner);
+    res.status(201).json(partner);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updatedPartners = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idPartner } = req.params;
+    const partnerUpdated = await Partner.updatedPartners(
+      Number(idPartner),
+      req.body as IPartner
+    );
+    if (partnerUpdated) {
+      const partner = await Partner.getPartnerById(Number(idPartner));
+      res.status(200).send(partner);
+    } else {
+      throw new ErrorHandler(500, `Partner cannot be updated`);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const deletePartner = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idPartner } = req.params;
+    const partner = await Partner.getPartnerById(Number(idPartner));
+    const partnerDeleted = await Partner.deletePartner(Number(idPartner));
+    if (partnerDeleted) {
+      res.status(200).send(partner);
+    } else {
+      throw new ErrorHandler(500, `This partner cannot be deleted`);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   validatePartner,
   getAllPartners,
   getOnePartner,
+  partnerExists,
+  addPartner,
+  updatedPartners,
+  deletePartner,
 };
