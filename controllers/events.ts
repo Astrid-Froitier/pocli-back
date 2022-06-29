@@ -14,14 +14,14 @@ const validateEvent = (req: Request, res: Response, next: NextFunction) => {
   }
   const errors = Joi.object({
     numberParticipantsMax: Joi.number().optional().allow(null), // pour react-admin qui envoie null et pas undefined
-    name: Joi.string().max(100).presence(required),
+    date: Joi.string().max(10).presence(required),
     description: Joi.string().max(255).presence(required),
     text: Joi.string().max(1000).optional().allow(null),
     podcastLink: Joi.string().max(255).optional().allow(null),
     reservedAdherent: Joi.number().presence(required),
     price: Joi.number().optional().allow(null),
     idPostType: Joi.number().presence(required),
-    idActivity: Joi.number().presence(required),
+    idActivity: Joi.number().allow(null),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {

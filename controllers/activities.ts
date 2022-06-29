@@ -13,6 +13,8 @@ const validateActivity = (req: Request, res: Response, next: NextFunction) => {
   }
   const errors = Joi.object({
     name: Joi.string().max(100).presence(required),
+    category: Joi.string().max(100).presence(required),
+    abridged: Joi.string().max(100).presence(required),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
