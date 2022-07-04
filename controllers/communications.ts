@@ -22,7 +22,6 @@ const validateCommunication = (
     content: Joi.string().email().max(255).presence(required),
     isOpened: Joi.bool().presence(required),
     idAdmin: Joi.number().presence(required),
-    idCommunicationMembers: Joi.number().presence(required),
     isBanner: Joi.bool().presence(required),
     id: Joi.number().optional(), // pour react-Communication
   }).validate(req.body, { abortEarly: false }).error;
