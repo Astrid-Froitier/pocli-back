@@ -36,10 +36,10 @@ const addEvent = async (event: IEvent): Promise<number> => {
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO events (numberParticipantsMax, name, description, text, podcastLink, reservedAdherent, price, idPostType, idActivity ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO events (numberParticipantsMax, date, description, text, podcastLink, reservedAdherent, price, idPostType, idActivity ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
         event.numberParticipantsMax,
-        event.name,
+        event.date,
         event.description,
         event.text,
         event.podcastLink,
@@ -65,9 +65,9 @@ const updateEvent = async (
     sqlValues.push(event.numberParticipantsMax);
     oneValue = true;
   }
-  if (event.name) {
-    sql += oneValue ? ', name = ? ' : ' name = ? ';
-    sqlValues.push(event.name);
+  if (event.date) {
+    sql += oneValue ? ', date = ? ' : ' date = ? ';
+    sqlValues.push(event.date);
     oneValue = true;
   }
   if (event.description) {

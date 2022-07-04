@@ -68,11 +68,56 @@ const cityExists = (async (req: Request, res: Response, next: NextFunction) => {
   }
 }) as RequestHandler;
 
+// add a city
+
 const addCity = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const city = req.body as ICity;
     city.id = await City.addCity(city);
     res.status(201).json(city);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// updates a city
+
+const updateCity = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idCity } = req.params;
+    const cityUpdated = await City.updateCity(
+      Number(idCity),
+      req.body as ICity
+    );
+    if (cityUpdated) {
+      const city = await City.getCityById(Number(idCity));
+      res.status(200).send(city); // react-admin needs this response
+    } else {
+      throw new ErrorHandler(500, `City cannot be updated`);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+// delete one city
+const deleteCity = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idCity } = req.params;
+    const cityDeleted = await City.deleteCity(Number(idCity));
+    if (cityDeleted) {
+      res.status(200).send(req.record); // react-admin needs this response
+    } else {
+      throw new ErrorHandler(409, `City not found`);
+    }
   } catch (err) {
     next(err);
   }
@@ -84,4 +129,6 @@ export default {
   validateCity,
   cityExists,
   addCity,
+  updateCity,
+  deleteCity
 };

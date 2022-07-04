@@ -14,13 +14,13 @@ import recipientsController from './controllers/recipients';
 import { Express } from 'express';
 
 const setupRoutes = (server: Express) => {
-  server.get('/coucou', (req, res) => {
-    res.status(200).json('hibou');
-  });
 
   // TABLE ACTIVITIES
   server.get('/api/activities', activitiesController.getAllActivities);
-  server.get('/api/activitie/:idActivity', activitiesController.getOneActivity);
+  server.get(
+    '/api/activities/:idActivity',
+    activitiesController.getOneActivity
+  );
 
   server.post(
     '/api/activities',
@@ -29,42 +29,45 @@ const setupRoutes = (server: Express) => {
   );
 
   server.put(
-    '/api/activities',
+    '/api/activities/:idActivity',
     activitiesController.validateActivity,
     activitiesController.activityExitsts,
     activitiesController.updateActivity
   );
 
   server.delete(
-    '/api/activities',
+    '/api/activities/:idActivity',
     activitiesController.activityExitsts,
     activitiesController.deleteActivity
   );
 
   // TABLE ADMINS
   server.get('/api/admins', adminsController.getAllAdmins);
-  server.get('/api/admin/:idAdmin', adminsController.getOneAdmin);
+  server.get('/api/admins/:idAdmin', adminsController.getOneAdmin);
+
   server.post(
     '/api/admins',
     adminsController.validateAdmin,
     adminsController.emailIsFree,
     adminsController.addAdmin
   );
+
   server.put(
-    '/api/admin/:idAdmin',
+    '/api/admins/:idAdmin',
     adminsController.validateAdmin,
     adminsController.adminExists,
-    adminsController.addAdmin
+    adminsController.updateAdmin
   );
+
   server.delete(
-    '/api/admin/:idAdmin',
+    '/api/admins/:idAdmin',
     adminsController.adminExists,
     adminsController.deleteAdmin
   );
 
   // TABLE CITIES
   server.get('/api/cities', citiesController.getAllCities);
-  server.get('/api/activitie/:idCity', citiesController.getOneCity);
+  server.get('/api/cities/:idCity', citiesController.getOneCity);
 
   server.post(
     '/api/cities',
@@ -73,9 +76,16 @@ const setupRoutes = (server: Express) => {
   );
 
   server.put(
-    '/api/cities',
+    '/api/cities/:idCity',
     citiesController.validateCity,
-    citiesController.cityExists
+    citiesController.cityExists,
+    citiesController.updateCity
+  );
+
+  server.delete(
+    '/api/cities/:idCity',
+    citiesController.cityExists,
+    citiesController.deleteCity
   );
 
   // TABLE COMMUNICATIONMEMBERS
@@ -84,67 +94,76 @@ const setupRoutes = (server: Express) => {
     communicationMembersController.getAllCommunicationMembers
   );
   server.get(
-    '/api/communicationMember/:idCommunicationMember',
+    '/api/communicationMembers/:idCommunicationMember',
     communicationMembersController.getOneCommunicationMember
   );
 
   // TABLE DOCUMENTS
   server.get('/api/documents', documentsController.getAllDocuments);
-  server.get('/api/document/:idDocument', documentsController.getOneDocument);
+  server.get('/api/documents/:idDocument', documentsController.getOneDocument);
+
   server.post(
     '/api/documents',
     documentsController.validateDocument,
     documentsController.addDocument
   );
+
   server.put(
-    '/api/document/:idDocument',
+    '/api/documents/:idDocument',
     documentsController.validateDocument,
     documentsController.documentExists,
     documentsController.updateDocument
   );
+
   server.delete(
-    '/api/document/:idDocument',
+    '/api/documents/:idDocument',
     documentsController.documentExists,
     documentsController.deleteDocument
   );
 
   // TABLE EVENTS
   server.get('/api/events', eventsController.getAllEvents);
-  server.get('/api/event/:idEvent', eventsController.getOneEvent);
+  server.get('/api/events/:idEvent', eventsController.getOneEvent);
+
   server.post(
     '/api/events',
     eventsController.validateEvent,
     eventsController.addEvent
   );
+
   server.put(
-    '/api/event/:idEvents',
+    '/api/events/:idEvent',
     eventsController.validateEvent,
     eventsController.eventExists,
     eventsController.updateEvent
   );
+
   server.delete(
-    '/api/events/:idEvents',
+    '/api/events/:idEvent',
     eventsController.eventExists,
     eventsController.deleteEvent
   );
 
   // TABLE FAMILIES
   server.get('/api/families', familiesController.getAllFamilies);
-  server.get('/api/family/:idFamily', familiesController.getOneFamily);
+  server.get('/api/families/:idFamily', familiesController.getOneFamily);
+
   server.post(
     '/api/families',
     familiesController.validateFamily,
     familiesController.emailIsFree,
     familiesController.addFamily
   );
+
   server.put(
-    '/api/family/:idFamily',
+    '/api/families/:idFamily',
     familiesController.validateFamily,
     familiesController.familyExists,
     familiesController.updateFamily
   );
+
   server.delete(
-    '/api/family/:idFamily',
+    '/api/families/:idFamily',
     familiesController.familyExists,
     familiesController.deleteFamily
   );
@@ -155,38 +174,43 @@ const setupRoutes = (server: Express) => {
     familyMembersController.getAllFamilyMembers,
     familyMembersController.getOneFamilyMember
   );
+
   server.post(
     '/api/familyMembers',
     familyMembersController.validateFamilyMember,
     familyMembersController.addFamilyMember
   );
+
   server.put(
-    '/api/familyMembers',
+    '/api/familyMembers/:idFamilyMember',
     familyMembersController.validateFamilyMember,
     familyMembersController.familyMemberExists
   );
+
   server.delete(
-    '/api/familyMembers',
+    '/api/familyMembers/:idFamilyMember',
     familyMembersController.familyMemberExists,
     familyMembersController.deleteFamilyMember
   );
 
   // TABLE PARTNERS
   server.get('/api/partners', partnersController.getAllPartners);
-  server.get('/api/partner/:idPartner', partnersController.getOnePartner);
+  server.get('/api/partners/:idPartner', partnersController.getOnePartner);
 
   server.post(
     '/api/partners',
     partnersController.validatePartner,
     partnersController.addPartner
   );
+
   server.put(
-    '/api/partners',
+    '/api/partners/:idPartner',
     partnersController.validatePartner,
     partnersController.partnerExists
   );
+
   server.delete(
-    '/api/partners,',
+    '/api/partners/:idPartner,',
     partnersController.partnerExists,
     partnersController.deletePartner
   );
@@ -197,7 +221,7 @@ const setupRoutes = (server: Express) => {
     paymentMethodsController.getAllPaymentMethods
   );
   server.get(
-    '/api/paymentMethod/:idPaymentMethod',
+    '/api/paymentMethods/:idPaymentMethod',
     paymentMethodsController.getOnePaymentMethod
   );
 
@@ -207,48 +231,54 @@ const setupRoutes = (server: Express) => {
     paymentRecordsController.getAllPaymentRecords
   );
   server.get(
-    '/api/paymentRecord/:idPaymentRecord',
+    '/api/paymentRecords/:idPaymentRecord',
     paymentRecordsController.getOnePaymentRecord
   );
+
   server.post(
     '/api/paymentRecords',
     paymentRecordsController.validatePaymentRecord,
     paymentRecordsController.addPaymentRecord
   );
+
   server.put(
-    '/api/paymentRecord/:idPaymentRecord',
+    '/api/paymentRecords/:idPaymentRecord',
     paymentRecordsController.validatePaymentRecord,
     paymentRecordsController.paymentRecordExists,
     paymentRecordsController.updatePaymentRecord
   );
+
   server.delete(
-    '/api/paymentRecord/:idPaymentRecord',
+    '/api/paymentRecords/:idPaymentRecord',
     paymentRecordsController.paymentRecordExists,
     paymentRecordsController.deletePaymentRecord
   );
 
   // TABLE POSTTYPES
   server.get('/api/postTypes', postTypesController.getAllPostTypes);
-  server.get('/api/postType/:idPostType', postTypesController.getOnePostType);
+  server.get('/api/postTypes/:idPostType', postTypesController.getOnePostType);
 
   // TABLE RECIPIENTS
   server.get('/api/recipients', recipientsController.getAllRecipients);
   server.get(
-    '/api/recipient/:idRecipient',
+    '/api/recipients/:idRecipient',
     recipientsController.getOneRecipient
   );
+
   server.post(
     '/api/recipients',
     recipientsController.validateRecipient,
     recipientsController.addRecipient
   );
+
   server.put(
-    '/api/recipients',
+    '/api/recipients/:idRecipient',
     recipientsController.validateRecipient,
     recipientsController.recipientExists
   );
+
   server.delete(
-    '/api/recipients',
+    '/api/recipients/:idRecipient',
     recipientsController.recipientExists,
     recipientsController.deleteRecipient
   );
