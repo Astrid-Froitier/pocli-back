@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import * as PaymentMethod from '../models/paymentMethod';
-import IPaymentMethod from '../interfaces/IPaymentMethod';
+// import IPaymentMethod from '../interfaces/IPaymentMethod';
 import { ErrorHandler } from '../helpers/errors';
 import { formatSortString } from '../helpers/functions';
 import Joi from 'joi';

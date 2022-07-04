@@ -67,7 +67,7 @@ const getOneEvent = (async (
 }) as RequestHandler;
 
 // checks if an event exists before update or delete
-const eventExists = async (
+const eventExists = (async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -83,7 +83,7 @@ const eventExists = async (
     // req.record = eventExists; // because we need deleted record to be sent after a delete in react-admin
     next();
   }
-};
+}) as RequestHandler;
 
 // adds an event
 

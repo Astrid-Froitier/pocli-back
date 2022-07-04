@@ -1,21 +1,21 @@
-import express from 'express';
-const app = express();
-import IContactMail from '../interfaces/IContactMail';
-import nodemailer from 'nodemailer-react';
-import cors from 'cors';
-require('dotenv').config();
+// import express from 'express';
+// const app = express();
+// import IContactMail from '../interfaces/IContactMail';
+// import nodemailer from 'nodemailer-react';
+// import cors from 'cors';
+// require('dotenv').config();
 
-const port = process.env.PORT || 8000;
+// const port = process.env.PORT || 8000;
 
-app.use(express.json());
+// app.use(express.json());
 
-const corsOptions = {
-  origin: process.env.CORS_ORIGIN,
-  credentials: true, // access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-  maxAge: 3600,
-};
-app.use(cors(corsOptions));
+// const corsOptions = {
+  // origin: process.env.CORS_ORIGIN,
+  // credentials: true, // access-control-allow-credentials:true
+//   optionSuccessStatus: 200,
+//   maxAge: 3600,
+// };
+// app.use(cors(corsOptions));
 
 // app.post('/', (req: Request, res: Response) => {
 //   const { firstname, lastname, email, subject, text } = req.body;
