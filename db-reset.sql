@@ -329,9 +329,11 @@ VALUES
     );
 
 INSERT INTO 
-    cities (`name`, `zipCode`)
+    cities (
+        `name`, 
+        `zipCode`
+        )
 VALUES 
-    
         ('ABZAC', 33230),
         ('ARVEYRES', 33500),
         ('BAYAS', 33230),
@@ -389,7 +391,7 @@ VALUES
         ("GRÉZILLAC", 33420),
         ('GUILLAC', 33420),
         ('JUGAZAN', 33420),
-        ("JUILLAC", 33890),
+        ('JUILLAC', 33890),
         ('LES SALLES DE CASTILLON', 33350),
         ('LUGAIGNAC', 33420),
         ('MERIGNAS', 33350),
@@ -487,11 +489,3 @@ INSERT INTO communications (`object`,
 INSERT INTO communicationMembers (`idFamilyMember`,
     `idCommunication`,
     `isOpened`) VALUES (1, 1, 1), (3, 2, 0), (2, 3, 1);
-
-
-
-
-
-
-
-
