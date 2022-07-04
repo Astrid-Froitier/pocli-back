@@ -1,6 +1,10 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import * as EventDocument from '../models/eventDocument';
+import * as Document from '../models/document';
+import * as Event from '../models/event';
 import IEventDocument from '../interfaces/IEventDocument';
+import IDocument from '../interfaces/IDocument';
+import IEvent from '../interfaces/IEvent';
 import { ErrorHandler } from '../helpers/errors';
 import { formatSortString } from '../helpers/functions';
 import Joi from 'joi';
@@ -84,6 +88,50 @@ const eventDocumentExists = async (
   }
 };
 
+// checks if an idDocument exists before post or update
+const idDocumentExists = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const idDocument = req.body.idDocument;
+
+  if (!idDocument) {
+    next();
+  } else {
+    const idDocumentExists: IDocument = await Document.getDocumentById(
+      Number(idDocument)
+    );
+    if (!idDocumentExists) {
+      next(new ErrorHandler(409, `This idDocument does not exist`));
+    } else {
+      // req.record = idDocumentExists; // because we need deleted record to be sent after a delete in react-admin
+      next();
+    }
+  }
+};
+
+// checks if an idEvent exists before post or update
+const idEventExists = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const idEvent = req.body.idEvent;
+
+  if (!idEvent) {
+    next();
+  } else {
+    const idEventExists: IEvent = await Event.getEventById(Number(idEvent));
+    if (!idEventExists) {
+      next(new ErrorHandler(409, `This idEvent does not exist`));
+    } else {
+      // req.record = idEventExists; // because we need deleted record to be sent after a delete in react-admin
+      next();
+    }
+  }
+};
+
 // adds a eventDocument
 
 const addEventDocument = async (
@@ -157,6 +205,8 @@ export default {
   getAllEventDocuments,
   getOneEventDocument,
   eventDocumentExists,
+  idDocumentExists,
+  idEventExists,
   addEventDocument,
   updateEventDocument,
   deleteEventDocument,

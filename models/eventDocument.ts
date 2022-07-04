@@ -3,7 +3,8 @@ import { ResultSetHeader } from 'mysql2';
 import IEventDocument from '../interfaces/IEventDocument';
 
 const getAllEventDocuments = async (sortBy = ''): Promise<IEventDocument[]> => {
-  let sql = 'SELECT * FROM eventDocuments';
+  let sql =
+    'SELECT ed.idDocument, ed.idEvent, e.numberParticipantsMax, e.date, e.description, e.text, e.podcastLink, e.reservedAdherent, e.price, e.idPostType, e.idActivity, d.name, d.url FROM eventDocuments ed RIGHT JOIN events e on e.id=ed.idEvent RIGHT JOIN documents d on d.id=ed.idDocument';
   if (sortBy) {
     sql += ` ORDER BY ${sortBy}`;
   }
@@ -16,9 +17,10 @@ const getEventDocumentById = async (
 ): Promise<IEventDocument> => {
   const [results] = await connection
     .promise()
-    .query<IEventDocument[]>('SELECT * FROM eventDocuments WHERE id = ?', [
-      idEventDocument,
-    ]);
+    .query<IEventDocument[]>(
+      'SELECT ed.idDocument, ed.idEvent, e.numberParticipantsMax, e.date, e.description, e.text, e.podcastLink, e.reservedAdherent, e.price, e.idPostType, e.idActivity, d.name, d.url FROM eventDocuments ed RIGHT JOIN events e on e.id=ed.idEvent RIGHT JOIN documents d on d.id=ed.idDocument WHERE id = ?',
+      [idEventDocument]
+    );
   return results[0];
 };
 

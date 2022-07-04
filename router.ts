@@ -125,10 +125,14 @@ const setupRoutes = (server: Express) => {
   // TABLE EVENTS
   server.get('/api/events', eventsController.getAllEvents);
   server.get('/api/events/:idEvent', eventsController.getOneEvent);
+  server.get('/api/events/postTypes/:idPostType', eventsController.getAllEventsByPostType);
+  server.get('/api/events/activities/:idActivity', eventsController.getAllEventsByActivity);
 
   server.post(
-    '/api/events',
+    '/api/events/',
     eventsController.validateEvent,
+    eventsController.idPostTypeExists,
+    eventsController.idActvityExists,
     eventsController.addEvent
   );
 
@@ -136,6 +140,8 @@ const setupRoutes = (server: Express) => {
     '/api/events/:idEvent',
     eventsController.validateEvent,
     eventsController.eventExists,
+    eventsController.idPostTypeExists,
+    eventsController.idActvityExists,
     eventsController.updateEvent
   );
 
@@ -152,6 +158,8 @@ const setupRoutes = (server: Express) => {
   server.post(
     '/api/eventDocuments',
     eventDocumentsController.validateEventDocument,
+    eventDocumentsController.idEventExists,
+    eventDocumentsController.idDocumentExists,
     eventDocumentsController.addEventDocument
   );
 
@@ -159,13 +167,15 @@ const setupRoutes = (server: Express) => {
     '/api/eventDocuments/:idEventDocument',
     eventDocumentsController.validateEventDocument,
     eventDocumentsController.eventDocumentExists,
+    eventDocumentsController.idEventExists,
+    eventDocumentsController.idDocumentExists,
     eventDocumentsController.updateEventDocument
   );
 
   server.delete(
     '/api/eventDocuments/:idEventDocument',
-    eventDocumentsController.eventExists,
-    eventDocumentsController.deleteEvent
+    eventDocumentsController.eventDocumentExists,
+    eventDocumentsController.deleteEventDocument,
   );
 
 
