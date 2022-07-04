@@ -395,5 +395,20 @@ VALUES
         ('SAINT MICHEL DE MONTAIGNE', 24230),
         ('SAINT PEY DE CASTETS', 33350)
         ('SAINTE RADEGONDE', 33350),
-        ('SAINT VINCENT DE PERTIGNAS', 33420)
+        ('SAINT VINCENT DE PERTIGNAS', 33420),
+        ('BARON', 33750),
+        ('BLESIGNAC', 33670),
+        ('CAPIAN', 33550),
+        ('CARDAN', 33410),
+        ('CREON', 33670),
+        ('CURSAN', 33670),
+        ('HAUX', 33550),
+        ('LA SAUVE MAJEUR', 33670),
+        ('LE POUT', 33670),
+        ('LOUPES', 33370),
+        ('MADIRAC', 33670),
+        ('SADIRAC', 33670),
+        ('SAINT GENES DE LOMBAUD', 33670),
+        ('SAINT LEION', 33670),
+        ('VILLENAVE DE RIONS', 33550)
 );
