@@ -12,7 +12,8 @@ CREATE TABLE `eventDocuments`(
 
 CREATE TABLE `communicationMembers`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `idFamilyMember` INT NOT NULL
+    `idFamilyMember` INT NOT NULL,
+    `idCommunication` INT NOT NULL
 );
 
 CREATE TABLE `admins` (
@@ -42,7 +43,6 @@ CREATE TABLE `communications`(
     `content` VARCHAR(255) NOT NULL,
     `isOpened` TINYINT(1) NOT NULL,
     `idAdmin` INT NOT NULL,
-    `idCommunicationMember` INT NOT NULL,
     `isBanner` TINYINT(1) NOT NULL
 );
 
@@ -73,7 +73,8 @@ CREATE TABLE `paymentRecords`(
     `datePay` DATE NOT NULL,
     `amountPay` INT NOT NULL,
     `idFamily` INT NULL,
-    `idFamilyMember` INT NULL
+    `idFamilyMember` INT NULL,
+    `idActivity` INT NOT NULL,
 );
 
 CREATE TABLE `familyMembers`(
@@ -147,6 +148,11 @@ ADD
     CONSTRAINT `paymentrecords_idfamilymember_foreign` FOREIGN KEY(`idFamilyMember`) REFERENCES `familyMembers`(`id`);
 
 ALTER TABLE
+    `paymentRecords`
+ADD
+    CONSTRAINT `paymentrecords_idactivity_foreign` FOREIGN KEY(`idActivity`) REFERENCES `activities`(`id`);
+
+ALTER TABLE
     `familyMembers`
 ADD
     CONSTRAINT `familymembers_idfamily_foreign` FOREIGN KEY(`idFamily`) REFERENCES `families`(`id`);
@@ -172,9 +178,14 @@ ADD
     CONSTRAINT `familymemberactivities_idfamilymember_foreign` FOREIGN KEY(`idFamilyMember`) REFERENCES `familyMembers`(`id`);
 
 ALTER TABLE
-    `communications`
+    `communicationsMembers`
 ADD
-    CONSTRAINT `communications_idcommunicationmembers_foreign` FOREIGN KEY(`idCommunicationMembers`) REFERENCES `communicationMembers`(`id`);
+    CONSTRAINT `communicationMembers_idcommunications_foreign` FOREIGN KEY(`idCommunication`) REFERENCES `communications`(`id`);
+
+ALTER TABLE
+    `communicationsMembers`
+ADD
+    CONSTRAINT `communicationMembers_idfamilyMember_foreign` FOREIGN KEY(`idFamilyMember`) REFERENCES `familyMembers`(`id`);
 
 ALTER TABLE
     `familyMemberEvents`
@@ -317,9 +328,11 @@ VALUES
     );
 
 INSERT INTO 
-    cities 
+    cities (
+        `name`, 
+        `zipCode`
+        )
 VALUES 
-    (
         ('ABZAC', 33230),
         ('ARVEYRES', 33500),
         ('BAYAS', 33230),
@@ -377,7 +390,7 @@ VALUES
         ("GRÉZILLAC", 33420),
         ('GUILLAC', 33420),
         ('JUGAZAN', 33420),
-        ("JUILLAC", 33890),
+        ('JUILLAC', 33890),
         ('LES SALLES DE CASTILLON', 33350),
         ('LUGAIGNAC', 33420),
         ('MERIGNAS', 33350),
@@ -393,7 +406,7 @@ VALUES
         ('SAINT JEAN DE BLAIGNAC', 33420),
         ('SAINT MAGNE DE CASTILLON', 33350),
         ('SAINT MICHEL DE MONTAIGNE', 24230),
-        ('SAINT PEY DE CASTETS', 33350)
+        ('SAINT PEY DE CASTETS', 33350),
         ('SAINTE RADEGONDE', 33350),
         ('SAINT VINCENT DE PERTIGNAS', 33420),
         ('BARON', 33750),
@@ -410,5 +423,4 @@ VALUES
         ('SADIRAC', 33670),
         ('SAINT GENES DE LOMBAUD', 33670),
         ('SAINT LEION', 33670),
-        ('VILLENAVE DE RIONS', 33550)
-);
+        ('VILLENAVE DE RIONS', 33550);
