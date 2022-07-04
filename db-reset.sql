@@ -328,9 +328,11 @@ VALUES
     );
 
 INSERT INTO 
-    cities 
+    cities (
+        `name`, 
+        `zipCode`
+        )
 VALUES 
-    (
         ('ABZAC', 33230),
         ('ARVEYRES', 33500),
         ('BAYAS', 33230),
@@ -388,7 +390,7 @@ VALUES
         ("GRÉZILLAC", 33420),
         ('GUILLAC', 33420),
         ('JUGAZAN', 33420),
-        ("JUILLAC", 33890),
+        ('JUILLAC', 33890),
         ('LES SALLES DE CASTILLON', 33350),
         ('LUGAIGNAC', 33420),
         ('MERIGNAS', 33350),
@@ -404,7 +406,7 @@ VALUES
         ('SAINT JEAN DE BLAIGNAC', 33420),
         ('SAINT MAGNE DE CASTILLON', 33350),
         ('SAINT MICHEL DE MONTAIGNE', 24230),
-        ('SAINT PEY DE CASTETS', 33350)
+        ('SAINT PEY DE CASTETS', 33350),
         ('SAINTE RADEGONDE', 33350),
         ('SAINT VINCENT DE PERTIGNAS', 33420),
         ('BARON', 33750),
@@ -421,5 +423,4 @@ VALUES
         ('SADIRAC', 33670),
         ('SAINT GENES DE LOMBAUD', 33670),
         ('SAINT LEION', 33670),
-        ('VILLENAVE DE RIONS', 33550)
-);
+        ('VILLENAVE DE RIONS', 33550);
