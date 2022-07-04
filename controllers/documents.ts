@@ -59,7 +59,7 @@ const getOneDocument = (async (
 }) as RequestHandler;
 
 // checks if an document exists before update or delete
-const documentExists = async (
+const documentExists = (async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -75,7 +75,7 @@ const documentExists = async (
     // req.record = documentExists; // because we need deleted record to be sent after a delete in react-admin
     next();
   }
-};
+}) as RequestHandler;
 
 // adds a document
 
