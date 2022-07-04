@@ -56,7 +56,7 @@ CREATE TABLE `events`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `numberParticipantsMax` INT NULL,
     `date` VARCHAR(100) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
+    `description` VARCHAR(100) NOT NULL,
     `text` TEXT NULL,
     `podcastLink` VARCHAR(255) NULL,
     `reservedAdherent` TINYINT(1) NOT NULL,
@@ -238,7 +238,6 @@ VALUES
     );
 
 -- POST TYPES
-
 INSERT INTO
     postTypes (`name`)
 VALUES

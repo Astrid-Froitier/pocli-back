@@ -11,6 +11,7 @@ import paymentMethodsController from './controllers/paymentMethods';
 import paymentRecordsController from './controllers/paymentRecords';
 import postTypesController from './controllers/postTypes';
 import recipientsController from './controllers/recipients';
+import eventDocumentsController from './controllers/eventDocuments';
 import { Express } from 'express';
 
 const setupRoutes = (server: Express) => {
@@ -143,6 +144,30 @@ const setupRoutes = (server: Express) => {
     eventsController.eventExists,
     eventsController.deleteEvent
   );
+
+  // TABLE EVENTDOCUMENTS
+  server.get('/api/eventDocuments', eventDocumentsController.getAllEventDocuments);
+  server.get('/api/eventDocuments/:idEventDocument', eventDocumentsController.getOneEventDocument);
+
+  server.post(
+    '/api/eventDocuments',
+    eventDocumentsController.validateEventDocument,
+    eventDocumentsController.addEventDocument
+  );
+
+  server.put(
+    '/api/eventDocuments/:idEventDocument',
+    eventDocumentsController.validateEventDocument,
+    eventDocumentsController.eventDocumentExists,
+    eventDocumentsController.updateEventDocument
+  );
+
+  server.delete(
+    '/api/eventDocuments/:idEventDocument',
+    eventDocumentsController.eventExists,
+    eventDocumentsController.deleteEvent
+  );
+
 
   // TABLE FAMILIES
   server.get('/api/families', familiesController.getAllFamilies);

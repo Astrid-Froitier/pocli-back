@@ -15,7 +15,7 @@ const validateEvent = (req: Request, res: Response, next: NextFunction) => {
   const errors = Joi.object({
     numberParticipantsMax: Joi.number().optional().allow(null), // pour react-admin qui envoie null et pas undefined
     date: Joi.string().max(10).presence(required),
-    description: Joi.string().max(255).presence(required),
+    description: Joi.string().max(100).presence(required),
     text: Joi.string().max(1000).optional().allow(null),
     podcastLink: Joi.string().max(255).optional().allow(null),
     reservedAdherent: Joi.number().presence(required),
