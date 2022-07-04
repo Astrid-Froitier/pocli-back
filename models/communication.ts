@@ -3,7 +3,7 @@ import ICommunication from '../interfaces/ICommunication';
 import { ResultSetHeader } from 'mysql2';
 
 const getAllCommunications = async (sortBy = ''): Promise<ICommunication[]> => {
-  let sql = `SELECT id, object, content, isOpened, idAdmin, idCommunicationMember, isBanner FROM communications`;
+  let sql = `SELECT id, object, content, isOpened, idAdmin, isBanner FROM communications`;
   if (sortBy) {
     sql += ` ORDER BY ${sortBy}`;
   }
@@ -17,7 +17,7 @@ const getCommunicationById = async (
   const [results] = await connection
     .promise()
     .query<ICommunication[]>(
-      'SELECT id, object, content, isOpened, idAdmin, idCommunicationMember, isBanner FROM communications WHERE id = ?',
+      'SELECT id, object, content, isOpened, idAdmin, isBanner FROM communications WHERE id = ?',
       [idCommunication]
     );
   return results[0];
@@ -29,13 +29,12 @@ const addCommunication = async (
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO communications (object, content, isOpened, idAdmin, idCommunicationMember, isBanner) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO communications (object, content, isOpened, idAdmin, isBanner) VALUES (?, ?, ?, ?, ?, ?)',
       [
         communication.object,
         communication.content,
         communication.isOpened,
         communication.idAdmin,
-        communication.idCommunicationMember,
         communication.isBanner,
       ]
     );

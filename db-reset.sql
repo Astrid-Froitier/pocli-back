@@ -12,7 +12,8 @@ CREATE TABLE `eventDocuments`(
 
 CREATE TABLE `communicationMembers`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `idFamilyMember` INT NOT NULL
+    `idFamilyMember` INT NOT NULL,
+    `idCommunication` INT NOT NULL
 );
 
 CREATE TABLE `admins` (
@@ -42,7 +43,6 @@ CREATE TABLE `communications`(
     `content` VARCHAR(255) NOT NULL,
     `isOpened` TINYINT(1) NOT NULL,
     `idAdmin` INT NOT NULL,
-    `idCommunicationMember` INT NOT NULL,
     `isBanner` TINYINT(1) NOT NULL
 );
 
@@ -73,7 +73,8 @@ CREATE TABLE `paymentRecords`(
     `datePay` DATE NOT NULL,
     `amountPay` INT NOT NULL,
     `idFamily` INT NULL,
-    `idFamilyMember` INT NULL
+    `idFamilyMember` INT NULL,
+    `idActivity` INT NOT NULL,
 );
 
 CREATE TABLE `familyMembers`(
@@ -147,6 +148,11 @@ ADD
     CONSTRAINT `paymentrecords_idfamilymember_foreign` FOREIGN KEY(`idFamilyMember`) REFERENCES `familyMembers`(`id`);
 
 ALTER TABLE
+    `paymentRecords`
+ADD
+    CONSTRAINT `paymentrecords_idactivity_foreign` FOREIGN KEY(`idActivity`) REFERENCES `activities`(`id`);
+
+ALTER TABLE
     `familyMembers`
 ADD
     CONSTRAINT `familymembers_idfamily_foreign` FOREIGN KEY(`idFamily`) REFERENCES `families`(`id`);
@@ -172,9 +178,14 @@ ADD
     CONSTRAINT `familymemberactivities_idfamilymember_foreign` FOREIGN KEY(`idFamilyMember`) REFERENCES `familyMembers`(`id`);
 
 ALTER TABLE
-    `communications`
+    `communicationsMembers`
 ADD
-    CONSTRAINT `communications_idcommunicationmembers_foreign` FOREIGN KEY(`idCommunicationMembers`) REFERENCES `communicationMembers`(`id`);
+    CONSTRAINT `communicationMembers_idcommunications_foreign` FOREIGN KEY(`idCommunication`) REFERENCES `communications`(`id`);
+
+ALTER TABLE
+    `communicationsMembers`
+ADD
+    CONSTRAINT `communicationMembers_idfamilyMember_foreign` FOREIGN KEY(`idFamilyMember`) REFERENCES `familyMembers`(`id`);
 
 ALTER TABLE
     `familyMemberEvents`

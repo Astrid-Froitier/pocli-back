@@ -6,6 +6,5 @@ export default interface ICommunication extends RowDataPacket {
   content: string;
   isOpened: boolean;
   idAdmin: number;
-  idCommunicationMember: number;
   isBanner: boolean;
 }

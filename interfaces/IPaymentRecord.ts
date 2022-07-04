@@ -9,4 +9,5 @@ export default interface IPaymentRecord extends RowDataPacket {
   amountPay: number;
   idFamily: number;
   idFamilyMember: number;
+  idActivity: number;
 }
