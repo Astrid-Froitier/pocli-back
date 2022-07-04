@@ -114,12 +114,12 @@ const eventExists = (async (req: Request, res: Response, next: NextFunction) => 
 }) as RequestHandler;
 
 // checks if an idPostType exists before post or update
-const idPostTypeExists = async (
+const idPostTypeExists = (async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const idPostType = req.body.idPostType;
+  const { idPostType } = req.body as IEvent;
 
   if (!idPostType) {
     next();
@@ -134,15 +134,15 @@ const idPostTypeExists = async (
       next();
     }
   }
-};
+}) as RequestHandler;
 
 // checks if an idActvity exists before post or update
-const idActvityExists = async (
+const idActvityExists = (async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const idActivity = req.body.idActivity;
+  const { idActivity } = req.body as IEvent;
 
   if (!idActivity) {
     next();
@@ -157,7 +157,7 @@ const idActvityExists = async (
       next();
     }
   }
-};
+}) as RequestHandler;
 
 // adds an event
 

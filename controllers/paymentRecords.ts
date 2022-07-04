@@ -17,11 +17,12 @@ const validatePaymentRecord = (
   const errors = Joi.object({
     numberCheck: Joi.number().max(100).presence(required),
     isPaymentActiviy: Joi.bool().presence(required),
-    datePay: Joi.date().max(100).presence(required),
+    datePay: Joi.string().max(50).presence(required),
     amoutPay: Joi.number().max(100).presence(required),
     idPaymentMethod: Joi.number().max(100).presence(required),
     idFamily: Joi.number().max(100).presence(required),
     idFamilyMember: Joi.number().max(100).presence(required),
+    idActivity: Joi.number().max(100).presence(required),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {

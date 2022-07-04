@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import * as PostType from '../models/postType';
-import IPostType from '../interfaces/IPostType';
+// import IPostType from '../interfaces/IPostType';
 import { ErrorHandler } from '../helpers/errors';
 import { formatSortString } from '../helpers/functions';
 import Joi from 'joi';

@@ -71,7 +71,7 @@ const getOneEventDocument = (async (
 }) as RequestHandler;
 
 // checks if an eventDocument exists before update or delete
-const eventDocumentExists = async (
+const eventDocumentExists = (async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -86,15 +86,15 @@ const eventDocumentExists = async (
     // req.record = eventDocumentExists; // because we need deleted record to be sent after a delete in react-admin
     next();
   }
-};
+}) as RequestHandler;
 
 // checks if an idDocument exists before post or update
-const idDocumentExists = async (
+const idDocumentExists = (async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const idDocument = req.body.idDocument;
+  const { idDocument } = req.body as IEventDocument;
 
   if (!idDocument) {
     next();
@@ -109,15 +109,15 @@ const idDocumentExists = async (
       next();
     }
   }
-};
+}) as RequestHandler;
 
 // checks if an idEvent exists before post or update
-const idEventExists = async (
+const idEventExists = (async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const idEvent = req.body.idEvent;
+  const { idEvent } = req.body as IEventDocument;
 
   if (!idEvent) {
     next();
@@ -130,7 +130,7 @@ const idEventExists = async (
       next();
     }
   }
-};
+}) as RequestHandler;
 
 // adds a eventDocument
 

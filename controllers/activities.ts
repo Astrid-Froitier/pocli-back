@@ -61,7 +61,8 @@ const getOneActivity = (async (
   }
 }) as RequestHandler;
 
-const activityExitsts = async (
+
+const activityExitsts = (async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -77,7 +78,7 @@ const activityExitsts = async (
   } catch (err) {
     next();
   }
-};
+}) as RequestHandler;
 
 const addActivity = async (req: Request, res: Response, next: NextFunction) => {
   try {
