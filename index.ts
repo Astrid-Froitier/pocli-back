@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 import { handleError } from './helpers/errors';
-// import setupRoutes from './router';
+import setupRoutes from './router';
 import 'dotenv/config';
 import cors from 'cors';
 
@@ -28,7 +28,7 @@ app.use(express.json());
 //middleware pour envoyer des cookies
 app.use(cookieParser());
 
-// setupRoutes(app);
+setupRoutes(app);
 
 // A mettre à la fin pour gèrer les erreurs qui sortiront des routes
 app.use(handleError);

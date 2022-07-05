@@ -11,6 +11,7 @@ import paymentMethodsController from './controllers/paymentMethods';
 import paymentRecordsController from './controllers/paymentRecords';
 import postTypesController from './controllers/postTypes';
 import recipientsController from './controllers/recipients';
+import eventDocumentsController from './controllers/eventDocuments';
 import { Express } from 'express';
 
 const setupRoutes = (server: Express) => {
@@ -124,10 +125,14 @@ const setupRoutes = (server: Express) => {
   // TABLE EVENTS
   server.get('/api/events', eventsController.getAllEvents);
   server.get('/api/events/:idEvent', eventsController.getOneEvent);
+  server.get('/api/events/postTypes/:idPostType', eventsController.getAllEventsByPostType);
+  server.get('/api/events/activities/:idActivity', eventsController.getAllEventsByActivity);
 
   server.post(
-    '/api/events',
+    '/api/events/',
     eventsController.validateEvent,
+    eventsController.idPostTypeExists,
+    eventsController.idActvityExists,
     eventsController.addEvent
   );
 
@@ -135,6 +140,8 @@ const setupRoutes = (server: Express) => {
     '/api/events/:idEvent',
     eventsController.validateEvent,
     eventsController.eventExists,
+    eventsController.idPostTypeExists,
+    eventsController.idActvityExists,
     eventsController.updateEvent
   );
 
@@ -143,6 +150,34 @@ const setupRoutes = (server: Express) => {
     eventsController.eventExists,
     eventsController.deleteEvent
   );
+
+  // TABLE EVENTDOCUMENTS
+  server.get('/api/eventDocuments', eventDocumentsController.getAllEventDocuments);
+  server.get('/api/eventDocuments/:idEventDocument', eventDocumentsController.getOneEventDocument);
+
+  server.post(
+    '/api/eventDocuments',
+    eventDocumentsController.validateEventDocument,
+    eventDocumentsController.idEventExists,
+    eventDocumentsController.idDocumentExists,
+    eventDocumentsController.addEventDocument
+  );
+
+  server.put(
+    '/api/eventDocuments/:idEventDocument',
+    eventDocumentsController.validateEventDocument,
+    eventDocumentsController.eventDocumentExists,
+    eventDocumentsController.idEventExists,
+    eventDocumentsController.idDocumentExists,
+    eventDocumentsController.updateEventDocument
+  );
+
+  server.delete(
+    '/api/eventDocuments/:idEventDocument',
+    eventDocumentsController.eventDocumentExists,
+    eventDocumentsController.deleteEventDocument,
+  );
+
 
   // TABLE FAMILIES
   server.get('/api/families', familiesController.getAllFamilies);
