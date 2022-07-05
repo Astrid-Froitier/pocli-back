@@ -16,6 +16,8 @@ const validateCommunicationMember = (
   }
   const errors = Joi.object({
     idFamilyMember: Joi.number().presence(required),
+    idCommunication: Joi.number().presence(required),
+    isOpened: Joi.bool().presence(required),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {

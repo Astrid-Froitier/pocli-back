@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import * as Event from '../models/event';
+import * as PostType from '../models/postType';
+import * as Activity from '../models/activity';
 import IEvent from '../interfaces/IEvent';
+import IPostType from '../interfaces/IPostType';
+import IActivity from '../interfaces/IActivity';
 import { ErrorHandler } from '../helpers/errors';
 import { formatSortString } from '../helpers/functions';
 import Joi from 'joi';
@@ -15,7 +19,7 @@ const validateEvent = (req: Request, res: Response, next: NextFunction) => {
   const errors = Joi.object({
     numberParticipantsMax: Joi.number().optional().allow(null), // pour react-admin qui envoie null et pas undefined
     date: Joi.string().max(10).presence(required),
-    description: Joi.string().max(255).presence(required),
+    description: Joi.string().max(100).presence(required),
     text: Joi.string().max(1000).optional().allow(null),
     podcastLink: Joi.string().max(255).optional().allow(null),
     reservedAdherent: Joi.number().presence(required),
@@ -66,24 +70,94 @@ const getOneEvent = (async (
   }
 }) as RequestHandler;
 
-// checks if an event exists before update or delete
-const eventExists = async (
+// returns all events by postType
+const getAllEventsByPostType = (async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  try {
+    const { idPostType } = req.params;
+    const events = await Event.getEventByPostType(Number(idPostType));
+    events ? res.status(200).json(events) : res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+}) as RequestHandler;
+
+// returns all events by postType
+const getAllEventsByActivity = (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idActivity } = req.params;
+    const events = await Event.getEventByPostType(Number(idActivity));
+    events ? res.status(200).json(events) : res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+}) as RequestHandler;
+
+// checks if an event exists before update or delete
+const eventExists = (async (req: Request, res: Response, next: NextFunction) => {
   const { idEvent } = req.params;
 
-  const eventExists: IEvent = await Event.getEventById(
-    Number(idEvent)
-  );
+  const eventExists: IEvent = await Event.getEventById(Number(idEvent));
   if (!eventExists) {
     next(new ErrorHandler(409, `This event does not exist`));
   } else {
     // req.record = eventExists; // because we need deleted record to be sent after a delete in react-admin
     next();
   }
-};
+}) as RequestHandler;
+
+// checks if an idPostType exists before post or update
+const idPostTypeExists = (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { idPostType } = req.body as IEvent;
+
+  if (!idPostType) {
+    next();
+  } else {
+    const idPostTypeExists: IPostType = await PostType.getPostTypeById(
+      Number(idPostType)
+    );
+    if (!idPostTypeExists) {
+      next(new ErrorHandler(409, `This idPostType does not exist`));
+    } else {
+      // req.record = idPostTypeExists; // because we need deleted record to be sent after a delete in react-admin
+      next();
+    }
+  }
+}) as RequestHandler;
+
+// checks if an idActvity exists before post or update
+const idActvityExists = (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { idActivity } = req.body as IEvent;
+
+  if (!idActivity) {
+    next();
+  } else {
+    const idActivityExists: IActivity = await Activity.getActivityById(
+      Number(idActivity)
+    );
+    if (!idActivityExists) {
+      next(new ErrorHandler(409, `This idActivity does not exist`));
+    } else {
+      // req.record = idActivityExists; // because we need deleted record to be sent after a delete in react-admin
+      next();
+    }
+  }
+}) as RequestHandler;
 
 // adds an event
 
@@ -102,11 +176,7 @@ const addEvent = async (req: Request, res: Response, next: NextFunction) => {
 
 // updates an event
 
-const updateEvent = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const updateEvent = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { idEvent } = req.params;
     const eventUpdated = await Event.updateEvent(
@@ -125,11 +195,7 @@ const updateEvent = async (
 };
 
 // delete one event
-const deleteEvent = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const deleteEvent = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { idEvent } = req.params;
     const eventDeleted = await Event.deleteEvent(Number(idEvent));
@@ -146,9 +212,13 @@ const deleteEvent = async (
 export default {
   getAllEvents,
   getOneEvent,
+  getAllEventsByPostType,
+  getAllEventsByActivity,
   deleteEvent,
   addEvent,
   updateEvent,
   validateEvent,
   eventExists,
+  idPostTypeExists,
+  idActvityExists,
 };

@@ -17,7 +17,7 @@ const validateFamilyMember = (
   const errors = Joi.object({
     idFamily: Joi.number().presence(required),
     firstname: Joi.string().max(255).presence(required),
-    birthday: Joi.date().max(10).presence(required),
+    birthday: Joi.string().max(50).presence(required),
     isActive: Joi.number().presence(required),
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
