@@ -528,16 +528,16 @@ VALUES
 INSERT INTO
     documents (`name`, `url`)
 VALUES
-    ("cadeaux", "https://ibb.co/b16ss3J"),
-    ("enfantsPeintures", "https://ibb.co/p36J9h0"),
-    ("anes", "https://ibb.co/XZqbSKy"),
-    ("enfantDécoupage", "https://ibb.co/vQkN2sW"),
-    ("réunion", "https://ibb.co/fX9pq3r"),
-    ("papiEnfants", "https://ibb.co/GR3gTYx"),
-    ("jeux", "https://ibb.co/C0q8QPw"),
-    ("pilate", "https://ibb.co/QjnWG98"),
-    ("gymDouce", "https://ibb.co/MSfBWw7"),
-    ("gym", "https://ibb.co/0MQB832");
+    ("cadeaux", "https://i.ibb.co/Y2NccWZ/20211216-141722.jpg"),
+    ("enfantsPeintures", "https://i.ibb.co/cNKD7Yg/20170707-094557.jpg"),
+    ("anes", "https://i.ibb.co/5WP6BSY/Partages-juin.jpg"),
+    ("enfantDécoupage", "https://i.ibb.co/fnH3m8W/20210929-101149-1.jpg"),
+    ("réunion", "https://i.ibb.co/RgN0YXQ/conf-college.jpg"),
+    ("papiEnfants", "https://i.ibb.co/DQg3pcV/20170614-152502.jpg"),
+    ("jeux", "https://i.ibb.co/q1zjpJD/20210429-171847.jpg"),
+    ("pilate", "https://i.ibb.co/qF9HwB0/IMG-8295.jpg"),
+    ("gymDouce", "https://i.ibb.co/6w8XV9F/gym-douce.jpg"),
+    ("gym", "https://i.ibb.co/pznWGpw/IMG-0463.jpg");
 
 INSERT INTO
     eventDocuments (`idDocument`, `idEvent`)
