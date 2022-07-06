@@ -1,5 +1,5 @@
 import connection from '../db-config.js';
-import { ResultSetHeader } from 'mysql2';
+// import { ResultSetHeader } from 'mysql2';
 import IPaymentMethod from '../interfaces/IPaymentMethod';
 
 const getAllPaymentMethods = async (sortBy = ''): Promise<IPaymentMethod[]> => {

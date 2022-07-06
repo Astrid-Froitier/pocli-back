@@ -1,5 +1,4 @@
 import connection from '../db-config.js';
-import { ResultSetHeader } from 'mysql2';
 import IPostType from '../interfaces/IPostType';
 
 const getAllPostType = async (sortBy = ''): Promise<IPostType[]> => {
