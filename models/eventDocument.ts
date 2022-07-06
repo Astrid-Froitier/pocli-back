@@ -4,7 +4,7 @@ import IEventDocument from '../interfaces/IEventDocument';
 
 const getAllEventDocuments = async (sortBy = ''): Promise<IEventDocument[]> => {
   let sql =
-    'SELECT ed.idDocument, ed.idEvent, e.numberParticipantsMax, e.date, e.description, e.text, e.podcastLink, e.reservedAdherent, e.price, e.idPostType, e.idActivity, d.name, d.url FROM eventDocuments ed RIGHT JOIN events e on e.id=ed.idEvent RIGHT JOIN documents d on d.id=ed.idDocument';
+    'SELECT ed.*, d.name AS document_name, d.url AS document_url FROM eventDocuments AS ed LEFT JOIN documents AS d ON d.id=ed.idDocument';
   if (sortBy) {
     sql += ` ORDER BY ${sortBy}`;
   }
@@ -18,31 +18,8 @@ const getEventDocumentById = async (
   const [results] = await connection
     .promise()
     .query<IEventDocument[]>(
-      'SELECT ed.idDocument, ed.idEvent, e.numberParticipantsMax, e.date, e.description, e.text, e.podcastLink, e.reservedAdherent, e.price, e.idPostType, e.idActivity, d.name, d.url FROM eventDocuments ed RIGHT JOIN events e on e.id=ed.idEvent RIGHT JOIN documents d on d.id=ed.idDocument WHERE id = ?',
+      'SELECT ed.*, d.name AS document_name, d.url AS document_url FROM eventDocuments AS ed LEFT JOIN documents AS d ON d.id=ed.idDocument WHERE ed.id = ?',
       [idEventDocument]
-    );
-  return results[0];
-};
-
-const getEventDocumentByEvent = async (
-  idEvent: number
-): Promise<IEventDocument[]> => {
-  const results = await connection
-    .promise()
-    .query<IEventDocument[]>('SELECT * FROM eventDocuments WHERE idEvent = ?', [
-      idEvent,
-    ]);
-  return results[0];
-};
-
-const getEventDocumentByDocument = async (
-  idDocument: number
-): Promise<IEventDocument[]> => {
-  const results = await connection
-    .promise()
-    .query<IEventDocument[]>(
-      'SELECT * FROM eventDocuments WHERE idDocument = ?',
-      [idDocument]
     );
   return results[0];
 };
@@ -122,8 +99,6 @@ const deleteEventDocumentByEvent = async (
 export {
   getAllEventDocuments,
   getEventDocumentById,
-  getEventDocumentByEvent,
-  getEventDocumentByDocument,
   addEventDocument,
   updateEventDocument,
   deleteEventDocument,
