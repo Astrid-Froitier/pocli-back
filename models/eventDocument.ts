@@ -4,7 +4,7 @@ import IEventDocument from '../interfaces/IEventDocument';
 
 const getAllEventDocuments = async (sortBy = ''): Promise<IEventDocument[]> => {
   let sql =
-    'SELECT ed.*, d.name AS document_name, d.url AS document_url FROM eventDocuments AS ed LEFT JOIN documents AS d ON d.id=ed.idDocument';
+    'SELECT * FROM eventDocuments';
   if (sortBy) {
     sql += ` ORDER BY ${sortBy}`;
   }
@@ -18,7 +18,7 @@ const getEventDocumentById = async (
   const [results] = await connection
     .promise()
     .query<IEventDocument[]>(
-      'SELECT ed.*, d.name AS document_name, d.url AS document_url FROM eventDocuments AS ed LEFT JOIN documents AS d ON d.id=ed.idDocument WHERE ed.id = ?',
+      'SELECT * FROM eventDocuments WHERE id = ?',
       [idEventDocument]
     );
   return results[0];

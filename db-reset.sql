@@ -4,15 +4,19 @@ CREATE DATABASE `pocli`;
 
 USE `pocli`;
 
-CREATE TABLE `eventDocuments`(
+CREATE TABLE `linkedDocuments`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `idDocument` INT NOT NULL,
-    `idEvent` INT NOT NULL
+    `idEvent` INT NULL,
+    `idCommunication` INT NULL,
+    `idFamilyMember` INT NULL,
+    `idFamily` INT NULL
 );
 
 CREATE TABLE `communicationMembers`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `idFamilyMember` INT NOT NULL,
+    `idFamilyMember` INT NULL,
+    `idFamily` INT NULL,
     `idCommunication` INT NOT NULL,
     `isOpened` TINYINT(1) NOT NULL
 );
@@ -42,6 +46,7 @@ CREATE TABLE `communications`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `object` VARCHAR(255) NOT NULL,
     `content` VARCHAR(255) NOT NULL,
+    `date` DATETIME NOT NULL,
     `idAdmin` INT NOT NULL,
     `isBanner` TINYINT(1) NOT NULL
 );
@@ -68,13 +73,14 @@ CREATE TABLE `events`(
 CREATE TABLE `paymentRecords`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `idPaymentMethod` INT NOT NULL,
-    `numberCheck` VARCHAR(50) NULL,
+    `checkNumber` VARCHAR(50) NULL,
     `isPaymentActivity` TINYINT(1) NOT NULL,
-    `datePay` VARCHAR(50) NOT NULL,
-    `amountPay` INT NOT NULL,
+    `dateStart` DATETIME NOT NULL,
+    `dateEnd` DATETIME NOT NULL,
+    `amount` INT NOT NULL,
     `idFamily` INT NULL,
     `idFamilyMember` INT NULL,
-    `idActivity` INT NOT NULL
+    `idActivity` INT NULL
 );
 
 CREATE TABLE `familyMembers`(
@@ -82,7 +88,8 @@ CREATE TABLE `familyMembers`(
     `idFamily` INT NOT NULL,
     `firstname` VARCHAR(255) NOT NULL,
     `birthday` VARCHAR(50) NOT NULL,
-    `isActive` TINYINT(1) NOT NULL
+    `isActive` TINYINT(1) NOT NULL,
+    `avatar` VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE `families`(
@@ -113,7 +120,7 @@ CREATE TABLE `activities`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL,
     `category` VARCHAR(100) NOT NULL,
-    `abridged` VARCHAR(100) NOT NULL
+    `shortName` VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE `recipients`(
@@ -130,6 +137,11 @@ CREATE TABLE `cities`(
 CREATE TABLE `paymentMethods`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE `newsletters`(
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `email` VARCHAR(255) NOT NULL
 );
 
 ALTER TABLE
@@ -180,12 +192,17 @@ ADD
 ALTER TABLE
     `communicationMembers`
 ADD
-    CONSTRAINT `communicationMembers_idcommunications_foreign` FOREIGN KEY(`idCommunication`) REFERENCES `communications`(`id`);
+    CONSTRAINT `communicationmembers_idcommunication_foreign` FOREIGN KEY(`idCommunication`) REFERENCES `communications`(`id`);
 
 ALTER TABLE
     `communicationMembers`
 ADD
-    CONSTRAINT `communicationMembers_idfamilyMember_foreign` FOREIGN KEY(`idFamilyMember`) REFERENCES `familyMembers`(`id`);
+    CONSTRAINT `communicationmembers_idfamilyMember_foreign` FOREIGN KEY(`idFamilyMember`) REFERENCES `familyMembers`(`id`);
+
+ALTER TABLE
+    `communicationMembers`
+ADD
+    CONSTRAINT `communicationmembers_idfamily_foreign` FOREIGN KEY(`idFamily`) REFERENCES `families`(`id`);
 
 ALTER TABLE
     `familyMemberEvents`
@@ -208,18 +225,33 @@ ADD
     CONSTRAINT `events_idactivity_foreign` FOREIGN KEY(`idActivity`) REFERENCES `activities`(`id`);
 
 ALTER TABLE
-    `eventDocuments`
+    `linkedDocuments`
 ADD
-    CONSTRAINT `eventdocuments_iddocument_foreign` FOREIGN KEY(`idDocument`) REFERENCES `documents`(`id`);
+    CONSTRAINT `linkeddocuments_iddocument_foreign` FOREIGN KEY(`idDocument`) REFERENCES `documents`(`id`);
 
 ALTER TABLE
-    `eventDocuments`
+    `linkedDocuments`
 ADD
-    CONSTRAINT `eventdocuments_idevent_foreign` FOREIGN KEY(`idEvent`) REFERENCES `events`(`id`);
+    CONSTRAINT `linkeddocuments_idevent_foreign` FOREIGN KEY(`idEvent`) REFERENCES `events`(`id`);
+
+ALTER TABLE
+    `linkedDocuments`
+ADD
+    CONSTRAINT `linkeddocuments_idcommunication_foreign` FOREIGN KEY(`idCommunication`) REFERENCES `communications`(`id`);
+
+ALTER TABLE
+    `linkedDocuments`
+ADD
+    CONSTRAINT `linkeddocuments_idfamily_foreign` FOREIGN KEY(`idFamily`) REFERENCES `families`(`id`);
+
+ALTER TABLE
+    `linkedDocuments`
+ADD
+    CONSTRAINT `linkeddocuments_idfamilymember_foreign` FOREIGN KEY(`idFamilyMember`) REFERENCES `familyMembers`(`id`);
 
 -- ACTIVITIES
 INSERT INTO
-    activities (`name`, `category`, `abridged`)
+    activities (`name`, `category`, `shortName`)
 VALUES
     ('Part’Ages', 'Famille - Parentalité', 'family'),
     (
@@ -369,7 +401,7 @@ VALUES
     ('SAINT MEDARD DE GUIZIERES', 33230),
     ('SAINT QUENTIN DE BARON', 33750),
     ('SAINT SAUVEUR DE PUYNORMAND', 33660),
-    ('SAINT SEURIN DE L’ISLE', 3660),
+    ('SAINT SEURIN DE L’ISLE', 33660),
     ('SAVIGNAC DE L’ISLE', 33910),
     ('TIZAC DE CURTON', 33531),
     ('TIZAC DE LAPOUYADE', 33620),
@@ -472,7 +504,7 @@ VALUES
         "rootroot",
         3,
         3,
-        1
+        0
     );
 
 INSERT INTO
@@ -480,18 +512,73 @@ INSERT INTO
         `idFamily`,
         `firstname`,
         `birthday`,
-        `isActive`
+        `isActive`,
+        `avatar`
     )
 VALUES
-    (1, "Philipe", 16 / 05 / 1978, 1),
-    (1, "Maire", 19 / 02 / 1976, 1),
-    (1, "Kevin", 24 / 12 / 1989, 1),
-    (2, "Gérard", 20 / 05 / 1976, 1),
-    (2, "Yvette", 02 / 09 / 1980, 1),
-    (2, "Jeremy", 24 / 12 / 2000, 1),
-    (3, "John", 20 / 05 / 1952, 1),
-    (3, "Suzy", 02 / 09 / 1960, 1),
-    (3, "Eric", 24 / 12 / 2008, 1);
+    (
+        1,
+        "Philipe",
+        "1985-07-06 00:00:00",
+        1,
+        "assets/avatar.png"
+    ),
+    (
+        1,
+        "Maire",
+        "1987-07-06 00:00:00",
+        1,
+        "assets/avatar.png"
+    ),
+    (
+        1,
+        "Kevin",
+        "1900-07-06 00:00:00",
+        1,
+        "assets/avatar.png"
+    ),
+    (
+        2,
+        "Gérard",
+        "1980-07-06 00:00:00",
+        1,
+        "assets/avatar.png"
+    ),
+    (
+        2,
+        "Yvette",
+        "1989-07-06 00:00:00",
+        1,
+        "assets/avatar.png"
+    ),
+    (
+        2,
+        "Jeremy",
+        "1990-07-06 00:00:00",
+        1,
+        "assets/avatar.png"
+    ),
+    (
+        3,
+        "John",
+        "1997-07-06 00:00:00",
+        1,
+        "assets/avatar.png"
+    ),
+    (
+        3,
+        "Suzy",
+        "1995-07-06 00:00:00",
+        1,
+        "assets/avatar.png"
+    ),
+    (
+        3,
+        "Eric",
+        "1600-07-06 00:00:00",
+        1,
+        "assets/avatar.png"
+    );
 
 INSERT INTO
     paymentMethods (`name`)
@@ -503,10 +590,11 @@ VALUES
 INSERT INTO
     paymentRecords (
         `idPaymentMethod`,
-        `numberCheck`,
+        `checkNumber`,
         `isPaymentActivity`,
-        `datePay`,
-        `amountPay`,
+        `dateStart`,
+        `dateEnd`,
+        `amount`,
         `idFamily`,
         `idFamilyMember`,
         `idActivity`
@@ -516,49 +604,104 @@ VALUES
         2,
         21654987312178554,
         1,
-        25 / 06 / 2022,
+        "2021-07-06 00:00:00",
+        "2023-07-06 00:00:00",
         40,
         2,
         null,
         3
     ),
-    (1, null, 1, 12 / 05 / 2021, 20, null, 2, 1),
-    (3, null, 1, 10 / 12 / 2021, 10, 3, null, 5);
+    (
+        1,
+        null,
+        1,
+        "2021-05-06 00:00:00",
+        "2022-05-06 00:00:00",
+        500,
+        null,
+        2,
+        1
+    ),
+    (
+        3,
+        null,
+        1,
+        "2021-10-06 00:00:00",
+        "2022-07-30 00:00:00",
+        200,
+        3,
+        null,
+        5
+    );
 
 INSERT INTO
     documents (`name`, `url`)
 VALUES
-    ("cadeaux", "https://i.ibb.co/Y2NccWZ/20211216-141722.jpg"),
-    ("enfantsPeintures", "https://i.ibb.co/cNKD7Yg/20170707-094557.jpg"),
-    ("anes", "https://i.ibb.co/5WP6BSY/Partages-juin.jpg"),
-    ("enfantDécoupage", "https://i.ibb.co/fnH3m8W/20210929-101149-1.jpg"),
-    ("réunion", "https://i.ibb.co/RgN0YXQ/conf-college.jpg"),
-    ("papiEnfants", "https://i.ibb.co/DQg3pcV/20170614-152502.jpg"),
-    ("jeux", "https://i.ibb.co/q1zjpJD/20210429-171847.jpg"),
-    ("pilate", "https://i.ibb.co/qF9HwB0/IMG-8295.jpg"),
-    ("gymDouce", "https://i.ibb.co/6w8XV9F/gym-douce.jpg"),
+    (
+        "cadeaux",
+        "https://i.ibb.co/Y2NccWZ/20211216-141722.jpg"
+    ),
+    (
+        "enfantsPeintures",
+        "https://i.ibb.co/cNKD7Yg/20170707-094557.jpg"
+    ),
+    (
+        "anes",
+        "https://i.ibb.co/5WP6BSY/Partages-juin.jpg"
+    ),
+    (
+        "enfantDécoupage",
+        "https://i.ibb.co/fnH3m8W/20210929-101149-1.jpg"
+    ),
+    (
+        "réunion",
+        "https://i.ibb.co/RgN0YXQ/conf-college.jpg"
+    ),
+    (
+        "papiEnfants",
+        "https://i.ibb.co/DQg3pcV/20170614-152502.jpg"
+    ),
+    (
+        "jeux",
+        "https://i.ibb.co/q1zjpJD/20210429-171847.jpg"
+    ),
+    (
+        "pilate",
+        "https://i.ibb.co/qF9HwB0/IMG-8295.jpg"
+    ),
+    (
+        "gymDouce",
+        "https://i.ibb.co/6w8XV9F/gym-douce.jpg"
+    ),
     ("gym", "https://i.ibb.co/pznWGpw/IMG-0463.jpg");
 
 INSERT INTO
-    eventDocuments (`idDocument`, `idEvent`)
+    linkedDocuments (
+        `idDocument`,
+        `idEvent`,
+        `idCommunication`,
+        `idFamilyMember`,
+        `idFamily`
+    )
 VALUES
-    (1, 1),
-    (2, 1),
-    (3, 1),
-    (4, 1),
-    (5, 2),
-    (6, 2),
-    (7, 3),
-    (8, 3),
-    (7, 4),
-    (8, 4),
-    (9, 5),
-    (10, 5);
+    (1, 1, null, null, null),
+    (2, 1, null, null, null),
+    (3, 1, null, null, null),
+    (4, 1, null, null, null),
+    (5, 2, null, null, null),
+    (6, 2, null, null, null),
+    (7, 3, null, null, null),
+    (8, 3, null, null, null),
+    (7, 4, null, null, null),
+    (8, 4, null, null, null),
+    (9, 5, null, null, null),
+    (10, 5, null, null, null);
 
 INSERT INTO
     communications (
         `object`,
         `content`,
+        `date`,
         `idAdmin`,
         `isBanner`
     )
@@ -566,18 +709,21 @@ VALUES
     (
         'Informations',
         'Lorem ipsum dolor sit amet consectetur adipisicing elit',
+        "2021-10-06 00:00:00",
         1,
         1
     ),
     (
         'Fermeture',
         'Nous fermerons nos portes du 10 au 20/06',
+        "2021-10-06 00:00:00",
         2,
         1
     ),
     (
         'Atelier',
         'Future Atelier parent - enfant',
+        "2021-10-06 00:00:00",
         1,
         0
     );
@@ -586,9 +732,10 @@ INSERT INTO
     communicationMembers (
         `idFamilyMember`,
         `idCommunication`,
+        `idFamily`,
         `isOpened`
     )
 VALUES
-    (1, 1, 1),
-    (3, 2, 0),
-    (2, 3, 1);
+    (1, 1, 1, 1),
+    (3, 2, 1, 0),
+    (2, 3, 1, 1);
