@@ -85,7 +85,7 @@ const getOneAdmin = (async (
 }) as RequestHandler;
 
 // checks if Admin exists
-const AdminExists = (async (
+const adminExists = (async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -114,7 +114,14 @@ const addAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const admin = req.body as IAdmin;
     admin.id = await Admin.addAdmin(admin);
-    res.status(201).json(admin);
+    res
+      .status(201)
+      .json({
+        id: admin.id,
+        firstname: admin.firstname,
+        lastname: admin.lastname,
+        email: admin.email,
+      });
   } catch (err) {
     next(err);
   }
@@ -160,7 +167,7 @@ const deleteAdmin = async (req: Request, res: Response, next: NextFunction) => {
 export default {
   getAllAdmins,
   getOneAdmin,
-  AdminExists,
+  adminExists,
   emailIsFree,
   deleteAdmin,
   validateAdmin,

@@ -13,9 +13,9 @@ const validateFamily = (req: Request, res: Response, next: NextFunction) => {
   }
   const errors = Joi.object({
     name: Joi.string().max(255).presence(required),
-    streetNumber: Joi.number().max(5).presence(required),
+    streetNumber: Joi.number().presence(required),
     address: Joi.string().max(255).presence(required),
-    phoneNumber: Joi.string().max(10).presence(required),
+    phoneNumber: Joi.number().presence(required),
     email: Joi.string().max(255).presence(required),
     password: Joi.string().min(8).max(15).presence(required),
     idCity: Joi.number().presence(required),
@@ -58,7 +58,7 @@ const getAllFamilies = (async (
 
     res.setHeader(
       'Content-Range',
-      `users : 0-${families.length}/${families.length + 1}`
+      `families : 0-${families.length}/${families.length + 1}`
     );
     return res.status(200).json(families);
   } catch (err) {
@@ -87,7 +87,7 @@ const familyExists = (async (
 ) => {
   const { idFamily } = req.params;
   try {
-    const userExists = await Family.getFamilyById(Number(idFamily));
+    const familyExists = await Family.getFamilyById(Number(idFamily));
     if (!familyExists) {
       next(new ErrorHandler(404, `This family doesn't exist`));
     } else {

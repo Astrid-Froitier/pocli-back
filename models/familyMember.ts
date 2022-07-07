@@ -1,7 +1,7 @@
-// import { Request, Response, NextFunction } from 'express';
+//import { Request, Response, NextFunction } from 'express';
 import { ResultSetHeader } from 'mysql2';
 import connection from '../db-config';
-//import { ErrorHandler } from '../helpers/errors';
+// import { ErrorHandler } from '../helpers/errors';
 import IFamilyMember from '../interfaces/IFamilyMember';
 
 // to see if the email is available
@@ -17,7 +17,8 @@ import IFamilyMember from '../interfaces/IFamilyMember';
 //   }
 // };
 
-const getAllfamilyMembers = async (sortBy = ''): Promise<IFamilyMember[]> => {
+// to have all of family members //
+const getAllFamilyMembers = async (sortBy = ''): Promise<IFamilyMember[]> => {
   let sql =
     'SELECT id, idFamily, firstname, birthday, isActive FROM familyMembers';
   if (sortBy) {
@@ -27,14 +28,15 @@ const getAllfamilyMembers = async (sortBy = ''): Promise<IFamilyMember[]> => {
   return results[0];
 };
 
+// to select one member by its id
 const getFamilyMemberById = async (
-  idFamily: number
+  idFamilyMember: number
 ): Promise<IFamilyMember> => {
   const [results] = await connection
     .promise()
     .query<IFamilyMember[]>(
       'SELECT id, firstname, birthday FROM familyMembers WHERE id =  ?',
-      [idFamily]
+      [idFamilyMember]
     );
   return results[0];
 };
@@ -66,8 +68,8 @@ const deleteFamilyMember = async (idFamilyMember: number): Promise<boolean> => {
   return results[0].affectedRows === 1;
 };
 
-export default {
-  getAllfamilyMembers,
+export {
+  getAllFamilyMembers,
   getFamilyMemberById,
   addFamilyMember,
   deleteFamilyMember,
