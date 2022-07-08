@@ -1,10 +1,9 @@
 import connection from '../db-config.js';
 import { ResultSetHeader } from 'mysql2';
-import IEventDocument from '../interfaces/IEventDocument';
+import IEventDocument from '../interfaces/ILinkedDocument';
 
 const getAllEventDocuments = async (sortBy = ''): Promise<IEventDocument[]> => {
-  let sql =
-    'SELECT * FROM eventDocuments';
+  let sql = 'SELECT * FROM eventDocuments';
   if (sortBy) {
     sql += ` ORDER BY ${sortBy}`;
   }
@@ -17,10 +16,9 @@ const getEventDocumentById = async (
 ): Promise<IEventDocument> => {
   const [results] = await connection
     .promise()
-    .query<IEventDocument[]>(
-      'SELECT * FROM eventDocuments WHERE id = ?',
-      [idEventDocument]
-    );
+    .query<IEventDocument[]>('SELECT * FROM eventDocuments WHERE id = ?', [
+      idEventDocument,
+    ]);
   return results[0];
 };
 
