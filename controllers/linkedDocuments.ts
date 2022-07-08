@@ -248,7 +248,7 @@ const updateLinkedDocument = async (
       const linkedDocument = await LinkedDocument.getLinkedDocumentById(
         Number(idLinkedDocument)
       );
-      res.status(200).send(LinkedDocument); // react-admin needs this response
+      res.status(200).send(linkedDocument); // react-admin needs this response
     } else {
       throw new ErrorHandler(500, `LinkedDocument cannot be updated`);
     }

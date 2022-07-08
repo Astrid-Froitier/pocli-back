@@ -22,7 +22,7 @@ CREATE TABLE `communicationMembers`(
 );
 
 CREATE TABLE `admins` (
-    `id` INT auto_increment PRIMARY KEY,
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
     `firstname` VARCHAR(100) NOT NULL,
     `lastname` VARCHAR(100) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE `admins` (
 );
 
 CREATE TABLE `partners` (
-    `id` INT auto_increment PRIMARY KEY,
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL,
     `logo` VARCHAR(100) NOT NULL,
     `url` VARCHAR(100) NOT NULL
@@ -195,6 +195,11 @@ ADD
     CONSTRAINT `communicationmembers_idcommunication_foreign` FOREIGN KEY(`idCommunication`) REFERENCES `communications`(`id`);
 
 ALTER TABLE
+    `communications`
+ADD
+    CONSTRAINT `communications_idadmin_foreign` FOREIGN KEY(`idAdmin`) REFERENCES `admins`(`id`);
+
+ALTER TABLE
     `communicationMembers`
 ADD
     CONSTRAINT `communicationmembers_idfamilyMember_foreign` FOREIGN KEY(`idFamilyMember`) REFERENCES `familyMembers`(`id`);
@@ -321,7 +326,7 @@ VALUES
         null,
         0,
         1000,
-        2,
+        11,
         null
     ),
     (
@@ -333,7 +338,7 @@ VALUES
         1,
         1000,
         1,
-        3
+        21
     ),
     (
         5,
@@ -343,7 +348,7 @@ VALUES
         null,
         1,
         500,
-        3,
+        21,
         null
     ),
     (
@@ -355,7 +360,7 @@ VALUES
         1,
         50,
         1,
-        8
+        71
     );
 
 INSERT INTO
@@ -491,8 +496,8 @@ VALUES
         0636655555,
         "dupont @gmail.com",
         "cartable",
-        2,
-        2,
+        11,
+        11,
         1
     ),
     (
@@ -502,8 +507,8 @@ VALUES
         0689145715,
         "doe @gmail.chine",
         "rootroot",
-        3,
-        3,
+        21,
+        21,
         0
     );
 
@@ -538,42 +543,42 @@ VALUES
         "assets/avatar.png"
     ),
     (
-        2,
+        11,
         "Gérard",
         "1980-07-06 00:00:00",
         1,
         "assets/avatar.png"
     ),
     (
-        2,
+        11,
         "Yvette",
         "1989-07-06 00:00:00",
         1,
         "assets/avatar.png"
     ),
     (
-        2,
+        11,
         "Jeremy",
         "1990-07-06 00:00:00",
         1,
         "assets/avatar.png"
     ),
     (
-        3,
+        21,
         "John",
         "1997-07-06 00:00:00",
         1,
         "assets/avatar.png"
     ),
     (
-        3,
+        21,
         "Suzy",
         "1995-07-06 00:00:00",
         1,
         "assets/avatar.png"
     ),
     (
-        3,
+        21,
         "Eric",
         "1600-07-06 00:00:00",
         1,
@@ -601,15 +606,15 @@ INSERT INTO
     )
 VALUES
     (
-        2,
+        11,
         21654987312178554,
         1,
         "2021-07-06 00:00:00",
         "2023-07-06 00:00:00",
         40,
-        2,
+        11,
         null,
-        3
+        21
     ),
     (
         1,
@@ -619,19 +624,19 @@ VALUES
         "2022-05-06 00:00:00",
         500,
         null,
-        2,
+        11,
         1
     ),
     (
-        3,
+        21,
         null,
         1,
         "2021-10-06 00:00:00",
         "2022-07-30 00:00:00",
         200,
-        3,
+        21,
         null,
-        5
+        41
     );
 
 INSERT INTO
@@ -685,18 +690,29 @@ INSERT INTO
     )
 VALUES
     (1, 1, null, null, null),
-    (2, 1, null, null, null),
-    (3, 1, null, null, null),
-    (4, 1, null, null, null),
-    (5, 2, null, null, null),
-    (6, 2, null, null, null),
-    (7, 3, null, null, null),
-    (8, 3, null, null, null),
-    (7, 4, null, null, null),
-    (8, 4, null, null, null),
-    (9, 5, null, null, null),
-    (10, 5, null, null, null);
+    (11, 1, null, null, null),
+    (21, 1, null, null, null),
+    (31, 1, null, null, null),
+    (41, 11, null, null, null),
+    (51, 11, null, null, null),
+    (61, 21, null, null, null),
+    (71, 21, null, null, null),
+    (61, 31, null, null, null),
+    (71, 31, null, null, null),
+    (81, 41, null, null, null),
+    (91, 41, null, null, null);
 
+INSERT INTO
+    admins (`firstname`, `lastname`, `email`, `password`)
+VALUES
+    (
+        'Boris',
+        'Vian',
+        'soireedisco@joke.com',
+        'borisetviansontsurunbateau'
+    ),
+    ('test', 'test', 'test@test.com', 'test');
+    
 INSERT INTO
     communications (
         `object`,
@@ -717,7 +733,7 @@ VALUES
         'Fermeture',
         'Nous fermerons nos portes du 10 au 20/06',
         "2021-10-06 00:00:00",
-        2,
+        11,
         1
     ),
     (
@@ -737,5 +753,5 @@ INSERT INTO
     )
 VALUES
     (1, 1, 1, 1),
-    (3, 2, 1, 0),
-    (2, 3, 1, 1);
+    (21, 11, 1, 0),
+    (11, 21, 1, 1);

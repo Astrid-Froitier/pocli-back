@@ -44,17 +44,17 @@ const updateFamilyMemberActivity = async (
   familyMemberActivity: IFamilyMemberActivity
 ): Promise<boolean> => {
   let sql = 'UPDATE familyMemberActivities SET ';
-  const sqlValues: Array<string | number> = [];
+  const sqlValues: Array<number> = [];
   let oneValue = false;
 
   if (familyMemberActivity.idDocument) {
     sql += 'idDocument = ? ';
-    sqlValues.push(familyMemberActivity.idDocument);
+    sqlValues.push(Number(familyMemberActivity.idDocument));
     oneValue = true;
   }
   if (familyMemberActivity.idEvent) {
     sql += oneValue ? ', idEvent = ? ' : ' idEvent = ? ';
-    sqlValues.push(familyMemberActivity.idEvent);
+    sqlValues.push(Number(familyMemberActivity.idEvent));
     oneValue = true;
   }
   sql += ' WHERE id = ?';
