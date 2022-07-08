@@ -87,7 +87,7 @@ CREATE TABLE `familyMembers`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `idFamily` INT NOT NULL,
     `firstname` VARCHAR(255) NOT NULL,
-    `birthday` VARCHAR(50) NOT NULL,
+    `birthday` DATETIME NOT NULL,
     `isActive` TINYINT(1) NOT NULL,
     `avatar` VARCHAR(255) NOT NULL
 );

@@ -22,8 +22,8 @@ const addActivity = async (activity: IActivity): Promise<number> => {
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO activities (name, category, abridged) VALUES (?, ?, ?)',
-      [activity.name, activity.category, activity.abridged]
+      'INSERT INTO activities (name, category, shortName) VALUES (?, ?, ?)',
+      [activity.name, activity.category, activity.shortName]
     );
   return results[0].insertId;
 };
@@ -45,9 +45,9 @@ const updateActivity = async (
     sqlValues.push(activity.category);
     oneValue = true;
   }
-  if (activity.abridged) {
-    sql += oneValue ? ', abridged = ? ' : ' abridged = ? ';
-    sqlValues.push(activity.abridged);
+  if (activity.shortName) {
+    sql += oneValue ? ', shortName = ? ' : ' shortName = ? ';
+    sqlValues.push(activity.shortName);
     oneValue = true;
   }
   sql += ' WHERE id = ?';

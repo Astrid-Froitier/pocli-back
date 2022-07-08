@@ -19,9 +19,10 @@ const validateCommunication = (
   const errors = Joi.object({
     firstname: Joi.string().max(100).presence(required),
     object: Joi.string().max(100).presence(required),
+    date: Joi.string().max(100).presence(required),
     content: Joi.string().email().max(255).presence(required),
     idAdmin: Joi.number().presence(required),
-    isBanner: Joi.bool().presence(required),
+    isBanner: Joi.number().presence(required),
     id: Joi.number().optional(), // pour react-Communication
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
@@ -71,7 +72,7 @@ const getOneCommunication = (async (
 }) as RequestHandler;
 
 // checks if Communication exists
-const CommunicationExists = (async (
+const communicationExists = (async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -141,7 +142,7 @@ const deleteCommunication = async (
 export default {
   getAllCommunications,
   getOneCommunication,
-  CommunicationExists,
+  communicationExists,
   deleteCommunication,
   validateCommunication,
   addCommunication,

@@ -15,10 +15,11 @@ const validatePaymentRecord = (
     required = 'required';
   }
   const errors = Joi.object({
-    numberCheck: Joi.number().max(100).presence(required),
-    isPaymentActiviy: Joi.bool().presence(required),
-    datePay: Joi.string().max(50).presence(required),
-    amoutPay: Joi.number().max(100).presence(required),
+    checkNumber: Joi.number().max(100).presence(required),
+    isPaymentActiviy: Joi.number().presence(required),
+    dateStart: Joi.date().presence(required),
+    dateEnd: Joi.date().presence(required),
+    amout: Joi.number().max(100).presence(required),
     idPaymentMethod: Joi.number().max(100).presence(required),
     idFamily: Joi.number().max(100).presence(required),
     idFamilyMember: Joi.number().max(100).presence(required),

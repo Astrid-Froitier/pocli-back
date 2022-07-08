@@ -4,5 +4,5 @@ export default interface IActivity extends RowDataPacket {
   id: number;
   name: string;
   category: string;
-  abridged: string;
+  shortName: string;
 }
