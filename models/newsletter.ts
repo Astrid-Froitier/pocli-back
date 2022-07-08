@@ -37,11 +37,9 @@ const updateNewsletter = async (
 ): Promise<boolean> => {
   let sql = 'UPDATE newsletters SET ';
   const sqlValues: Array<string | number> = [];
-  let oneValue = false;
   if (newsletter.url) {
-    sql += oneValue ? ', url = ? ' : ' url = ? ';
-    sqlValues.push(newsletter.url);
-    oneValue = true;
+    sql += 'url = ? ';
+    sqlValues.push(String(newsletter.url));
   }
   sql += ' WHERE id = ?';
   sqlValues.push(idNewsletter);
