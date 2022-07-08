@@ -30,12 +30,13 @@ const addPaymentRecord = async (
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO paymentRecords (idPaymentMethod, numberCheck, isPaymentActivity, datePay, amountPay, idFamily, idFamilyMember, idActivity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO paymentRecords (idPaymentMethod, checkNumber, isPaymentActivity, dateStart, dateEnd, amount, idFamily, idFamilyMember, idActivity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
-        paymentRecord.numberCheck,
+        paymentRecord.checkNumber,
         paymentRecord.isPaymentActivity,
-        paymentRecord.datePay,
-        paymentRecord.amountPay,
+        paymentRecord.dateStart,
+        paymentRecord.dateEnd,
+        paymentRecord.amount,
         paymentRecord.idPaymentMethod,
         paymentRecord.idFamily,
         paymentRecord.idFamilyMember,
@@ -53,9 +54,9 @@ const updatePaymentRecord = async (
   const sqlValues: Array<string | number | boolean> = [];
   let oneValue = false;
 
-  if (paymentRecord.numberCheck) {
-    sql += 'numberCheck = ? ';
-    sqlValues.push(paymentRecord.numberCheck);
+  if (paymentRecord.checkNumber) {
+    sql += 'checkNumber = ? ';
+    sqlValues.push(paymentRecord.checkNumber);
     oneValue = true;
   }
   if (paymentRecord.isPaymentActivity) {
@@ -63,15 +64,20 @@ const updatePaymentRecord = async (
     sqlValues.push(paymentRecord.isPaymentActivity);
     oneValue = true;
   }
-  if (paymentRecord.datePay) {
-    sql += oneValue ? ', datePay = ? ' : ' datePay = ? ';
-    sqlValues.push(paymentRecord.datePay);
+  if (paymentRecord.dateStart) {
+    sql += oneValue ? ', dateStart = ? ' : ' dateStart = ? ';
+    sqlValues.push(paymentRecord.dateStart);
+    oneValue = true;
+  }
+  if (paymentRecord.dateEnd) {
+    sql += oneValue ? ', dateEnd = ? ' : ' dateEnd = ? ';
+    sqlValues.push(paymentRecord.dateEnd);
     oneValue = true;
   }
 
-  if (paymentRecord.amountPay) {
-    sql += oneValue ? ', amountPay = ? ' : ' amountPay = ? ';
-    sqlValues.push(paymentRecord.amountPay);
+  if (paymentRecord.amount) {
+    sql += oneValue ? ', amount = ? ' : ' amount = ? ';
+    sqlValues.push(paymentRecord.amount);
     oneValue = true;
   }
   if (paymentRecord.idPaymentMethod) {

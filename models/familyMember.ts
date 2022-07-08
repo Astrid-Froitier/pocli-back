@@ -4,23 +4,9 @@ import connection from '../db-config';
 // import { ErrorHandler } from '../helpers/errors';
 import IFamilyMember from '../interfaces/IFamilyMember';
 
-// to see if the email is available
-// const emailIsFree = async (req: Request, res: Response, next: NextFunction) => {
-//   const familyMember = req.body as IFamilyMember;
-//   const familyMemberExists: IFamilyMember = await getFamilyMemberByEmail(
-//     familyMember.email
-//   );
-//   if (familyMemberExists) {
-//     next(new ErrorHandler(409, `This email's member already exists`));
-//   } else {
-//     next();
-//   }
-// };
-
 // to have all of family members //
 const getAllFamilyMembers = async (sortBy = ''): Promise<IFamilyMember[]> => {
-  let sql =
-    'SELECT id, idFamily, firstname, birthday, isActive FROM familyMembers';
+  let sql = 'SELECT * FROM familyMembers';
   if (sortBy) {
     sql += `ORDER BY ${sortBy}`;
   }
@@ -34,10 +20,9 @@ const getFamilyMemberById = async (
 ): Promise<IFamilyMember> => {
   const [results] = await connection
     .promise()
-    .query<IFamilyMember[]>(
-      'SELECT id, firstname, birthday FROM familyMembers WHERE id =  ?',
-      [idFamilyMember]
-    );
+    .query<IFamilyMember[]>('SELECT * FROM familyMembers WHERE id =  ?', [
+      idFamilyMember,
+    ]);
   return results[0];
 };
 
@@ -48,12 +33,13 @@ const addFamilyMember = async (
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO familyMembers (idFamily, firstname, birthday, isActive) VALUES (?, ?, ?, ?)',
+      'INSERT INTO familyMembers (idFamily, firstname, birthday, isActive, avatar ) VALUES (?, ?, ?, ?, ?)',
       [
         familyMember.idFamily,
         familyMember.firstname,
         familyMember.birthday,
         familyMember.isActive,
+        familyMember.avatar,
       ]
     );
   return results[0].insertId;
