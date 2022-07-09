@@ -20,7 +20,6 @@ app.use(cors(corsOptions));
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Expose-Headers', 'Content-Range');
-  res.setHeader('Access-Control-Allow-Origin', 'https://pocli.vercel.app/');
   next();
 });
 
