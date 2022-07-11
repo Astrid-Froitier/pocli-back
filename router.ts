@@ -1,21 +1,24 @@
 import activitiesController from './controllers/activities';
 import adminsController from './controllers/admins';
 import communicationMembersController from './controllers/communicationMembers';
+import communicationsController from './controllers/communications';
 import citiesController from './controllers/cities';
 import documentsController from './controllers/documents';
 import eventsController from './controllers/events';
 import familiesController from './controllers/families';
+import familyMemberActivitiesController from './controllers/familyMemberActivities';
+import familyMemberEventsController from './controllers/familyMemberEvents';
 import familyMembersController from './controllers/familyMembers';
+import linkedDocumentsController from './controllers/linkedDocuments';
+import newslettersController from './controllers/newsletters';
 import partnersController from './controllers/partners';
 import paymentMethodsController from './controllers/paymentMethods';
 import paymentRecordsController from './controllers/paymentRecords';
 import postTypesController from './controllers/postTypes';
 import recipientsController from './controllers/recipients';
-import eventDocumentsController from './controllers/eventDocuments';
 import { Express } from 'express';
 
 const setupRoutes = (server: Express) => {
-
   // TABLE ACTIVITIES
   server.get('/api/activities', activitiesController.getAllActivities);
   server.get(
@@ -89,6 +92,28 @@ const setupRoutes = (server: Express) => {
     citiesController.deleteCity
   );
 
+  // TABLE COMMUNICATIONS
+  server.get(
+    '/api/communications',
+    communicationsController.getAllCommunications
+  );
+  server.get(
+    '/api/communications/:idCommunication',
+    communicationsController.getOneCommunication
+  );
+  server.post(
+    '/api/communications/',
+    communicationsController.validateCommunication,
+    communicationsController.communicationExists,
+    communicationsController.addCommunication
+  );
+
+  server.delete(
+    '/api/communications/:idCommunication',
+    communicationsController.communicationExists,
+    communicationsController.deleteCommunication
+  );
+
   // TABLE COMMUNICATIONMEMBERS
   server.get(
     '/api/communicationMembers',
@@ -125,8 +150,14 @@ const setupRoutes = (server: Express) => {
   // TABLE EVENTS
   server.get('/api/events', eventsController.getAllEvents);
   server.get('/api/events/:idEvent', eventsController.getOneEvent);
-  server.get('/api/events/postTypes/:idPostType', eventsController.getAllEventsByPostType);
-  server.get('/api/events/activities/:idActivity', eventsController.getAllEventsByActivity);
+  server.get(
+    '/api/events/postTypes/:idPostType',
+    eventsController.getAllEventsByPostType
+  );
+  server.get(
+    '/api/events/activities/:idActivity',
+    eventsController.getAllEventsByActivity
+  );
 
   server.post(
     '/api/events/',
@@ -150,34 +181,6 @@ const setupRoutes = (server: Express) => {
     eventsController.eventExists,
     eventsController.deleteEvent
   );
-
-  // TABLE EVENTDOCUMENTS
-  server.get('/api/eventDocuments', eventDocumentsController.getAllEventDocuments);
-  server.get('/api/eventDocuments/:idEventDocument', eventDocumentsController.getOneEventDocument);
-
-  server.post(
-    '/api/eventDocuments',
-    eventDocumentsController.validateEventDocument,
-    eventDocumentsController.idEventExists,
-    eventDocumentsController.idDocumentExists,
-    eventDocumentsController.addEventDocument
-  );
-
-  server.put(
-    '/api/eventDocuments/:idEventDocument',
-    eventDocumentsController.validateEventDocument,
-    eventDocumentsController.eventDocumentExists,
-    eventDocumentsController.idEventExists,
-    eventDocumentsController.idDocumentExists,
-    eventDocumentsController.updateEventDocument
-  );
-
-  server.delete(
-    '/api/eventDocuments/:idEventDocument',
-    eventDocumentsController.eventDocumentExists,
-    eventDocumentsController.deleteEventDocument,
-  );
-
 
   // TABLE FAMILIES
   server.get('/api/families', familiesController.getAllFamilies);
@@ -226,6 +229,115 @@ const setupRoutes = (server: Express) => {
     '/api/familyMembers/:idFamilyMember',
     familyMembersController.familyMemberExists,
     familyMembersController.deleteFamilyMember
+  );
+
+  // TABLE FAMILYMEMBERACTIVITIES
+  server.get(
+    '/api/familyMemberActivities',
+    familyMemberActivitiesController.getAllFamilyMemberActivities,
+    familyMemberActivitiesController.getOneFamilyMemberActivity
+  );
+
+  server.post(
+    '/api/familyMemberActivities',
+    familyMemberActivitiesController.validateFamilyMemberActivity,
+    familyMemberActivitiesController.addFamilyMemberActivity
+  );
+
+  server.put(
+    '/api/familyMemberActivities/:idFamilyMemberActivity',
+    familyMemberActivitiesController.validateFamilyMemberActivity,
+    familyMemberActivitiesController.familyMemberActivityExists
+  );
+
+  server.delete(
+    '/api/familyMemberActivities/:idFamilyMemberActivity',
+    familyMemberActivitiesController.familyMemberActivityExists,
+    familyMemberActivitiesController.deleteFamilyMemberActivity
+  );
+
+  // TABLE FAMILYMEMBEREVENTS
+  server.get(
+    '/api/familyMemberEvents',
+    familyMemberEventsController.getAllFamilyMemberEvents,
+    familyMemberEventsController.getOneFamilyMemberEvent
+  );
+
+  server.post(
+    '/api/familyMemberEvents',
+    familyMemberEventsController.validateFamilyMemberEvent,
+    familyMemberEventsController.addFamilyMemberEvent
+  );
+
+  server.put(
+    '/api/familyMemberEvents/:idFamilyMemberEvent',
+    familyMemberEventsController.validateFamilyMemberEvent,
+    familyMemberEventsController.familyMemberEventExists
+  );
+
+  server.delete(
+    '/api/familyMemberEvents/:idFamilyMemberEvent',
+    familyMemberEventsController.familyMemberEventExists,
+    familyMemberEventsController.deleteFamilyMemberEvent
+  );
+
+  // TABLE LINKEDDOCUMENTS
+  server.get(
+    '/api/linkedDocuments',
+    linkedDocumentsController.getAllLinkedDocuments
+  );
+  server.get(
+    '/api/linkedDocuments/:idLinkedDocument',
+    linkedDocumentsController.getOneLinkedDocument
+  );
+
+  server.post(
+    '/api/linkedDocuments',
+    linkedDocumentsController.validateLinkedDocument,
+    linkedDocumentsController.idEventExists,
+    linkedDocumentsController.idDocumentExists,
+    linkedDocumentsController.addLinkedDocument
+  );
+
+  server.put(
+    '/api/linkedDocuments/:idLinkedDocument',
+    linkedDocumentsController.validateLinkedDocument,
+    linkedDocumentsController.linkedDocumentExists,
+    linkedDocumentsController.idEventExists,
+    linkedDocumentsController.idDocumentExists,
+    linkedDocumentsController.updateLinkedDocument
+  );
+
+  server.delete(
+    '/api/linkedDocuments/:idLinkedDocument',
+    linkedDocumentsController.linkedDocumentExists,
+    linkedDocumentsController.deleteLinkedDocument
+  );
+
+  // TABLE NEWSLETTER
+  server.get('/api/newsletters', newslettersController.getAllNewsletters);
+  server.get(
+    '/api/newsletters/:idNewsletter',
+    newslettersController.getOneNewsletter
+  );
+
+  server.post(
+    '/api/newsletters',
+    newslettersController.validateNewsletter,
+    newslettersController.addNewsletter
+  );
+
+  server.put(
+    '/api/newsletters/:idNewsletter',
+    newslettersController.validateNewsletter,
+    newslettersController.newsletterExists,
+    newslettersController.updateNewsletter
+  );
+
+  server.delete(
+    '/api/newsletters/:idNewsletter',
+    newslettersController.newsletterExists,
+    newslettersController.deleteNewsletter
   );
 
   // TABLE PARTNERS

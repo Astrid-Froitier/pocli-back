@@ -3,7 +3,7 @@ import { ResultSetHeader } from 'mysql2';
 import IEvent from '../interfaces/IEvent';
 
 const getAllEvents = async (sortBy = ''): Promise<IEvent[]> => {
-  let sql = 'SELECT e.id, e.numberParticipantsMax, e.date, e.description, e.text, e.podcastLink, e.reservedAdherent, e.price, p.name postType_name, a.name activity_name, a.category activity_category, a.abridged activity_abridged FROM events AS e LEFT JOIN postTypes AS p ON p.id=e.idPostType LEFT JOIN activities AS a ON a.id=e.idActivity';
+  let sql = 'SELECT * FROM events';
   if (sortBy) {
     sql += ` ORDER BY ${sortBy}`;
   }
@@ -14,21 +14,21 @@ const getAllEvents = async (sortBy = ''): Promise<IEvent[]> => {
 const getEventById = async (idEvent: number): Promise<IEvent> => {
   const [results] = await connection
     .promise()
-    .query<IEvent[]>('SELECT e.id, e.numberParticipantsMax, e.date, e.description, e.text, e.podcastLink, e.reservedAdherent, e.price, p.name postType_name, a.name activity_name, a.category activity_category, a.abridged activity_abridged FROM events AS e LEFT JOIN postTypes AS p ON p.id=e.idPostType LEFT JOIN activities AS a ON a.id=e.idActivity WHERE e.id = ?', [idEvent]);
+    .query<IEvent[]>('SELECT * FROM events WHERE id = ?', [idEvent]);
   return results[0];
 };
 
 const getEventByPostType = async (idPostType: number): Promise<IEvent[]> => {
   const results = await connection
     .promise()
-    .query<IEvent[]>('SELECT e.id, e.numberParticipantsMax, e.date, e.description, e.text, e.podcastLink, e.reservedAdherent, e.price, p.name postType_name, a.name activity_name, a.category activity_category, a.abridged activity_abridged FROM events AS e LEFT JOIN postTypes AS p ON p.id=e.idPostType LEFT JOIN activities AS a ON a.id=e.idActivity WHERE e.idPostType = ?', [idPostType]);
+    .query<IEvent[]>('SELECT * FROM events WHERE idPostType = ?', [idPostType]);
   return results[0];
 };
 
 const getEventByActivity = async (idActivity: number): Promise<IEvent[]> => {
     const results = await connection
       .promise()
-      .query<IEvent[]>('SELECT e.id, e.numberParticipantsMax, e.date, e.description, e.text, e.podcastLink, e.reservedAdherent, e.price, p.name postType_name, a.name activity_name, a.category activity_category, a.abridged activity_abridged FROM events AS e LEFT JOIN postTypes AS p ON p.id=e.idPostType LEFT JOIN activities AS a ON a.id=e.idActivity WHERE e.idActivity = ?', [idActivity]);
+      .query<IEvent[]>('SELECT * FROM events WHERE idActivity = ?', [idActivity]);
     return results[0];
   };
 

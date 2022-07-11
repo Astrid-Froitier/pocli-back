@@ -6,10 +6,10 @@ import 'dotenv/config';
 import cors from 'cors';
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 const corsOptions: cors.CorsOptions = {
-  origin: ['http://localhost:3001', 'http://localhost:3000'],
+  origin: ['http://localhost:3001', 'http://localhost:3000', 'https://pocli.vercel.app/'],
   credentials: true,
 };
 
@@ -20,6 +20,7 @@ app.use(cors(corsOptions));
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Expose-Headers', 'Content-Range');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   next();
 });
 
