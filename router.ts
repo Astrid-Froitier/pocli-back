@@ -16,9 +16,13 @@ import paymentMethodsController from './controllers/paymentMethods';
 import paymentRecordsController from './controllers/paymentRecords';
 import postTypesController from './controllers/postTypes';
 import recipientsController from './controllers/recipients';
+import authController from './controllers/auth';
 import { Express } from 'express';
 
 const setupRoutes = (server: Express) => {
+  // LOGIN
+  server.post('/api/login', authController.validateLogin, authController.login);
+
   // TABLE ACTIVITIES
   server.get('/api/activities', activitiesController.getAllActivities);
   server.get(

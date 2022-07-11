@@ -41,7 +41,7 @@ const emailIsFree = async (req: Request, res: Response, next: NextFunction) => {
 // return all families
 const getAllFamilies = async (sortBy = ''): Promise<IFamily[]> => {
   let sql =
-    'SELECT id, name, streetNumber, address, phoneNumber, email, password, idCity, idRecipient, isActive FROM families';
+    'SELECT id, name, streetNumber, address, phoneNumber, email, idCity, idRecipient, isActive FROM families';
   if (sortBy) {
     sql += `ORDER BY ${sortBy}`;
   }
@@ -62,7 +62,7 @@ const getFamilyById = async (idFamily: number): Promise<IFamily> => {
 const getFamilyByEmail = async (email: string): Promise<IFamily> => {
   const [results] = await connection
     .promise()
-    .query<IFamily[]>('SELECT id, name FROM families WHERE email = ?', [email]);
+    .query<IFamily[]>('SELECT id, name, email, password FROM families WHERE email = ?', [email]);
   return results[0];
 };
 
