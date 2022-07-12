@@ -63,6 +63,22 @@ const getOneFamilyMember = (async (
   }
 }) as RequestHandler;
 
+const getFamilyMembersByIdFamily = (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idFamily } = req.params;
+    const familyMembers = await FamilyMember.getFamilyMembersByIdFamily(
+      Number(idFamily)
+    );
+    familyMembers ? res.status(200).json(familyMembers) : res.status(404);
+  } catch (err) {
+    next(err);
+  }
+}) as RequestHandler;
+
 const familyMemberExists = (async (
   req: Request,
   res: Response,
@@ -124,6 +140,7 @@ export default {
   validateFamilyMember,
   getAllFamilyMembers,
   getOneFamilyMember,
+  getFamilyMembersByIdFamily,
   familyMemberExists,
   addFamilyMember,
   deleteFamilyMember,
