@@ -211,10 +211,16 @@ const setupRoutes = (server: Express) => {
   );
 
   // TABLE FAMILYMEMBERS
+  server.get('/api/familyMembers', familyMembersController.getAllFamilyMembers);
+
   server.get(
-    '/api/familyMembers',
-    familyMembersController.getAllFamilyMembers,
+    '/api/familyMembers/:idFamilyMember',
     familyMembersController.getOneFamilyMember
+  );
+
+  server.get(
+    '/api/families/:idFamily/familyMembers',
+    familyMembersController.getFamilyMembersByIdFamily
   );
 
   server.post(
