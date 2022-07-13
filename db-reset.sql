@@ -16,7 +16,7 @@ CREATE TABLE `linkedDocuments`(
 CREATE TABLE `communicationMembers`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `idFamilyMember` INT NULL,
-    `idFamily` INT NULL,
+    `idFamily` INT NOT NULL,
     `idCommunication` INT NOT NULL,
     `isOpened` TINYINT(1) NOT NULL
 );
@@ -78,7 +78,7 @@ CREATE TABLE `paymentRecords`(
     `dateStart` DATETIME NOT NULL,
     `dateEnd` DATETIME NOT NULL,
     `amount` INT NOT NULL,
-    `idFamily` INT NULL,
+    `idFamily` INT NOT NULL,
     `idFamilyMember` INT NULL,
     `idActivity` INT NULL
 );

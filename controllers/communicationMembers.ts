@@ -73,7 +73,27 @@ const getOneCommunicationMember = (async (
   }
 }) as RequestHandler;
 
+const getAllCommunicationMembersByIdFamily = (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idFamily } = req.params;
+    const communicationMembers =
+      await CommunicationMember.getAllCommunicationMembersByIdFamily(
+        Number(idFamily)
+      );
+    communicationMembers
+      ? res.status(200).json(communicationMembers)
+      : res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+}) as RequestHandler;
+
 export default {
+  getAllCommunicationMembersByIdFamily,
   getOneCommunicationMember,
   getAllCommunicationMembers,
   validateCommunicationMember,

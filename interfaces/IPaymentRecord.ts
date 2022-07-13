@@ -8,7 +8,7 @@ export default interface IPaymentRecord extends RowDataPacket {
   dateStart: string;
   dateEnd: string;
   amount: number;
-  idFamily?: number;
+  idFamily: number;
   idFamilyMember?: number;
   idActivity?: number;
 }

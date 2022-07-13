@@ -3,8 +3,7 @@ import { ResultSetHeader } from 'mysql2';
 import IPaymentRecord from '../interfaces/IPaymentRecord';
 
 const getAllPaymentRecord = async (sortBy = ''): Promise<IPaymentRecord[]> => {
-  let sql =
-    'SELECT * FROM paymentRecords as pR INNER JOIN paymentMethods as pM WHERE pR.idPaymentMethod = pM.id INNER JOIN families as f WHERE pR.idFamily = f.id INNER JOIN familyMembers as fM WHERE pR.idFamilyMember = fM.id';
+  let sql = 'SELECT * FROM paymentRecords';
   if (sortBy) {
     sql += ` ORDER BY ${sortBy}`;
   }
@@ -17,11 +16,22 @@ const getPaymentRecordById = async (
 ): Promise<IPaymentRecord> => {
   const [results] = await connection
     .promise()
-    .query<IPaymentRecord[]>(
-      'SELECT * FROM paymentRecords as pR WHERE id = ? INNER JOIN paymentMethods as pM WHERE pR.idPaymentMethod = pM.id INNER JOIN families as f WHERE pR.idFamily = f.id INNER JOIN familyMembers as fM WHERE pR.idFamilyMember = fM.id INNER JOIN activities as a WHERE pR.idActivity = a.id ',
-      [idPaymentRecord]
-    );
+    .query<IPaymentRecord[]>('SELECT * FROM paymentRecords WHERE id = ?', [
+      idPaymentRecord,
+    ]);
   return results[0];
+};
+
+const getAllPaymentRecordsByIdFamily = async (
+  idFamily: number
+): Promise<IPaymentRecord[]> => {
+  const [results] = await connection
+    .promise()
+    .query<IPaymentRecord[]>(
+      'SELECT * FROM paymentRecords WHERE idFamily = ?',
+      [idFamily]
+    );
+  return results;
 };
 
 const addPaymentRecord = async (
@@ -122,6 +132,7 @@ const deletePaymentRecord = async (
 };
 
 export {
+  getAllPaymentRecordsByIdFamily,
   getAllPaymentRecord,
   getPaymentRecordById,
   addPaymentRecord,
