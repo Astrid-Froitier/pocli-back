@@ -69,7 +69,6 @@ export {
   getAllFamilyMembersByIdFamily,
   getAllFamilyMembers,
   getFamilyMemberById,
-  getFamilyMembersByIdFamily,
   addFamilyMember,
   deleteFamilyMember,
 };

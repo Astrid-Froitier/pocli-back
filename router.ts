@@ -99,6 +99,7 @@ const setupRoutes = (server: Express) => {
   // TABLE COMMUNICATIONS
   server.get(
     '/api/communications',
+    authController.getCurrentSession,
     communicationsController.getAllCommunications
   );
   server.get(
@@ -224,7 +225,7 @@ const setupRoutes = (server: Express) => {
 
   server.get(
     '/api/families/:idFamily/familyMembers',
-    familyMembersController.getFamilyMembersByIdFamily
+    familyMembersController.getAllFamilyMembersByIdFamily
   );
 
   server.post(
