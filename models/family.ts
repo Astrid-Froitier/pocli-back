@@ -62,7 +62,10 @@ const getFamilyById = async (idFamily: number): Promise<IFamily> => {
 const getFamilyByEmail = async (email: string): Promise<IFamily> => {
   const [results] = await connection
     .promise()
-    .query<IFamily[]>('SELECT id, name, email, password FROM families WHERE email = ?', [email]);
+    .query<IFamily[]>(
+      'SELECT id, name, email, password FROM families WHERE email = ?',
+      [email]
+    );
   return results[0];
 };
 
