@@ -53,7 +53,7 @@ const getAllFamilies = async (sortBy = ''): Promise<IFamily[]> => {
 const getFamilyById = async (idFamily: number): Promise<IFamily> => {
   const [results] = await connection
     .promise()
-    .query<IFamily[]>('SELECT id, name, email FROM families WHERE id = ?', [
+    .query<IFamily[]>('SELECT id, name, streetNumber, address, phoneNumber, email, idCity, idRecipient, isActive FROM families WHERE id = ?', [
       idFamily,
     ]);
   return results[0];

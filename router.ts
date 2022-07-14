@@ -99,6 +99,7 @@ const setupRoutes = (server: Express) => {
   // TABLE COMMUNICATIONS
   server.get(
     '/api/communications',
+    authController.getCurrentSession,
     communicationsController.getAllCommunications
   );
   server.get(
