@@ -80,12 +80,12 @@ const getAllCommunicationMembersByIdFamily = (async (
 ) => {
   try {
     const { idFamily } = req.params;
-    const communicationMembers =
+    const communicationMembersByIdFamily =
       await CommunicationMember.getAllCommunicationMembersByIdFamily(
         Number(idFamily)
       );
-    communicationMembers
-      ? res.status(200).json(communicationMembers)
+      communicationMembersByIdFamily
+      ? res.status(200).json(communicationMembersByIdFamily)
       : res.sendStatus(404);
   } catch (err) {
     next(err);

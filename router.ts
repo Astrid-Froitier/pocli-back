@@ -225,7 +225,7 @@ const setupRoutes = (server: Express) => {
 
   server.get(
     '/api/families/:idFamily/familyMembers',
-    familyMembersController.getFamilyMembersByIdFamily
+    familyMembersController.getAllFamilyMembersByIdFamily
   );
 
   server.post(
