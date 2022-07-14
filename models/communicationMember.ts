@@ -24,4 +24,20 @@ const getCommunicationMemberById = async (
   return results[0];
 };
 
-export { getAllCommunicationMembers, getCommunicationMemberById };
+const getAllCommunicationMembersByIdFamily = async (
+  idFamily: number
+): Promise<ICommunicationMember[]> => {
+  const [results] = await connection
+    .promise()
+    .query<ICommunicationMember[]>(
+      'SELECT * FROM communicationMembers WHERE idFamily = ?',
+      [idFamily]
+    );
+  return results;
+};
+
+export {
+  getAllCommunicationMembers,
+  getCommunicationMemberById,
+  getAllCommunicationMembersByIdFamily,
+};
