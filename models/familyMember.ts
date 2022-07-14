@@ -26,15 +26,15 @@ const getFamilyMemberById = async (
   return results[0];
 };
 
-const getFamilyMembersByIdFamily = async (
+const getAllFamilyMembersByIdFamily = async (
   idFamily: number
 ): Promise<IFamilyMember[]> => {
-  const results = await connection
+  const [results] = await connection
     .promise()
-    .query<IFamilyMember[]>('SELECT * FROM familyMembers WHERE idFamily = ?', [
+    .query<IFamilyMember[]>('SELECT * FROM familyMembers WHERE idFamily =  ?', [
       idFamily,
     ]);
-  return results[0];
+  return results;
 };
 
 const addFamilyMember = async (
@@ -66,6 +66,7 @@ const deleteFamilyMember = async (idFamilyMember: number): Promise<boolean> => {
 };
 
 export {
+  getAllFamilyMembersByIdFamily,
   getAllFamilyMembers,
   getFamilyMemberById,
   getFamilyMembersByIdFamily,

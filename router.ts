@@ -127,6 +127,10 @@ const setupRoutes = (server: Express) => {
     '/api/communicationMembers/:idCommunicationMember',
     communicationMembersController.getOneCommunicationMember
   );
+  server.get(
+    '/api/families/:idFamily/communicationMembers',
+    communicationMembersController.getAllCommunicationMembersByIdFamily
+  );
 
   // TABLE DOCUMENTS
   server.get('/api/documents', documentsController.getAllDocuments);
@@ -387,9 +391,15 @@ const setupRoutes = (server: Express) => {
     '/api/paymentRecords',
     paymentRecordsController.getAllPaymentRecords
   );
+
   server.get(
     '/api/paymentRecords/:idPaymentRecord',
     paymentRecordsController.getOnePaymentRecord
+  );
+
+  server.get(
+    '/api/families/:idFamily/paymentRecords',
+    paymentRecordsController.getAllPaymentRecordsByIdFamily
   );
 
   server.post(

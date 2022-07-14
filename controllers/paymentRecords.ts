@@ -70,6 +70,22 @@ const getOnePaymentRecord = (async (
   }
 }) as RequestHandler;
 
+const getAllPaymentRecordsByIdFamily = (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idFamily } = req.params;
+    const paymentRecords = await PaymentRecord.getAllPaymentRecordsByIdFamily(
+      Number(idFamily)
+    );
+    paymentRecords ? res.status(200).json(paymentRecords) : res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+}) as RequestHandler;
+
 const addPaymentRecord = async (
   req: Request,
   res: Response,
@@ -160,6 +176,7 @@ const deletePaymentRecord = async (
 };
 
 export default {
+  getAllPaymentRecordsByIdFamily,
   validatePaymentRecord,
   paymentRecordExists,
   getAllPaymentRecords,
