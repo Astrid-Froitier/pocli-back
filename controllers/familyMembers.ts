@@ -47,17 +47,17 @@ const getAllFamilyMembers = (async (
   }
 }) as RequestHandler;
 
-const getFamilyMembersByIdFamily = (async (
+const getAllFamilyMembersByIdFamily = (async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { idFamily } = req.params;
-    const familyMembers = await FamilyMember.getAllFamilyMembersByIdFamily(
+    const familyMembersByIdFamily = await FamilyMember.getAllFamilyMembersByIdFamily(
       Number(idFamily)
     );
-    familyMembers ? res.status(200).json(familyMembers) : res.status(404);
+    familyMembersByIdFamily ? res.status(200).json(familyMembersByIdFamily) : res.status(404);
   } catch (err) {
     next(err);
   }
@@ -74,22 +74,6 @@ const getOneFamilyMember = (async (
       Number(idFamilyMember)
     );
     familyMember ? res.status(200).json(familyMember) : res.status(404);
-  } catch (err) {
-    next(err);
-  }
-}) as RequestHandler;
-
-const getFamilyMembersByIdFamily = (async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { idFamily } = req.params;
-    const familyMembers = await FamilyMember.getFamilyMembersByIdFamily(
-      Number(idFamily)
-    );
-    familyMembers ? res.status(200).json(familyMembers) : res.status(404);
   } catch (err) {
     next(err);
   }
@@ -153,11 +137,10 @@ const deleteFamilyMember = async (
 };
 
 export default {
-  getFamilyMembersByIdFamily,
+  getAllFamilyMembersByIdFamily,
   validateFamilyMember,
   getAllFamilyMembers,
   getOneFamilyMember,
-  getFamilyMembersByIdFamily,
   familyMemberExists,
   addFamilyMember,
   deleteFamilyMember,

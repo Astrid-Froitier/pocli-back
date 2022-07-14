@@ -77,10 +77,10 @@ const getAllPaymentRecordsByIdFamily = (async (
 ) => {
   try {
     const { idFamily } = req.params;
-    const paymentRecords = await PaymentRecord.getAllPaymentRecordsByIdFamily(
+    const paymentRecordsByIdFamily = await PaymentRecord.getAllPaymentRecordsByIdFamily(
       Number(idFamily)
     );
-    paymentRecords ? res.status(200).json(paymentRecords) : res.sendStatus(404);
+    paymentRecordsByIdFamily ? res.status(200).json(paymentRecordsByIdFamily) : res.sendStatus(404);
   } catch (err) {
     next(err);
   }
