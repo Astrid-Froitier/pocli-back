@@ -18,7 +18,8 @@ const validateFamilyMember = (
     idFamily: Joi.number().presence(required),
     firstname: Joi.string().max(255).presence(required),
     birthday: Joi.date().presence(required),
-    isActive: Joi.number().presence(required),
+    avatar: Joi.string().max(255).presence(required),
+    id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
     next(new ErrorHandler(422, errors.message));
@@ -113,6 +114,26 @@ const addFamilyMember = async (
   }
 };
 
+// updates an familyMember
+
+const updateFamilyMember = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { idFamilyMember } = req.params;
+    const familyMemberUpdated = await FamilyMember.updateFamilyMember(
+      Number(idFamilyMember),
+      req.body as IFamilyMember
+    );
+    if (familyMemberUpdated) {
+      const familyMember = await FamilyMember.getFamilyMemberById(Number(idFamilyMember));
+      res.status(200).send(familyMember); // react-admin needs this response
+    } else {
+      throw new ErrorHandler(500, `FamilyMember cannot be updated`);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 const deleteFamilyMember = async (
   req: Request,
   res: Response,
@@ -143,5 +164,6 @@ export default {
   getOneFamilyMember,
   familyMemberExists,
   addFamilyMember,
+  updateFamilyMember,
   deleteFamilyMember,
 };

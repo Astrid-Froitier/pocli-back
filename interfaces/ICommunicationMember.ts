@@ -6,4 +6,5 @@ export default interface ICommunicationMember extends RowDataPacket {
   idFamily: number;
   idCommunication: number;
   isOpened: number;
+  isTrashed: number;
 }

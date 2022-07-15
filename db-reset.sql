@@ -18,7 +18,8 @@ CREATE TABLE `communicationMembers`(
     `idFamilyMember` INT NULL,
     `idFamily` INT NOT NULL,
     `idCommunication` INT NOT NULL,
-    `isOpened` TINYINT(1) NOT NULL
+    `isOpened` TINYINT(1) NOT NULL,
+    `isTrashed` TINYINT(1) NOT NULL,
 );
 
 CREATE TABLE `admins` (
@@ -74,7 +75,6 @@ CREATE TABLE `paymentRecords`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `idPaymentMethod` INT NOT NULL,
     `checkNumber` VARCHAR(50) NULL,
-    `isPaymentActivity` TINYINT(1) NOT NULL,
     `dateStart` DATETIME NOT NULL,
     `dateEnd` DATETIME NOT NULL,
     `amount` INT NOT NULL,
@@ -88,7 +88,6 @@ CREATE TABLE `familyMembers`(
     `idFamily` INT NOT NULL,
     `firstname` VARCHAR(255) NOT NULL,
     `birthday` DATETIME NOT NULL,
-    `isActive` TINYINT(1) NOT NULL,
     `avatar` VARCHAR(255) NOT NULL
 );
 
@@ -101,8 +100,7 @@ CREATE TABLE `families`(
     `email` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `idCity` INT NOT NULL,
-    `idRecipient` INT NOT NULL,
-    `isActive` TINYINT(1) NOT NULL
+    `idRecipient` INT NOT NULL
 );
 
 CREATE TABLE `postTypes`(
@@ -474,8 +472,7 @@ INSERT INTO
         `email`,
         `password`,
         `idCity`,
-        `idRecipient`,
-        `isActive`
+        `idRecipient`
     )
 VALUES
     (
@@ -485,7 +482,6 @@ VALUES
         0636656565,
         "ducasse @gmail.com",
         "password",
-        1,
         1,
         1
     ),
@@ -497,8 +493,7 @@ VALUES
         "dupont @gmail.com",
         "cartable",
         11,
-        11,
-        1
+        11
     ),
     (
         "Doe",
@@ -508,8 +503,7 @@ VALUES
         "doe @gmail.chine",
         "rootroot",
         21,
-        21,
-        0
+        21
     );
 
 INSERT INTO
@@ -517,7 +511,6 @@ INSERT INTO
         `idFamily`,
         `firstname`,
         `birthday`,
-        `isActive`,
         `avatar`
     )
 VALUES
@@ -525,63 +518,54 @@ VALUES
         1,
         "Philipe",
         "1985-07-06 00:00:00",
-        1,
         "assets/avatar.png"
     ),
     (
         1,
         "Maire",
         "1987-07-06 00:00:00",
-        1,
         "assets/avatar.png"
     ),
     (
         1,
         "Kevin",
         "1900-07-06 00:00:00",
-        1,
         "assets/avatar.png"
     ),
     (
         11,
         "Gérard",
         "1980-07-06 00:00:00",
-        1,
         "assets/avatar.png"
     ),
     (
         11,
         "Yvette",
         "1989-07-06 00:00:00",
-        1,
         "assets/avatar.png"
     ),
     (
         11,
         "Jeremy",
         "1990-07-06 00:00:00",
-        1,
         "assets/avatar.png"
     ),
     (
         21,
         "John",
         "1997-07-06 00:00:00",
-        1,
         "assets/avatar.png"
     ),
     (
         21,
         "Suzy",
         "1995-07-06 00:00:00",
-        1,
         "assets/avatar.png"
     ),
     (
         21,
         "Eric",
         "1600-07-06 00:00:00",
-        1,
         "assets/avatar.png"
     );
 
@@ -596,7 +580,6 @@ INSERT INTO
     paymentRecords (
         `idPaymentMethod`,
         `checkNumber`,
-        `isPaymentActivity`,
         `dateStart`,
         `dateEnd`,
         `amount`,
@@ -608,34 +591,31 @@ VALUES
     (
         11,
         21654987312178554,
-        1,
         "2021-07-06 00:00:00",
         "2023-07-06 00:00:00",
         40,
         11,
         null,
-        21
+        null
     ),
     (
         1,
         null,
-        1,
         "2021-05-06 00:00:00",
         "2022-05-06 00:00:00",
         500,
-        null,
+        1,
         11,
         1
     ),
     (
         21,
         null,
-        1,
         "2021-10-06 00:00:00",
         "2022-07-30 00:00:00",
         200,
+        1,
         21,
-        null,
         41
     );
 
@@ -749,9 +729,10 @@ INSERT INTO
         `idFamilyMember`,
         `idCommunication`,
         `idFamily`,
-        `isOpened`
+        `isOpened`,
+        `isTrashed`
     )
 VALUES
-    (1, 1, 1, 1),
-    (21, 11, 1, 0),
-    (11, 21, 1, 1);
+    (1, 1, 1, 1, 0),
+    (21, 11, 1, 0, 0),
+    (11, 21, 1, 1, 1);

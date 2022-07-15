@@ -41,7 +41,7 @@ const emailIsFree = async (req: Request, res: Response, next: NextFunction) => {
 // return all families
 const getAllFamilies = async (sortBy = ''): Promise<IFamily[]> => {
   let sql =
-    'SELECT id, name, streetNumber, address, phoneNumber, email, idCity, idRecipient, isActive FROM families';
+    'SELECT id, name, streetNumber, address, phoneNumber, email, idCity, idRecipient FROM families';
   if (sortBy) {
     sql += `ORDER BY ${sortBy}`;
   }
@@ -53,7 +53,7 @@ const getAllFamilies = async (sortBy = ''): Promise<IFamily[]> => {
 const getFamilyById = async (idFamily: number): Promise<IFamily> => {
   const [results] = await connection
     .promise()
-    .query<IFamily[]>('SELECT id, name, streetNumber, address, phoneNumber, email, idCity, idRecipient, isActive FROM families WHERE id = ?', [
+    .query<IFamily[]>('SELECT id, name, streetNumber, address, phoneNumber, email, idCity, idRecipient FROM families WHERE id = ?', [
       idFamily,
     ]);
   return results[0];
@@ -74,7 +74,7 @@ const addFamily = async (family: IFamily): Promise<number> => {
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO families (name, streetNumber, address, phoneNumber, email, password, idCity, idRecipient, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO families (name, streetNumber, address, phoneNumber, email, password, idCity, idRecipient) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [
         family.name,
         family.streetNumber,
@@ -84,7 +84,6 @@ const addFamily = async (family: IFamily): Promise<number> => {
         hashedPassword,
         family.idCity,
         family.idRecipient,
-        family.isActive,
       ]
     );
   return results[0].insertId;
@@ -137,11 +136,6 @@ const updateFamily = async (
   if (family.idRecipient) {
     sql += oneValue ? ', idRecipient = ?' : ' idRecipient = ? ';
     sqlValues.push(family.idRecipient);
-    oneValue = true;
-  }
-  if (family.isActive) {
-    sql += oneValue ? ', isActive = ?' : ' isActive = ?';
-    sqlValues.push(family.isActive);
     oneValue = true;
   }
   sql += ' WHERE id = ?';

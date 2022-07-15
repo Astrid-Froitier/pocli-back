@@ -10,5 +10,4 @@ export default interface IFamily extends RowDataPacket {
   password: string;
   idCity: number;
   idRecipient: number;
-  isActive: number;
 }
