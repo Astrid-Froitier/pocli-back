@@ -27,10 +27,10 @@ const validateLinkedDocument = (
   }
   const errors = Joi.object({
     idDocument: Joi.number().presence(required),
-    idEvent: Joi.number().presence(required),
-    idCommunication: Joi.number().presence(required),
-    idFamilyMember: Joi.number().presence(required),
-    idFamily: Joi.number().presence(required),
+    idEvent: Joi.number().allow(null),
+    idCommunication: Joi.number().allow(null),
+    idFamilyMember: Joi.number().allow(null),
+    idFamily: Joi.number().allow(null),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
@@ -63,6 +63,25 @@ const getAllLinkedDocuments = (async (
     next(err);
   }
 }) as RequestHandler; // Used to avoid eslint error : Promise returned in function argument where a void return was expected
+
+const getAllLinkedDocumentsByIdFamily = (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idFamily } = req.params;
+    const linkedDocumentsByIdFamily =
+      await LinkedDocument.getAllLinkedDocumentsByIdFamily(
+        Number(idFamily)
+      );
+      linkedDocumentsByIdFamily
+      ? res.status(200).json(linkedDocumentsByIdFamily)
+      : res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+}) as RequestHandler;
 
 // get one LinkedDocument
 const getOneLinkedDocument = (async (
@@ -281,6 +300,7 @@ const deleteLinkedDocument = async (
 export default {
   validateLinkedDocument,
   getAllLinkedDocuments,
+  getAllLinkedDocumentsByIdFamily,
   getOneLinkedDocument,
   linkedDocumentExists,
   idDocumentExists,

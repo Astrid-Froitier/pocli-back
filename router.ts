@@ -133,6 +133,25 @@ const setupRoutes = (server: Express) => {
     communicationMembersController.getAllCommunicationMembersByIdFamily
   );
 
+  server.post(
+    '/api/communicationMembers',
+    communicationMembersController.validateCommunicationMember,
+    communicationMembersController.addCommunicationMember
+  );
+
+  server.put(
+    '/api/communicationMembers/:idCommunicationMember',
+    communicationMembersController.validateCommunicationMember,
+    communicationMembersController.communicationMemberExists,
+    communicationMembersController.updateCommunicationMember
+  );
+
+  server.delete(
+    '/api/communicationMembers/:idCommunicationMember',
+    communicationMembersController.communicationMemberExists,
+    communicationMembersController.deleteCommunicationMember
+  );
+
   // TABLE DOCUMENTS
   server.get('/api/documents', documentsController.getAllDocuments);
   server.get('/api/documents/:idDocument', documentsController.getOneDocument);
@@ -222,7 +241,6 @@ const setupRoutes = (server: Express) => {
     '/api/familyMembers/:idFamilyMember',
     familyMembersController.getOneFamilyMember
   );
-
   server.get(
     '/api/families/:idFamily/familyMembers',
     familyMembersController.getAllFamilyMembersByIdFamily
@@ -237,7 +255,8 @@ const setupRoutes = (server: Express) => {
   server.put(
     '/api/familyMembers/:idFamilyMember',
     familyMembersController.validateFamilyMember,
-    familyMembersController.familyMemberExists
+    familyMembersController.familyMemberExists,
+    familyMembersController.updateFamilyMember
   );
 
   server.delete(
@@ -304,6 +323,10 @@ const setupRoutes = (server: Express) => {
   server.get(
     '/api/linkedDocuments/:idLinkedDocument',
     linkedDocumentsController.getOneLinkedDocument
+  );
+  server.get(
+    '/api/families/:idFamily/linkedDocuments',
+    linkedDocumentsController.getAllLinkedDocumentsByIdFamily
   );
 
   server.post(
