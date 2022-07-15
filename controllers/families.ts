@@ -20,7 +20,6 @@ const validateFamily = (req: Request, res: Response, next: NextFunction) => {
     password: Joi.string().min(8).max(15).presence(required),
     idCity: Joi.number().presence(required),
     idRecipient: Joi.number().presence(required),
-    isActive: Joi.number().max(1).presence(required),
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
     next(new ErrorHandler(422, errors.message));

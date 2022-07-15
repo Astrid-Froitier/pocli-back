@@ -40,10 +40,9 @@ const addPaymentRecord = async (
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO paymentRecords (idPaymentMethod, checkNumber, isPaymentActivity, dateStart, dateEnd, amount, idFamily, idFamilyMember, idActivity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO paymentRecords (idPaymentMethod, checkNumber, dateStart, dateEnd, amount, idFamily, idFamilyMember, idActivity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [
         paymentRecord.checkNumber,
-        paymentRecord.isPaymentActivity,
         paymentRecord.dateStart,
         paymentRecord.dateEnd,
         paymentRecord.amount,
@@ -67,11 +66,6 @@ const updatePaymentRecord = async (
   if (paymentRecord.checkNumber) {
     sql += 'checkNumber = ? ';
     sqlValues.push(paymentRecord.checkNumber);
-    oneValue = true;
-  }
-  if (paymentRecord.isPaymentActivity) {
-    sql += oneValue ? ', isPaymentActivity = ? ' : ' isPaymentActivity = ? ';
-    sqlValues.push(paymentRecord.isPaymentActivity);
     oneValue = true;
   }
   if (paymentRecord.dateStart) {

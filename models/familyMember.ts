@@ -44,16 +44,52 @@ const addFamilyMember = async (
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO familyMembers (idFamily, firstname, birthday, isActive, avatar ) VALUES (?, ?, ?, ?, ?)',
+      'INSERT INTO familyMembers (idFamily, firstname, birthday, avatar ) VALUES (?, ?, ?, ?)',
       [
         familyMember.idFamily,
         familyMember.firstname,
         familyMember.birthday,
-        familyMember.isActive,
         familyMember.avatar,
       ]
     );
   return results[0].insertId;
+};
+
+const updateFamilyMember = async (
+  idFamilyMember: number,
+  familyMember: IFamilyMember
+): Promise<boolean> => {
+  let sql = 'UPDATE familyMembers SET ';
+  const sqlValues: Array<string | number> = [];
+  let oneValue = false;
+
+  if (familyMember.idFamily) {
+    sql += 'idFamily = ? ';
+    sqlValues.push(familyMember.idFamily);
+    oneValue = true;
+  }
+  if (familyMember.firstname) {
+    sql += oneValue ? ', firstname = ? ' : ' firstname = ? ';
+    sqlValues.push(familyMember.firstname);
+    oneValue = true;
+  }
+  if (familyMember.birthday) {
+    sql += oneValue ? ', birthday = ? ' : ' birthday = ? ';
+    sqlValues.push(familyMember.birthday);
+    oneValue = true;
+  }
+  if (familyMember.avatar) {
+    sql += oneValue ? ', avatar = ? ' : ' avatar = ? ';
+    sqlValues.push(familyMember.avatar);
+    oneValue = true;
+  }
+  sql += ' WHERE id = ?';
+  sqlValues.push(idFamilyMember);
+
+  const results = await connection
+    .promise()
+    .query<ResultSetHeader>(sql, sqlValues);
+  return results[0].affectedRows === 1;
 };
 
 const deleteFamilyMember = async (idFamilyMember: number): Promise<boolean> => {
@@ -70,5 +106,6 @@ export {
   getAllFamilyMembers,
   getFamilyMemberById,
   addFamilyMember,
+  updateFamilyMember,
   deleteFamilyMember,
 };

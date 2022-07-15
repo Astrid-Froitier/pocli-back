@@ -24,6 +24,17 @@ const getLinkedDocumentById = async (
   return results[0];
 };
 
+const getAllLinkedDocumentsByIdFamily = async (
+  idFamily: number
+): Promise<ILinkedDocument[]> => {
+  const [results] = await connection
+    .promise()
+    .query<ILinkedDocument[]>('SELECT * FROM linkedDocuments WHERE idFamily = ?', [
+      idFamily,
+    ]);
+  return results;
+};
+
 const addLinkedDocument = async (
   linkedDocument: ILinkedDocument
 ): Promise<number> => {
@@ -97,6 +108,7 @@ const deleteLinkedDocument = async (
 
 export {
   getAllLinkedDocuments,
+  getAllLinkedDocumentsByIdFamily,
   getLinkedDocumentById,
   addLinkedDocument,
   updateLinkedDocument,
