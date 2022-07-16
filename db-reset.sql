@@ -61,7 +61,7 @@ CREATE TABLE `familyMemberActivities`(
 CREATE TABLE `events`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `numberParticipantsMax` INT NULL,
-    `date` VARCHAR(100) NOT NULL,
+    `date` DATETIME NOT NULL,
     `description` VARCHAR(100) NOT NULL,
     `text` TEXT NULL,
     `podcastLink` VARCHAR(255) NULL,
@@ -88,7 +88,7 @@ CREATE TABLE `familyMembers`(
     `idFamily` INT NOT NULL,
     `firstname` VARCHAR(255) NOT NULL,
     `birthday` DATETIME NOT NULL,
-    `avatar` VARCHAR(255) NOT NULL
+    `avatar` VARCHAR(255) NULL
 );
 
 CREATE TABLE `families`(
@@ -262,11 +262,31 @@ VALUES
         'Famille - Parentalité',
         'family'
     ),
-    ('Pilates', 'Sport et bien-être', 'sport'),
-    ('Gym Douce', 'Sport et bien-être', 'sport'),
-    ('Gym Seniors', 'Sport et bien-être', 'sport'),
-    ('Bien-Être Solo', 'Sport et bien-être', 'sport'),
-    ('Bien-Être Duo', 'Sport et bien-être', 'sport'),
+    (
+        'Pilates',
+        'Activité physiques et de Bien-être',
+        'physical'
+    ),
+    (
+        'Gym Douce',
+        'Activité physiques et de Bien-être',
+        'physical'
+    ),
+    (
+        'Gym Seniors',
+        'Activité physiques et de Bien-être',
+        'physical'
+    ),
+    (
+        'Bien-Être Solo',
+        'Activité physiques et de Bien-être',
+        'physical'
+    ),
+    (
+        'Bien-Être Duo',
+        'Activité physiques et de Bien-être',
+        'physical'
+    ),
     (
         'Visites de Convivialité',
         'Prévention - Action sociale',
@@ -307,9 +327,9 @@ INSERT INTO
 VALUES
     (
         3,
-        '12/12/12',
-        '“Atelier à venir..."Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis',
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa',
+        '2021-07-06 00:00:00',
+        'Les Ateliers Part''Ages permettent de créer du lien et de mixer les générations.',
+        'Adultes et enfants partagent une activité dans une ambiance détendue. Les enfants ont entre 0 et 12 ans. Les ateliers sont pour eux des moments de découvertes, d''expériences et de complicité avec les autres et avec son parent. Pour les adultes, ils permettent de sortir de la maison, de partager pleinement un temps avec son enfant, de rencontrer d''autres parents et de partager ses doutes et ses difficultés si besoin. Le cadre bienveillant permet d''y trouver écoute et soutien. Les activités sont variées : découverte sensorielle, peinture, constuction, cuisine, éveil musical, contes, motricité, ... et les ateliers "Fait Maison" pour faire soi même lessive, dentifrice, baume hydratant... Mais l''activité n''est qu''un prétexte à la rencontre !',
         null,
         0,
         100,
@@ -318,47 +338,111 @@ VALUES
     ),
     (
         10,
-        '01/01/22',
-        'Les activités proposées vous permettent, parents et grands-parents, de partager un moment avec',
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa',
+        '2021-06-06 00:00:00',
+        'Un heureux évènement... suite',
+        'Bonjour futur(s) ou jeune(s) parent(s), Suite à mon article écrit dans notre bulletin n°2, dans l’onglet « Parents thèmes », voici l’adresse e-mail sur laquelle vous pourrez directement prendre contact avec moi durant le confinement, si vous le souhaitez : alexia.ecoute.et.soutien.perinatal@gmail.com. Bien à vous !',
         null,
         0,
         1000,
-        11,
-        null
+        1,
+        11
     ),
     (
         10,
-        '12/04/10',
-        'Moment convivial autour d’une activité partagée : découverte sensorielle, motricité, éveil',
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa',
+        '2021-05-06 00:00:00',
+        'Vous pratiquerez des activités physiques dans une ambiance détendue et conviviale.',
+        'Vous renforcerez vos relations avec vos enfants lors de séances de bien être duo parents/enfants : méditation, yoga, massage, balade sensorielle. Vous prendrez du temps pour vous : activités et sorties bien-être solo (méditation, yoga), soirées papote autour d’un verre, …',
         null,
-        1,
+        0,
         1000,
         1,
         21
     ),
     (
         5,
-        '12/12/12',
-        'Vous pratiquerez des activités sportives dans une ambiance détendue et conviviale : pilates, gym',
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa',
+        '2021-04-06 00:00:00',
+        'Gym Seniors',
+        'Renforcement musculaire, équilibre dynamique, stimulation de la fonction cardia-respiratoire, renforcement abdos fessiers, assouplissement  de la colonne vertébrale, étirement de la chaîne musculaire.',
         null,
-        1,
+        0,
         500,
+        1,
+        41
+    ),
+    (
+        25,
+        '2021-03-06 00:00:00',
+        'Bien-être Solo',
+        'Cycles de découvertes d’activités relaxantes : méditation, yoga. Sorties bien-être : Calicéo, balade nature, …',
+        null,
+        0,
+        50,
+        1,
+        51
+    ),
+    (
+        null,
+        '2021-10-06 00:00:00',
+        'Sur le chemin de Compostelle avec Hervé Pauchon',
+        'C’est un chemin mythique qui attire des pèlerins du monde entier. Des pèlerins au sens large avec des motivations pas toujours religieuses. Bien des raisons peuvent mener aux chemins de Saint-Jacques-de-Compostelle. On marche vers la capitale de la Galice pour chercher Dieu ou pour retrouver foi en l’humanité, pour ralentir ou pour garder la forme, pour reprendre pied dans l’existence ou pour lâcher prise, pour rencontrer l’autre ou pour se retrouver soi et pour mille autres raisons encore.',
+        'https://www.radiofrance.fr/franceinter/podcasts/le-temps-d-un-bivouac/le-temps-d-un-bivouac-du-mardi-05-juillet-2022-4349919',
+        1,
+        null,
         21,
         null
     ),
     (
-        25,
-        '12/12/12',
-        'Hello man',
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa Lorem ipsum dolor sit amet consectetur adipisicing elit. Non perferendis libero ipsa',
         null,
-        1,
-        50,
-        1,
-        71
+        '2022-06-21 00:00:00',
+        'Fête de la Musique 2022 !',
+        'Une fête écourtée à cause des conditions météorologiques mais de très beaux moments partagés avec les autres bénévoles des associations partenaires. 
+        RV l''année prochaine !',
+        null,
+        0,
+        null,
+        11,
+        null
+    ),
+    (
+        null,
+        '2022-09-05 00:00:00',
+        'Rentrée de Septembre',
+        'Toutes les activités reprendront la semaine du 5 septembre : Pilates : lundi de 19h à 20h, salle des fêtes d''Espiet 
+        Gym Séniors : mardi de 11h15 à 12h15, salle des fêtes de St Quentin de Baron 
+        Douce : jeudi de 18h à 19h, salle des fêtes de St Quentin de Baron
+        Ateliers Part''Ages : lundi, mardi et jeudi de 9h à 11h Salle des fêtes de St Quentin de Baron et mercredi de 9h30 à 11h30 : salle des fêtes d''Espiet 
+        Informations et inscriptions à partir du 16 août au 07 64 15 27 11',
+        null,
+        0,
+        null,
+        11,
+        null
+    ),
+    (
+        null,
+        '2022-07-02 00:00:00',
+        'Château de Bisqueytan',
+        'Alison nous a ouvert les portes du château pour une balade ludique et conviviale ! 
+        Petits et grands ont apprécié cette visite à la recherche des cailloux dorés ! 
+        (photos à venir)',
+        null,
+        0,
+        null,
+        11,
+        null
+    ),
+    (
+        null,
+        '2022-07-14 00:00:00',
+        'Un lieu dédié pour PoCLi',
+        'Depuis quelques années, avec nos partenaires, nous travaillons sur un lieu dédié à nos activités. Ce lieu d''activités est indispensable pour notre Espace de Vie Sociale et le développement de nos actions (et nous avons plein de belles idées !). 
+        Nous avons hâte de nous poser mais resterons au plus près des habitants du territoire en maintenant des actions "hors les murs". 
+        Le projet d''installation à l''ancienne Gare d''Espiet est en réflexion avec les partenaires et les élus. Nous vous informerons de l''avancée du projet à la rentrée de septembre.',
+        null,
+        0,
+        null,
+        11,
+        null
     );
 
 INSERT INTO
@@ -461,7 +545,7 @@ INSERT INTO
 VALUES
     ("CAF"),
     ("MSA"),
-    ("None");
+    ("Aucun");
 
 INSERT INTO
     families (
@@ -480,7 +564,7 @@ VALUES
         123,
         "route des colonies",
         0636656565,
-        "ducasse @gmail.com",
+        "ducasse@gmail.com",
         "password",
         1,
         1
@@ -488,20 +572,20 @@ VALUES
     (
         "Dupont",
         144,
-        "route des montagne",
+        "route des montagnes",
         0636655555,
-        "dupont @gmail.com",
-        "cartable",
+        "dupont@gmail.com",
+        "password",
         11,
         11
     ),
     (
-        "Doe",
+        "Snow",
         52,
         "Avenue des plages",
         0689145715,
-        "doe @gmail.chine",
-        "rootroot",
+        "snow@gmail.com",
+        "password",
         21,
         21
     );
@@ -518,55 +602,55 @@ VALUES
         1,
         "Philipe",
         "1985-07-06 00:00:00",
-        "assets/avatar.png"
+        null
     ),
     (
         1,
         "Maire",
         "1987-07-06 00:00:00",
-        "assets/avatar.png"
+        null
     ),
     (
         1,
         "Kevin",
         "1900-07-06 00:00:00",
-        "assets/avatar.png"
+        null
     ),
     (
         11,
         "Gérard",
         "1980-07-06 00:00:00",
-        "assets/avatar.png"
+        null
     ),
     (
         11,
         "Yvette",
         "1989-07-06 00:00:00",
-        "assets/avatar.png"
+        null
     ),
     (
         11,
         "Jeremy",
         "1990-07-06 00:00:00",
-        "assets/avatar.png"
+        null
     ),
     (
         21,
         "John",
         "1997-07-06 00:00:00",
-        "assets/avatar.png"
+        null
     ),
     (
         21,
         "Suzy",
         "1995-07-06 00:00:00",
-        "assets/avatar.png"
+        null
     ),
     (
         21,
         "Eric",
         "1600-07-06 00:00:00",
-        "assets/avatar.png"
+        null
     );
 
 INSERT INTO
@@ -623,11 +707,43 @@ INSERT INTO
     documents (`name`, `url`)
 VALUES
     (
+        "avatar-rabbit",
+        "https://i.ibb.co/svD1v3p/avatar-rabbit.png"
+    ),
+    (
+        "avatar-deer",
+        "https://i.ibb.co/Ld3T7NL/avatar-deer.png"
+    ),
+    (
+        "avatar-panda",
+        "https://i.ibb.co/Tr9b2Dj/avatar-panda.png"
+    ),
+    (
+        "avatar-fox",
+        "https://i.ibb.co/RNx3fzV/avatar-fox.png"
+    ),
+    (
+        "avatar-bear",
+        "https://i.ibb.co/vms0362/avatar-bear.png"
+    ),
+    (
+        "avatar-owl",
+        "https://i.ibb.co/SKWJ9V3/avatar-rabbit.png"
+    ),
+    (
+        "avatar-beaver",
+        "https://i.ibb.co/xD0dgt6/avatar-beaver.png"
+    ),
+    (
+        "avatar-raccoon",
+        "https://i.ibb.co/4NTLHQ1/avatar-raccoon.png"
+    ),
+    (
         "cadeaux",
         "https://i.ibb.co/Y2NccWZ/20211216-141722.jpg"
     ),
     (
-        "enfantsPeintures",
+        "enfants-peinture",
         "https://i.ibb.co/cNKD7Yg/20170707-094557.jpg"
     ),
     (
@@ -635,7 +751,7 @@ VALUES
         "https://i.ibb.co/5WP6BSY/Partages-juin.jpg"
     ),
     (
-        "enfantDécoupage",
+        "enfants-atelier-découpage",
         "https://i.ibb.co/fnH3m8W/20210929-101149-1.jpg"
     ),
     (
@@ -643,7 +759,7 @@ VALUES
         "https://i.ibb.co/RgN0YXQ/conf-college.jpg"
     ),
     (
-        "papiEnfants",
+        "papi-enfants",
         "https://i.ibb.co/DQg3pcV/20170614-152502.jpg"
     ),
     (
@@ -655,10 +771,26 @@ VALUES
         "https://i.ibb.co/qF9HwB0/IMG-8295.jpg"
     ),
     (
-        "gymDouce",
+        "gym-douce",
         "https://i.ibb.co/6w8XV9F/gym-douce.jpg"
     ),
-    ("gym", "https://i.ibb.co/pznWGpw/IMG-0463.jpg");
+    ("gym", "https://i.ibb.co/pznWGpw/IMG-0463.jpg"),
+    (
+        "Compostelle",
+        "https://i.ibb.co/pwzqjgT/560x315-img-0734002.webp"
+    ),
+    (
+        "collage",
+        "https://i.ibb.co/Cw026dh/collage-actions-Po-CLi.png"
+    ),
+    (
+        "gare",
+        "https://i.ibb.co/Q8XbN6b/Photos-gare.jpg"
+    ),
+    (
+        "fête de la musique",
+        "https://i.ibb.co/zbqgZYG/Resized-1656009810667-0-Resized-20220622-182830-2316.jpg"
+    );
 
 INSERT INTO
     linkedDocuments (
@@ -669,18 +801,21 @@ INSERT INTO
         `idFamily`
     )
 VALUES
-    (1, 1, null, null, null),
-    (11, 1, null, null, null),
-    (21, 1, null, null, null),
-    (31, 1, null, null, null),
-    (41, 11, null, null, null),
-    (51, 11, null, null, null),
-    (61, 21, null, null, null),
-    (71, 21, null, null, null),
-    (61, 31, null, null, null),
-    (71, 31, null, null, null),
-    (81, 41, null, null, null),
-    (91, 41, null, null, null);
+    (91, 1, null, null, null),
+    (101, 1, null, null, null),
+    (111, 1, null, null, null),
+    (121, 1, null, null, null),
+    (81, 11, null, null, null),
+    (131, 11, null, null, null),
+    (141, 11, null, null, null),
+    (151, 21, null, null, null),
+    (161, 21, null, null, null),
+    (171, 31, null, null, null),
+    (161, 41, null, null, null),
+    (181, 51, null, null, null),
+    (211, 61, null, null, null),
+    (191, 71, null, null, null),
+    (201, 91, null, null, null);
 
 INSERT INTO
     admins (`firstname`, `lastname`, `email`, `password`)
@@ -692,7 +827,7 @@ VALUES
         'borisetviansontsurunbateau'
     ),
     ('test', 'test', 'test@test.com', 'test');
-    
+
 INSERT INTO
     communications (
         `object`,
@@ -707,14 +842,14 @@ VALUES
         'Lorem ipsum dolor sit amet consectetur adipisicing elit',
         "2021-10-06 00:00:00",
         1,
-        1
+        0
     ),
     (
         'Fermeture',
         'Nous fermerons nos portes du 10 au 20/06',
         "2021-10-06 00:00:00",
         11,
-        1
+        0
     ),
     (
         'Atelier',
@@ -722,6 +857,20 @@ VALUES
         "2021-10-06 00:00:00",
         1,
         0
+    ),
+        (
+        'Nouveau site web',
+        'Nous avons le plaisir de vous annoncer que notre nouveau site web sera accessible dès le 30/07/22',
+        "2022-07-30 00:00:00",
+        1,
+        1
+    ),
+        (
+        'Vacances',
+        'PoCLi vous souhaite à toutes et tous de très belles vacances d''été',
+        "2022-07-01 00:00:00",
+        1,
+        1
     );
 
 INSERT INTO

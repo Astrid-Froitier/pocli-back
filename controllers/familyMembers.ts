@@ -18,7 +18,7 @@ const validateFamilyMember = (
     idFamily: Joi.number().presence(required),
     firstname: Joi.string().max(255).presence(required),
     birthday: Joi.date().presence(required),
-    avatar: Joi.string().max(255).presence(required),
+    avatar: Joi.string().max(255).allow(null),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {

@@ -5,5 +5,5 @@ export default interface IFamilyMember extends RowDataPacket {
   idFamily: number;
   firstname: string;
   birthday: string;
-  avatar: string;
+  avatar?: string;
 }
