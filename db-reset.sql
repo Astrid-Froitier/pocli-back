@@ -294,8 +294,8 @@ VALUES
     ),
     (
         'Rencontres L.I.S.E',
-        'Sport et bien-être',
-        'sport'
+        'Prévention - Action sociale',
+        'social'
     ),
     (
         'Animations locales',
