@@ -395,8 +395,7 @@ VALUES
         null,
         '2022-06-21 00:00:00',
         'Fête de la Musique 2022 !',
-        'Une fête écourtée à cause des conditions météorologiques mais de très beaux moments partagés avec les autres bénévoles des associations partenaires. 
-        RV l''année prochaine !',
+        'Une fête écourtée à cause des conditions météorologiques mais de très beaux moments partagés avec les autres bénévoles des associations partenaires.\RV l''année prochaine !',
         null,
         0,
         null,
@@ -407,11 +406,7 @@ VALUES
         null,
         '2022-09-05 00:00:00',
         'Rentrée de Septembre',
-        'Toutes les activités reprendront la semaine du 5 septembre : Pilates : lundi de 19h à 20h, salle des fêtes d''Espiet 
-        Gym Séniors : mardi de 11h15 à 12h15, salle des fêtes de St Quentin de Baron 
-        Douce : jeudi de 18h à 19h, salle des fêtes de St Quentin de Baron
-        Ateliers Part''Ages : lundi, mardi et jeudi de 9h à 11h Salle des fêtes de St Quentin de Baron et mercredi de 9h30 à 11h30 : salle des fêtes d''Espiet 
-        Informations et inscriptions à partir du 16 août au 07 64 15 27 11',
+        'Toutes les activités reprendront la semaine du 5 septembre :\Pilates : lundi de 19h à 20h, salle des fêtes d''Espiet.\Gym Séniors : mardi de 11h15 à 12h15, salle des fêtes de St Quentin de Baron.\Douce : jeudi de 18h à 19h, salle des fêtes de St Quentin de Baron.\Ateliers Part''Ages : lundi, mardi et jeudi de 9h à 11h Salle des fêtes de St Quentin de Baron et mercredi de 9h30 à 11h30 : salle des fêtes d''Espiet.\Informations et inscriptions à partir du 16 août au 07 64 15 27 11',
         null,
         0,
         null,

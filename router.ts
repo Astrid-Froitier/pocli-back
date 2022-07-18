@@ -22,6 +22,7 @@ import { Express } from 'express';
 const setupRoutes = (server: Express) => {
   // LOGIN
   server.post('/api/login', authController.validateLogin, authController.login);
+  server.post('/api/admins/login', authController.validateLogin, authController.loginAdmin);
 
   // TABLE ACTIVITIES
   server.get('/api/activities', activitiesController.getAllActivities);
