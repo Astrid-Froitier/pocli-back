@@ -40,7 +40,7 @@ const addPaymentRecord = async (
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO paymentRecords (idPaymentMethod, checkNumber, dateStart, dateEnd, amount, idFamily, idFamilyMember, idActivity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO paymentRecords (checkNumber, dateStart, dateEnd, amount, idPaymentMethod, idFamily, idFamilyMember, idActivity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [
         paymentRecord.checkNumber,
         paymentRecord.dateStart,

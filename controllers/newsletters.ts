@@ -16,7 +16,7 @@ const validateNewsletter = (
     required = 'required';
   }
   const errors = Joi.object({
-    url: Joi.string().max(100).presence(required),
+    email: Joi.string().max(100).presence(required),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
