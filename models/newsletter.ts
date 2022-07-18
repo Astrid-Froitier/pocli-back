@@ -25,8 +25,8 @@ const getNewsletterById = async (
 const addNewsletter = async (Newsletter: INewsletter): Promise<number> => {
   const results = await connection
     .promise()
-    .query<ResultSetHeader>('INSERT INTO newsletters (url) VALUES (?)', [
-      Newsletter.url,
+    .query<ResultSetHeader>('INSERT INTO newsletters (email) VALUES (?)', [
+      Newsletter.email,
     ]);
   return results[0].insertId;
 };
@@ -37,9 +37,9 @@ const updateNewsletter = async (
 ): Promise<boolean> => {
   let sql = 'UPDATE newsletters SET ';
   const sqlValues: Array<string | number> = [];
-  if (newsletter.url) {
-    sql += 'url = ? ';
-    sqlValues.push(String(newsletter.url));
+  if (newsletter.email) {
+    sql += 'email = ? ';
+    sqlValues.push(String(newsletter.email));
   }
   sql += ' WHERE id = ?';
   sqlValues.push(idNewsletter);
