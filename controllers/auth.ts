@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import * as Family from '../models/family';
+import * as Admin from '../models/admin';
 import { ErrorHandler } from '../helpers/errors';
 import IFamilyInfo from '../interfaces/IFamilyInfo';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 import Joi from 'joi';
 import IFamily from '../interfaces/IFamily';
+import IAdmin from '../interfaces/IAdmin';
 
 // validates login input
 const validateLogin = (req: Request, res: Response, next: NextFunction) => {
@@ -54,6 +56,40 @@ const calculateToken = (familyEmail = '', idFamily = 0) => {
   );
 };
 
+// logs a family
+const loginAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email, password } = req.body as IAdmin;
+    const admin = await Admin.getAdminByEmail(email);
+    if (!admin) throw new ErrorHandler(401, 'This admin does not exist');
+    else {
+      const passwordIsCorrect: boolean = await Admin.verifyPassword(
+        password,
+        (admin.password)
+      );
+      if (passwordIsCorrect) {
+        const token = calculateTokenAdmin(email, Number(admin.id));
+
+        res.cookie('user_token', token);
+        res.json({
+          id: admin.id,
+          name: admin.lastname,
+          token: token,
+        });
+      } else throw new ErrorHandler(401, 'Invalid Credentials');
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const calculateTokenAdmin = (adminEmail = '', idAdmin = 0) => {
+  return jwt.sign(
+    { email: adminEmail, id: idAdmin },
+    process.env.PRIVATE_KEY as string
+  );
+};
+
 interface ICookie {
   user_token: string;
 }
@@ -91,6 +127,7 @@ const getCurrentSession = (req: Request, res: Response, next: NextFunction) => {
 
 export default {
   login,
+  loginAdmin,
   getCurrentSession,
 //   checkSessionPrivileges,
   validateLogin,
