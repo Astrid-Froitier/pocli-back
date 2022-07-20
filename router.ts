@@ -11,6 +11,7 @@ import familyMemberEventsController from './controllers/familyMemberEvents';
 import familyMembersController from './controllers/familyMembers';
 import linkedDocumentsController from './controllers/linkedDocuments';
 import newslettersController from './controllers/newsletters';
+import documentTypesController from './controllers/documentTypes';
 import partnersController from './controllers/partners';
 import paymentMethodsController from './controllers/paymentMethods';
 import paymentRecordsController from './controllers/paymentRecords';
@@ -183,6 +184,32 @@ const setupRoutes = (server: Express) => {
     '/api/documents/:idDocument',
     documentsController.documentExists,
     documentsController.deleteDocument
+  );
+
+  // TABLE DocumentType
+  server.get('/api/documentTypes', documentTypesController.getAllDocumentTypes);
+  server.get(
+    '/api/documentTypes/:idDocumentType',
+    documentTypesController.getOneDocumentType
+  );
+
+  server.post(
+    '/api/documentTypes',
+    documentTypesController.validateDocumentType,
+    documentTypesController.addDocumentType
+  );
+
+  server.put(
+    '/api/documentTypes/:idDocumentType',
+    documentTypesController.validateDocumentType,
+    documentTypesController.documentTypeExists,
+    documentTypesController.updateDocumentType
+  );
+
+  server.delete(
+    '/api/documentTypes/:idDocumentType',
+    documentTypesController.documentTypeExists,
+    documentTypesController.deleteDocumentType
   );
 
   // TABLE EVENTS

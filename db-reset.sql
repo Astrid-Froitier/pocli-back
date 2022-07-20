@@ -108,6 +108,11 @@ CREATE TABLE `postTypes`(
     `name` VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE `documentTypes`(
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE `documents`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL,
@@ -891,3 +896,5 @@ VALUES
     (21, 11, 1, 0, 0),
     (1, 51, 1, 0, 0),
     (11, 21, 1, 1, 1);
+
+INSERT INTO documentTypes (`name`) VALUES ('IMAGE'), ('PODCAST'), ('PDF');
