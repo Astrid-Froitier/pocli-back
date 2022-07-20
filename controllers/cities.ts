@@ -82,11 +82,7 @@ const addCity = async (req: Request, res: Response, next: NextFunction) => {
 
 // updates a city
 
-const updateCity = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const updateCity = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { idCity } = req.params;
     const cityUpdated = await City.updateCity(
@@ -105,11 +101,7 @@ const updateCity = async (
 };
 
 // delete one city
-const deleteCity = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const deleteCity = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { idCity } = req.params;
     const cityDeleted = await City.deleteCity(Number(idCity));
@@ -130,5 +122,5 @@ export default {
   cityExists,
   addCity,
   updateCity,
-  deleteCity
+  deleteCity,
 };

@@ -43,7 +43,7 @@ const getAllFamilies = async (sortBy = ''): Promise<IFamily[]> => {
   let sql =
     'SELECT id, name, streetNumber, address, phoneNumber, email, idCity, idRecipient FROM families';
   if (sortBy) {
-    sql += `ORDER BY ${sortBy}`;
+    sql += ` ORDER BY ${sortBy}`;
   }
   const results = await connection.promise().query<IFamily[]>(sql);
   return results[0];
@@ -53,9 +53,10 @@ const getAllFamilies = async (sortBy = ''): Promise<IFamily[]> => {
 const getFamilyById = async (idFamily: number): Promise<IFamily> => {
   const [results] = await connection
     .promise()
-    .query<IFamily[]>('SELECT id, name, streetNumber, address, phoneNumber, email, idCity, idRecipient FROM families WHERE id = ?', [
-      idFamily,
-    ]);
+    .query<IFamily[]>(
+      'SELECT id, name, streetNumber, address, phoneNumber, email, idCity, idRecipient FROM families WHERE id = ?',
+      [idFamily]
+    );
   return results[0];
 };
 
@@ -93,7 +94,7 @@ const updateFamily = async (
   idFamily: number,
   family: IFamily
 ): Promise<boolean> => {
-  let sql = 'UPDATE families SET';
+  let sql = 'UPDATE families SET ';
   const sqlValues: Array<string | number | boolean> = [];
   let oneValue = false;
 

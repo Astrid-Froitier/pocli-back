@@ -16,7 +16,7 @@ const validateAdmin = (req: Request, res: Response, next: NextFunction) => {
     firstname: Joi.string().max(100).presence(required),
     lastname: Joi.string().max(100).presence(required),
     email: Joi.string().email().max(255).presence(required),
-    password: Joi.string().min(8).max(15).presence(required),
+    password: Joi.string().min(8).max(30).presence(required),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
@@ -114,14 +114,12 @@ const addAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const admin = req.body as IAdmin;
     admin.id = await Admin.addAdmin(admin);
-    res
-      .status(201)
-      .json({
-        id: admin.id,
-        firstname: admin.firstname,
-        lastname: admin.lastname,
-        email: admin.email,
-      });
+    res.status(201).json({
+      id: admin.id,
+      firstname: admin.firstname,
+      lastname: admin.lastname,
+      email: admin.email,
+    });
   } catch (err) {
     next(err);
   }

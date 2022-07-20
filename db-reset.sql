@@ -18,8 +18,8 @@ CREATE TABLE `communicationMembers`(
     `idFamilyMember` INT NULL,
     `idFamily` INT NOT NULL,
     `idCommunication` INT NOT NULL,
-    `isOpened` TINYINT(1) NOT NULL,
-    `isTrashed` TINYINT(1) NOT NULL,
+    `isOpened` TINYINT(1) NOT NULL DEFAULT false,
+    `isTrashed` TINYINT(1) NOT NULL DEFAULT false
 );
 
 CREATE TABLE `admins` (
@@ -810,18 +810,21 @@ VALUES
     (181, 51, null, null, null),
     (211, 61, null, null, null),
     (191, 71, null, null, null),
-    (201, 91, null, null, null);
+    (201, 91, null, null, null)
+    (191, 71, null, null, null),
+    (181, null, null, null, 1),
+    (191, null, null, null, 1);
 
 INSERT INTO
     admins (`firstname`, `lastname`, `email`, `password`)
 VALUES
     (
-        'Boris',
-        'Vian',
-        'soireedisco@joke.com',
-        'borisetviansontsurunbateau'
+        'Amandine',
+        'SOLER',
+        'amandinesoler@outlook.fr',
+        'pocli12345'
     ),
-    ('test', 'test', 'test@test.com', 'test');
+    ('Emeline', 'CHRUN', 'emelinechrun@gmail.com', 'pocli12345');
 
 INSERT INTO
     communications (
@@ -866,6 +869,13 @@ VALUES
         "2022-07-01 00:00:00",
         1,
         1
+    ),
+    (
+        "Bienvenue !",
+        "L'équipe PoCLi vous souhaite la bienvenue dans votre espace personnel ! Vous pouvez désormais accèder à tous nos évènements sans attendre, vous inscrire, nous contacter et bien plus encore. Laissez-vous guider par notre magnifique site internet pour y découvrir un contenu des plus interressant ;)",
+        "2021-10-06 00:00:00",
+        1,
+        0
     );
 
 INSERT INTO
@@ -879,4 +889,5 @@ INSERT INTO
 VALUES
     (1, 1, 1, 1, 0),
     (21, 11, 1, 0, 0),
+    (1, 51, 1, 0, 0),
     (11, 21, 1, 1, 1);
