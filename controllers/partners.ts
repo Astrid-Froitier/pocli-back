@@ -11,8 +11,8 @@ const validatePartner = (req: Request, res: Response, next: NextFunction) => {
     required = 'required';
   }
   const errors = Joi.object({
-    name: Joi.string().max(100).presence(required),
-    logo: Joi.string().max(100).presence(required),
+    name: Joi.string().max(50).presence(required),
+    logo: Joi.string().max(255).presence(required),
     url: Joi.string().max(255).presence(required),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
@@ -34,7 +34,7 @@ const getAllPartners = (async (
 
     res.setHeader(
       'Content-Range',
-      `users : 0-${partners.length}/${partners.length + 1}`
+      `partners : 0-${partners.length}/${partners.length + 1}`
     );
     return res.status(200).json(partners);
   } catch (err) {
@@ -84,14 +84,14 @@ const addPartner = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const updatedPartners = async (
+const updatedPartner = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { idPartner } = req.params;
-    const partnerUpdated = await Partner.updatedPartners(
+    const partnerUpdated = await Partner.updatedPartner(
       Number(idPartner),
       req.body as IPartner
     );
@@ -131,6 +131,6 @@ export default {
   getOnePartner,
   partnerExists,
   addPartner,
-  updatedPartners,
+  updatedPartner,
   deletePartner,
 };

@@ -29,13 +29,13 @@ const addPartner = async (partner: IPartner): Promise<number> => {
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO partners (name, logo, url) VALUES (?, ?, ?)',
-      [partner.name, partner.logo, partner.url]
+      'INSERT INTO partners (name, logo, link) VALUES (?, ?, ?)',
+      [partner.name, partner.logo, partner.link]
     );
   return results[0].insertId;
 };
 
-const updatedPartners = async (
+const updatedPartner = async (
   idPartner: number,
   partner: IPartner
 ): Promise<boolean> => {
@@ -53,9 +53,9 @@ const updatedPartners = async (
     sqlValues.push(partner.logo);
     oneValue = true;
   }
-  if (partner.url) {
-    sql += oneValue ? ', url = ? ' : 'url = ? ';
-    sqlValues.push(partner.url);
+  if (partner.link) {
+    sql += oneValue ? ', link = ? ' : 'link = ? ';
+    sqlValues.push(partner.link);
     oneValue = true;
   }
   sql += ' WHERE id = ?';
@@ -79,6 +79,6 @@ export {
   getPartnerById,
   getPartnerByName,
   addPartner,
-  updatedPartners,
+  updatedPartner,
   deletePartner,
 };
