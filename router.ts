@@ -22,7 +22,11 @@ import { Express } from 'express';
 const setupRoutes = (server: Express) => {
   // LOGIN
   server.post('/api/login', authController.validateLogin, authController.login);
-  server.post('/api/admins/login', authController.validateLogin, authController.loginAdmin);
+  server.post(
+    '/api/admins/login',
+    authController.validateLogin,
+    authController.loginAdmin
+  );
 
   // TABLE ACTIVITIES
   server.get('/api/activities', activitiesController.getAllActivities);
@@ -107,10 +111,16 @@ const setupRoutes = (server: Express) => {
     communicationsController.getOneCommunication
   );
   server.post(
-    '/api/communications/',
+    '/api/communications',
+    communicationsController.validateCommunication,
+    communicationsController.addCommunication
+  );
+
+  server.put(
+    '/api/communications/:idCommunication',
     communicationsController.validateCommunication,
     communicationsController.communicationExists,
-    communicationsController.addCommunication
+    communicationsController.updateCommunication
   );
 
   server.delete(
@@ -341,9 +351,6 @@ const setupRoutes = (server: Express) => {
   server.put(
     '/api/linkedDocuments/:idLinkedDocument',
     linkedDocumentsController.validateLinkedDocument,
-    linkedDocumentsController.linkedDocumentExists,
-    linkedDocumentsController.idEventExists,
-    linkedDocumentsController.idDocumentExists,
     linkedDocumentsController.updateLinkedDocument
   );
 

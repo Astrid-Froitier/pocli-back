@@ -29,7 +29,7 @@ const addCommunication = async (
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO communications (object, content, date, idAdmin, isBanner) VALUES (?, ?, ?, ?, ?, ?)',
+      'INSERT INTO communications (object, content, date, idAdmin, isBanner) VALUES (?, ?, ?, ?, ?)',
       [
         communication.object,
         communication.content,
@@ -39,6 +39,48 @@ const addCommunication = async (
       ]
     );
   return results[0].insertId;
+};
+
+const updateCommunication = async (
+  idCommunication: number,
+  communication: ICommunication
+): Promise<boolean> => {
+  let sql = 'UPDATE communications SET ';
+  const sqlValues: Array<string | number> = [];
+  let oneValue = false;
+
+  if (communication.object) {
+    sql += 'object = ? ';
+    sqlValues.push(communication.object);
+    oneValue = true;
+  }
+  if (communication.content) {
+    sql += oneValue ? ', content = ? ' : ' content = ? ';
+    sqlValues.push(communication.content);
+    oneValue = true;
+  }
+  if (communication.date) {
+    sql += oneValue ? ', date = ? ' : ' date = ? ';
+    sqlValues.push(communication.date);
+    oneValue = true;
+  }
+  if (communication.idAdmin) {
+    sql += oneValue ? ', idAdmin = ? ' : ' idAdmin = ? ';
+    sqlValues.push(communication.idAdmin);
+    oneValue = true;
+  }
+  if (communication.isBanner) {
+    sql += oneValue ? ', isBanner = ? ' : ' isBanner = ? ';
+    sqlValues.push(communication.isTrashed);
+    oneValue = true;
+  }
+  sql += ' WHERE id = ?';
+  sqlValues.push(idCommunication);
+
+  const results = await connection
+    .promise()
+    .query<ResultSetHeader>(sql, sqlValues);
+  return results[0].affectedRows === 1;
 };
 
 const deleteCommunication = async (
@@ -56,5 +98,6 @@ export {
   getAllCommunications,
   getCommunicationById,
   addCommunication,
+  updateCommunication,
   deleteCommunication,
 };

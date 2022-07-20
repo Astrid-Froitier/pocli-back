@@ -17,13 +17,12 @@ const validateCommunication = (
     required = 'required';
   }
   const errors = Joi.object({
-    firstname: Joi.string().max(100).presence(required),
     object: Joi.string().max(100).presence(required),
     date: Joi.date().max(100).presence(required),
     content: Joi.string().max(3000).presence(required),
     idAdmin: Joi.number().presence(required),
     isBanner: Joi.number().presence(required),
-    id: Joi.number().optional(), // pour react-Communication
+    id: Joi.number().optional(),
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
     next(new ErrorHandler(422, errors.message));
@@ -113,6 +112,30 @@ const addCommunication = async (
   }
 };
 
+const updateCommunication = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idCommunication } = req.params;
+    const communicationUpdated = await Communication.updateCommunication(
+      Number(idCommunication),
+      req.body as ICommunication
+    );
+    if (communicationUpdated) {
+      const communication = await Communication.getCommunicationById(
+        Number(idCommunication)
+      );
+      res.status(200).send(communication); // react-admin needs this response
+    } else {
+      throw new ErrorHandler(500, `Communication cannot be updated`);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 // delete one Communication
 const deleteCommunication = async (
   req: Request,
@@ -144,6 +167,7 @@ export default {
   getOneCommunication,
   communicationExists,
   deleteCommunication,
+  updateCommunication,
   validateCommunication,
   addCommunication,
 };

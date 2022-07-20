@@ -18,8 +18,8 @@ CREATE TABLE `communicationMembers`(
     `idFamilyMember` INT NULL,
     `idFamily` INT NOT NULL,
     `idCommunication` INT NOT NULL,
-    `isOpened` TINYINT(1) NOT NULL,
-    `isTrashed` TINYINT(1) NOT NULL,
+    `isOpened` TINYINT(1) NOT NULL DEFAULT false,
+    `isTrashed` TINYINT(1) NOT NULL DEFAULT false
 );
 
 CREATE TABLE `admins` (

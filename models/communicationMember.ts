@@ -43,7 +43,7 @@ const addCommunicationMember = async (
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO communicationMembers (idFamilyMember, idFamily, idCommunication, isOpened, isTrashed) VALUES (?, ?)',
+      'INSERT INTO communicationMembers (idFamilyMember, idFamily, idCommunication, isOpened, isTrashed) VALUES (?, ?, ?, ?, ?)',
       [
         communicationMember.idFamilyMember,
         communicationMember.idFamily,
@@ -114,5 +114,5 @@ export {
   getAllCommunicationMembersByIdFamily,
   addCommunicationMember,
   updateCommunicationMember,
-  deleteCommunicationMember
+  deleteCommunicationMember,
 };
