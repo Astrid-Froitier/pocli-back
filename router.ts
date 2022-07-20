@@ -306,7 +306,8 @@ const setupRoutes = (server: Express) => {
   server.put(
     '/api/familyMemberEvents/:idFamilyMemberEvent',
     familyMemberEventsController.validateFamilyMemberEvent,
-    familyMemberEventsController.familyMemberEventExists
+    familyMemberEventsController.familyMemberEventExists,
+    familyMemberEventsController.updateFamilyMemberEvent
   );
 
   server.delete(
@@ -465,7 +466,8 @@ const setupRoutes = (server: Express) => {
   server.put(
     '/api/recipients/:idRecipient',
     recipientsController.validateRecipient,
-    recipientsController.recipientExists
+    recipientsController.recipientExists,
+    recipientsController.updateRecipient
   );
 
   server.delete(
