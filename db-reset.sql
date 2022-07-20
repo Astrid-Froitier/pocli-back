@@ -7,6 +7,8 @@ USE `pocli`;
 CREATE TABLE `linkedDocuments`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `idDocument` INT NOT NULL,
+    `date` DATETIME NOT NULL DEFAULT NOW(),
+    `idActivity` INT NULL,
     `idEvent` INT NULL,
     `idCommunication` INT NULL,
     `idFamilyMember` INT NULL,
@@ -15,11 +17,12 @@ CREATE TABLE `linkedDocuments`(
 
 CREATE TABLE `communicationMembers`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `idFamily` INT NULL,
     `idFamilyMember` INT NULL,
-    `idFamily` INT NOT NULL,
+    `idActivity` INT NULL,
     `idCommunication` INT NOT NULL,
-    `isOpened` TINYINT(1) NOT NULL DEFAULT false,
-    `isTrashed` TINYINT(1) NOT NULL DEFAULT false
+    `isOpened` TINYINT(1) NOT NULL DEFAULT 0,
+    `isTrashed` TINYINT(1) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `admins` (
@@ -32,8 +35,16 @@ CREATE TABLE `admins` (
 
 CREATE TABLE `partners` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(100) NOT NULL,
-    `logo` VARCHAR(100) NOT NULL,
+    `name` VARCHAR(50) NOT NULL,
+    `logo` VARCHAR(255) NOT NULL,
+    `link` VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE `pocliMembers` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `firstname` VARCHAR(50) NOT NULL,
+    `lastname` VARCHAR(50) NOT NULL,
+    `function` VARCHAR(50) NOT NULL,
     `url` VARCHAR(255) NOT NULL
 );
 
@@ -45,42 +56,36 @@ CREATE TABLE `familyMemberEvents`(
 
 CREATE TABLE `communications`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `date` DATETIME NOT NULL DEFAULT NOW(),
     `object` VARCHAR(255) NOT NULL,
     `content` TEXT NOT NULL,
-    `date` DATETIME NOT NULL,
     `idAdmin` INT NOT NULL,
     `isBanner` TINYINT(1) NOT NULL
 );
 
-CREATE TABLE `familyMemberActivities`(
-    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `idActivity` INT NOT NULL,
-    `idFamilyMember` INT NOT NULL
-);
-
 CREATE TABLE `events`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `numberParticipantsMax` INT NULL,
+    `idPostType` INT NOT NULL,
+    `idActivity` INT NULL,
     `date` DATETIME NOT NULL,
     `description` VARCHAR(100) NOT NULL,
     `text` TEXT NULL,
     `podcastLink` VARCHAR(255) NULL,
+    `numberParticipantsMax` INT NULL,
     `reservedAdherent` TINYINT(1) NOT NULL,
-    `price` INT NULL,
-    `idPostType` INT NOT NULL,
-    `idActivity` INT NULL
+    `price` INT NULL
 );
 
 CREATE TABLE `paymentRecords`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `idPaymentMethod` INT NOT NULL,
-    `checkNumber` VARCHAR(50) NULL,
-    `dateStart` DATETIME NOT NULL,
-    `dateEnd` DATETIME NOT NULL,
-    `amount` INT NOT NULL,
     `idFamily` INT NOT NULL,
     `idFamilyMember` INT NULL,
-    `idActivity` INT NULL
+    `idActivity` INT NULL,
+    `idPaymentMethod` INT NOT NULL,
+    `checkNumber` VARCHAR(50) NULL,
+    `amount` INT NOT NULL,
+    `dateStart` DATETIME NOT NULL,
+    `dateEnd` DATETIME NOT NULL
 );
 
 CREATE TABLE `familyMembers`(
@@ -94,12 +99,12 @@ CREATE TABLE `familyMembers`(
 CREATE TABLE `families`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL,
-    `streetNumber` INT NOT NULL,
-    `address` VARCHAR(255) NOT NULL,
-    `phoneNumber` INT NOT NULL,
     `email` VARCHAR(100) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
+    `streetNumber` INT NOT NULL,
+    `address` VARCHAR(255) NOT NULL,
     `idCity` INT NOT NULL,
+    `phoneNumber` INT NOT NULL,
     `idRecipient` INT NOT NULL
 );
 
@@ -178,16 +183,6 @@ ADD
     CONSTRAINT `families_idrecipient_foreign` FOREIGN KEY(`idRecipient`) REFERENCES `recipients`(`id`);
 
 ALTER TABLE
-    `familyMemberActivities`
-ADD
-    CONSTRAINT `familymemberactivities_idactivity_foreign` FOREIGN KEY(`idActivity`) REFERENCES `activities`(`id`);
-
-ALTER TABLE
-    `familyMemberActivities`
-ADD
-    CONSTRAINT `familymemberactivities_idfamilymember_foreign` FOREIGN KEY(`idFamilyMember`) REFERENCES `familyMembers`(`id`);
-
-ALTER TABLE
     `communicationMembers`
 ADD
     CONSTRAINT `communicationmembers_idcommunication_foreign` FOREIGN KEY(`idCommunication`) REFERENCES `communications`(`id`);
@@ -206,6 +201,11 @@ ALTER TABLE
     `communicationMembers`
 ADD
     CONSTRAINT `communicationmembers_idfamily_foreign` FOREIGN KEY(`idFamily`) REFERENCES `families`(`id`);
+
+ALTER TABLE
+    `communicationMembers`
+ADD
+    CONSTRAINT `communicationmembers_idactivity_foreign` FOREIGN KEY(`idActivity`) REFERENCES `activities`(`id`);
 
 ALTER TABLE
     `familyMemberEvents`
@@ -251,6 +251,11 @@ ALTER TABLE
     `linkedDocuments`
 ADD
     CONSTRAINT `linkeddocuments_idfamilymember_foreign` FOREIGN KEY(`idFamilyMember`) REFERENCES `familyMembers`(`id`);
+
+ALTER TABLE
+    `linkedDocuments`
+ADD
+    CONSTRAINT `linkeddocuments_idactivity_foreign` FOREIGN KEY(`idActivity`) REFERENCES `activities`(`id`);
 
 -- ACTIVITIES
 INSERT INTO
@@ -311,6 +316,131 @@ VALUES
     ('Article'),
     ('Podcast');
 
+-- POCLI MEMBERS
+INSERT INTO
+    pocliMembers (`firstname`, `lastname`, `function`, `url`)
+VALUES
+    (
+        'Michaël',
+        'HOUSSIER',
+        'Président',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Membres%20du%20CA%20et%20salari%C3%A9s%2FMichae%CC%88l%20HOUSSIER.JPG?alt=media&token=8db055d3-d495-42cd-b02e-a117c37e1c23'
+    ),
+    (
+        'Emeline',
+        'CHRUN',
+        'Coordinatrice',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Membres%20du%20CA%20et%20salari%C3%A9s%2FEmeline%20CHRUN%2C%20coordinatrice.jpg?alt=media&token=2d979d8d-8d35-4d5c-bd18-56d800dab021'
+    ),
+    (
+        'Amandine',
+        'SOLER',
+        'Secrétaire',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Membres%20du%20CA%20et%20salari%C3%A9s%2FAmandine%20SOLER.jpg?alt=media&token=87e0e5c6-d170-452e-8434-9c62fad98614'
+    ),
+    (
+        'Anne-Michèle',
+        'LAIZAIN',
+        'Animatrice',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Membres%20du%20CA%20et%20salari%C3%A9s%2FAnne%20Miche%CC%80le%20LAIZAIN%2C%20animatrice.jpg?alt=media&token=955984da-c1d2-47b5-8c6e-57311c5dd522'
+    ),
+    (
+        'Sandrine',
+        'LARMET',
+        'Membre',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Membres%20du%20CA%20et%20salari%C3%A9s%2FSandrine%20LARMET.jpg?alt=media&token=af6cf9fe-ffe0-4a0f-8357-f2789c1f6487'
+    ),
+    (
+        'Marie-Françoise',
+        'PARENTEAU',
+        'Membre',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Membres%20du%20CA%20et%20salari%C3%A9s%2FMarie%20Franc%CC%A7oise%20PARENTEAU.jpg?alt=media&token=dd8eede3-e697-4a13-b52f-86ca732aa246'
+    ),
+    (
+        'Sylvie',
+        'POMMIER',
+        'Membre',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Membres%20du%20CA%20et%20salari%C3%A9s%2FSylvie%20POMMIER.jpg?alt=media&token=2f51c2a8-e619-4a1d-a89b-41e3c02a1a21'
+    ),
+    (
+        'Alexia',
+        'DHELIN',
+        'Membre',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Membres%20du%20CA%20et%20salari%C3%A9s%2FAlexia%20DHELLIN.jpg?alt=media&token=5f93785f-b016-4187-9fa7-f0f83be9a356'
+    ),
+    (
+        'Chrystelle',
+        'DEL RIO',
+        'Membre',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Membres%20du%20CA%20et%20salari%C3%A9s%2FChystelle%20DEL%20RIO.jpg?alt=media&token=b10ac21b-66dc-4a27-abe7-f36bddee4004'
+    ),
+    (
+        'Christine',
+        'HOUQUES',
+        'Membre',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Membres%20du%20CA%20et%20salari%C3%A9s%2FChristine%20HOUQUES.jpg?alt=media&token=04e0b564-fe11-4c42-9c15-10567066a545'
+    );
+
+-- PARTNERS
+INSERT INTO
+    partners (`name`, `logo`, `link`)
+VALUES
+    (
+        'Ville de Branne',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2FBranne.png?alt=media&token=3a6fabc4-2b14-44ae-bdc6-6b61ff78ceff',
+        'https://www.mairie-branne.fr/'
+    ),
+    (
+        'CAF',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2FCAF.jpg?alt=media&token=cac5f7cb-11c8-4f81-bcd9-3d8fde43c0bf',
+        'https://www.caf.fr/'
+    ),
+    (
+        'Castillon-Pujols',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2FCastillon%20Pujols.png?alt=media&token=dab82a55-7056-4d63-b0a3-5f012d78f708',
+        'https://www.castillonpujols.fr/'
+    ),
+    (
+        'Département Gironde',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2FDepartement%20Gironde.png?alt=media&token=51265cb2-7a37-4c4c-8478-dea9e5043999',
+        'https://www.gironde.fr/'
+    ),
+    (
+        'La Cali',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2FLa%20CALI.png?alt=media&token=ceb06e66-506f-424d-bd4b-80523813fafd',
+        'https://www.lacali.fr/'
+    ),
+    (
+        'MSA',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2FMSA.jpg?alt=media&token=4fd10d4c-c7f7-4538-8636-24007e357040',
+        'https://www.msa.fr/'
+    ),
+    (
+        'Mairie Espiet',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2FMairie%20Espiet.png?alt=media&token=f6bdc036-eb24-4af8-8686-d4351f1b970d',
+        'http://www.espiet.fr/'
+    ),
+    (
+        'Mairie de St Quentin de Baron',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2FMairie%20de%20St%20Quentin%20de%20B.png?alt=media&token=a056eff2-cfbc-47bd-9d45-a2812ee4f2b8',
+        'https://saint-quentin-de-baron.fr/'
+    ),
+    (
+        'Nérigean',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2FNe%CC%81rigean.jpg?alt=media&token=d2040d3c-e49e-466e-9e04-97c1d065cd89',
+        'https://nerigean.fr/'
+    ),
+    (
+        'Nouvelle-Aquitaine',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2FNouvelle%20Aquitaine.jpg?alt=media&token=36cde2b5-7497-4705-809b-ebcb88107a2a',
+        'https://www.nouvelle-aquitaine.fr/'
+    ),
+    (
+        'REAAP',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2FREAAP.jpg?alt=media&token=0cc50762-03d4-486a-a9b6-6f37246c6245',
+        ''
+    );
+
 -- EVENTS
 INSERT INTO
     events (
@@ -326,7 +456,7 @@ INSERT INTO
     )
 VALUES
     (
-        3,
+        null,
         '2021-07-06 00:00:00',
         'Les Ateliers Part''Ages permettent de créer du lien et de mixer les générations.',
         'Adultes et enfants partagent une activité dans une ambiance détendue. Les enfants ont entre 0 et 12 ans. Les ateliers sont pour eux des moments de découvertes, d''expériences et de complicité avec les autres et avec son parent. Pour les adultes, ils permettent de sortir de la maison, de partager pleinement un temps avec son enfant, de rencontrer d''autres parents et de partager ses doutes et ses difficultés si besoin. Le cadre bienveillant permet d''y trouver écoute et soutien. Les activités sont variées : découverte sensorielle, peinture, constuction, cuisine, éveil musical, contes, motricité, ... et les ateliers "Fait Maison" pour faire soi même lessive, dentifrice, baume hydratant... Mais l''activité n''est qu''un prétexte à la rencontre !',
@@ -440,6 +570,7 @@ VALUES
         null
     );
 
+-- CITIES
 INSERT INTO
     cities (`name`, `zipCode`)
 VALUES
@@ -535,6 +666,7 @@ VALUES
     ('SAINT LEION', 33670),
     ('VILLENAVE DE RIONS', 33550);
 
+-- RECIPIENTS
 INSERT INTO
     recipients (`name`)
 VALUES
@@ -560,7 +692,7 @@ VALUES
         "route des colonies",
         0636656565,
         "ducasse@gmail.com",
-        "password",
+        "$argon2id$v=19$m=65536,t=5,p=1$908LM5sH+jGbyz0rnR7jFA$M+N/D6k/qYXARufJTkGPD62IY5/XSVQV7cVRKtPXJDc",
         1,
         1
     ),
@@ -583,8 +715,19 @@ VALUES
         "password",
         21,
         21
+    ),
+    (
+        "Larroche",
+        13,
+        "Avenue de la Marne",
+        1234567890,
+        "larrochefamily@gmail.com",
+        "$argon2id$v=19$m=65536,t=5,p=1$NcJ0hlZt99HkDMLWmPh2qA$/NvLUx+SX/dCVCleNnLSETvz320RGzj98NRNPnjU2GE",
+        871,
+        11
     );
 
+-- FAMILY MEMBERS
 INSERT INTO
     familyMembers (
         `idFamily`,
@@ -601,25 +744,25 @@ VALUES
     ),
     (
         1,
-        "Maire",
+        "Boris",
         "1987-07-06 00:00:00",
         null
     ),
     (
         1,
-        "Kevin",
-        "1900-07-06 00:00:00",
+        "Thomas",
+        "1973-07-06 00:00:00",
         null
     ),
     (
-        11,
-        "Gérard",
+        1,
+        "André",
         "1980-07-06 00:00:00",
         null
     ),
     (
         11,
-        "Yvette",
+        "Emeline",
         "1989-07-06 00:00:00",
         null
     ),
@@ -637,7 +780,7 @@ VALUES
     ),
     (
         21,
-        "Suzy",
+        "Lisa",
         "1995-07-06 00:00:00",
         null
     ),
@@ -646,8 +789,27 @@ VALUES
         "Eric",
         "1600-07-06 00:00:00",
         null
+    ),
+    (
+        1,
+        "Paul",
+        "1995-07-06 00:00:00",
+        null
+    ),
+    (
+        1,
+        "Pascal",
+        "1959-07-06 00:00:00",
+        null
+    ),
+    (
+        1,
+        "Jacques",
+        "1965-07-06 00:00:00",
+        null
     );
 
+-- PAYMENT METHODS
 INSERT INTO
     paymentMethods (`name`)
 VALUES
@@ -669,7 +831,7 @@ INSERT INTO
 VALUES
     (
         11,
-        21654987312178554,
+        "21654987312178554",
         "2021-07-06 00:00:00",
         "2023-07-06 00:00:00",
         40,
@@ -696,136 +858,213 @@ VALUES
         1,
         21,
         41
+    ),
+    (
+        21,
+        null,
+        "2021-10-05 22:00:00",
+        "2022-07-29 22:00:00",
+        50,
+        1,
+        21,
+        1
+    ),
+    (
+        21,
+        null,
+        "2021-10-05 22:00:00",
+        "2022-07-29 22:00:00",
+        50,
+        1,
+        11,
+        11
+    ),
+    (
+        21,
+        null,
+        "2021-10-05 22:00:00",
+        "2022-07-29 22:00:00",
+        50,
+        1,
+        31,
+        1
+    ),
+    (
+        21,
+        null,
+        "2021-10-05 22:00:00",
+        "2022-07-29 22:00:00",
+        50,
+        1,
+        1,
+        1
+    ),
+    (
+        11,
+        "4543987312178554",
+        "2021-10-05 22:00:00",
+        "2022-07-29 22:00:00",
+        500,
+        1,
+        null,
+        null
+    ),
+    (
+        21,
+        null,
+        "2021-10-05 22:00:00",
+        "2022-07-29 22:00:00",
+        50,
+        1,
+        101,
+        1
     );
 
+-- DOCUMENTS
 INSERT INTO
     documents (`name`, `url`)
 VALUES
     (
         "avatar-rabbit",
-        "https://i.ibb.co/svD1v3p/avatar-rabbit.png"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-rabbit.png?alt=media&token=fe208f96-05fc-4034-85f8-a4c40d7fafb6"
     ),
     (
         "avatar-deer",
-        "https://i.ibb.co/Ld3T7NL/avatar-deer.png"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-deer.png?alt=media&token=c08d7f1f-cbe2-44c3-812e-2f93faaae6a1"
     ),
     (
         "avatar-panda",
-        "https://i.ibb.co/Tr9b2Dj/avatar-panda.png"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-panda.png?alt=media&token=e809e19b-a498-4d4e-83a1-9b83d27d920f"
     ),
     (
         "avatar-fox",
-        "https://i.ibb.co/RNx3fzV/avatar-fox.png"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-fox.png?alt=media&token=937eb25b-c25e-49b0-91b8-10ac93abe083"
     ),
     (
         "avatar-bear",
-        "https://i.ibb.co/vms0362/avatar-bear.png"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-bear.png?alt=media&token=5477cf9b-fcb1-461b-8881-c1b4b4a1d97d"
     ),
     (
         "avatar-owl",
-        "https://i.ibb.co/SKWJ9V3/avatar-rabbit.png"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-owl.png?alt=media&token=b82a795b-7915-4643-b5ac-b96be3791d76"
     ),
     (
         "avatar-beaver",
-        "https://i.ibb.co/xD0dgt6/avatar-beaver.png"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-beaver.png?alt=media&token=9fdc7e51-7e1f-4404-90d7-5a27b89c26c9"
     ),
     (
         "avatar-raccoon",
-        "https://i.ibb.co/4NTLHQ1/avatar-raccoon.png"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-raccoon.png?alt=media&token=2215a583-ce33-4d84-96df-396d5badb7ee"
     ),
     (
         "cadeaux",
-        "https://i.ibb.co/Y2NccWZ/20211216-141722.jpg"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20211216-141722.jpeg?alt=media&token=0430b50c-2cb9-4a6a-a015-3253ec9272e7"
     ),
     (
         "enfants-peinture",
-        "https://i.ibb.co/cNKD7Yg/20170707-094557.jpg"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20170707-094557.jpeg?alt=media&token=afac2feb-72f2-49de-83d9-2ff3417798ed"
     ),
     (
-        "anes",
-        "https://i.ibb.co/5WP6BSY/Partages-juin.jpg"
+        "ânes",
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2FPartages-juin.jpeg?alt=media&token=ef90b5a6-d3c4-4e5e-8e01-e683d05ef264"
     ),
     (
         "enfants-atelier-découpage",
-        "https://i.ibb.co/fnH3m8W/20210929-101149-1.jpg"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20210929-101149-1.jpeg?alt=media&token=940cfc04-96d2-4e94-8db4-b95ca5beffca"
     ),
     (
         "réunion",
-        "https://i.ibb.co/RgN0YXQ/conf-college.jpg"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2Fconf-college.jpeg?alt=media&token=124711d3-77ab-4331-82c3-47dfe2877b57"
     ),
     (
         "papi-enfants",
-        "https://i.ibb.co/DQg3pcV/20170614-152502.jpg"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20170614-152502.jpeg?alt=media&token=694e3758-1f2f-45dc-856d-b2c88aef4a8f"
     ),
     (
         "jeux",
-        "https://i.ibb.co/q1zjpJD/20210429-171847.jpg"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20210429-171847.jpeg?alt=media&token=ec23aef0-0e20-4be9-857a-5c16da493ccc"
     ),
     (
         "pilate",
-        "https://i.ibb.co/qF9HwB0/IMG-8295.jpg"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2FIMG-8295.jpeg?alt=media&token=4db1b26b-8108-4c7b-870b-a1ec9b1911be"
     ),
     (
         "gym-douce",
-        "https://i.ibb.co/6w8XV9F/gym-douce.jpg"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2Fgym-douce.jpeg?alt=media&token=0044e73c-20a3-42f0-b61d-7aeb4a5fc229"
     ),
-    ("gym", "https://i.ibb.co/pznWGpw/IMG-0463.jpg"),
+    (
+        "gym",
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2FIMG-0463.jpeg?alt=media&token=7462bfff-af8d-47fc-a955-f68e0d8a03a5"
+    ),
     (
         "Compostelle",
-        "https://i.ibb.co/pwzqjgT/560x315-img-0734002.webp"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F560x315-img-0734002.webp?alt=media&token=0250565d-1d17-4aec-8e07-5a48a0c091f7"
     ),
     (
         "collage",
-        "https://i.ibb.co/Cw026dh/collage-actions-Po-CLi.png"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20r%C3%A9els%2Fcollage-actions-Po-CLi.png?alt=media&token=bbbda796-a419-4a8d-a026-5c58aeb8cee3"
     ),
     (
         "gare",
-        "https://i.ibb.co/Q8XbN6b/Photos-gare.jpg"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20r%C3%A9els%2FPhotos-gare.jpeg?alt=media&token=f36bfffd-670c-4b66-b9b2-55e7718b1490"
     ),
     (
         "fête de la musique",
-        "https://i.ibb.co/zbqgZYG/Resized-1656009810667-0-Resized-20220622-182830-2316.jpg"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20r%C3%A9els%2FResized-1656009810667-0-Resized-20220622-182830-2316.jpeg?alt=media&token=869c3b08-95a0-44ab-a1d1-d46c026f6694"
     );
 
+-- LINKED DOCUMENTS
 INSERT INTO
     linkedDocuments (
         `idDocument`,
+        `idActivity`,
         `idEvent`,
         `idCommunication`,
         `idFamilyMember`,
         `idFamily`
     )
 VALUES
-    (91, 1, null, null, null),
-    (101, 1, null, null, null),
-    (111, 1, null, null, null),
-    (121, 1, null, null, null),
-    (81, 11, null, null, null),
-    (131, 11, null, null, null),
-    (141, 11, null, null, null),
-    (151, 21, null, null, null),
-    (161, 21, null, null, null),
-    (171, 31, null, null, null),
-    (161, 41, null, null, null),
-    (181, 51, null, null, null),
-    (211, 61, null, null, null),
-    (191, 71, null, null, null),
-    (201, 91, null, null, null)
-    (191, 71, null, null, null),
-    (181, null, null, null, 1),
-    (191, null, null, null, 1);
+    (91, null, 1, null, null, null),
+    (101, null, 1, null, null, null),
+    (111, null, 1, null, null, null),
+    (121, null, 1, null, null, null),
+    (81, null, 11, null, null, null),
+    (131, null, 11, null, null, null),
+    (141, null, 11, null, null, null),
+    (151, null, 21, null, null, null),
+    (161, null, 21, null, null, null),
+    (171, null, 31, null, null, null),
+    (161, null, 41, null, null, null),
+    (181, null, 51, null, null, null),
+    (211, null, 61, null, null, null),
+    (191, null, 71, null, null, null),
+    (201, null, 91, null, null, null),
+    (181, null, null, null, null, 1),
+    (191, null, null, null, null, 1);
 
+-- ADMINS
 INSERT INTO
-    admins (`firstname`, `lastname`, `email`, `password`)
+    admins (
+        `firstname`,
+        `lastname`,
+        `email`,
+        `password`
+    )
 VALUES
     (
-        'Amandine',
-        'SOLER',
-        'amandinesoler@outlook.fr',
-        'pocli12345'
+        "Amandine",
+        "SOLER",
+        "amandinesoler@outlook.fr",
+        "$argon2id$v=19$m=65536,t=5,p=1$koO9GAR2k9OXTS5QP6oBtg$sng/K9qtQTJl1FDfMmC1bDUAA/xKMPliu3SPQg8Wnj0"
     ),
-    ('Emeline', 'CHRUN', 'emelinechrun@gmail.com', 'pocli12345');
+    (
+        "Emeline",
+        "CHRUN",
+        "emelinechrun@gmail.com",
+        "testtest"
+    );
 
+-- COMMUNICATIONS
 INSERT INTO
     communications (
         `object`,
@@ -856,14 +1095,14 @@ VALUES
         1,
         0
     ),
-        (
+    (
         'Nouveau site web',
         'Nous avons le plaisir de vous annoncer que notre nouveau site web sera accessible dès le 30/07/22',
         "2022-07-30 00:00:00",
         1,
         1
     ),
-        (
+    (
         'Vacances',
         'PoCLi vous souhaite à toutes et tous de très belles vacances d''été',
         "2022-07-01 00:00:00",
@@ -878,16 +1117,18 @@ VALUES
         0
     );
 
+-- COMMUNICATION MEMBERS
 INSERT INTO
     communicationMembers (
         `idFamilyMember`,
+        `idActivity`,
         `idCommunication`,
         `idFamily`,
         `isOpened`,
         `isTrashed`
     )
 VALUES
-    (1, 1, 1, 1, 0),
-    (21, 11, 1, 0, 0),
-    (1, 51, 1, 0, 0),
-    (11, 21, 1, 1, 1);
+    (1, null, 1, 1, 1, 0),
+    (21, null, 11, 1, 0, 0),
+    (1, null, 51, 1, 0, 0),
+    (11, null, 21, 1, 1, 1);

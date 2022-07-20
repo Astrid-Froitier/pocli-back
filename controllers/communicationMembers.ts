@@ -17,10 +17,11 @@ const validateCommunicationMember = (
   }
   const errors = Joi.object({
     idFamilyMember: Joi.number().allow(null),
-    idFamily: Joi.number().presence(required),
+    idFamily: Joi.number().allow(null),
+    idActivity: Joi.number().allow(null),
     idCommunication: Joi.number().presence(required),
-    isOpened: Joi.number().presence(required),
-    isTrashed: Joi.number().presence(required),
+    isOpened: Joi.number().allow(null),
+    isTrashed: Joi.number().allow(null),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {

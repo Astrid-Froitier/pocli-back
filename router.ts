@@ -12,6 +12,7 @@ import familyMembersController from './controllers/familyMembers';
 import linkedDocumentsController from './controllers/linkedDocuments';
 import newslettersController from './controllers/newsletters';
 import partnersController from './controllers/partners';
+import pocliMembersController from './controllers/pocliMembers';
 import paymentMethodsController from './controllers/paymentMethods';
 import paymentRecordsController from './controllers/paymentRecords';
 import postTypesController from './controllers/postTypes';
@@ -399,13 +400,40 @@ const setupRoutes = (server: Express) => {
   server.put(
     '/api/partners/:idPartner',
     partnersController.validatePartner,
-    partnersController.partnerExists
+    partnersController.partnerExists,
+    partnersController.updatedPartner
   );
 
   server.delete(
     '/api/partners/:idPartner,',
     partnersController.partnerExists,
     partnersController.deletePartner
+  );
+
+  // TABLE POCLIMEMBERS
+  server.get('/api/pocliMembers', pocliMembersController.getAllPocliMembers);
+  server.get(
+    '/api/pocliMembers/:idPocliMember',
+    pocliMembersController.getOnePocliMember
+  );
+
+  server.post(
+    '/api/pocliMembers',
+    pocliMembersController.validatePocliMember,
+    pocliMembersController.addPocliMember
+  );
+
+  server.put(
+    '/api/pocliMembers/:idPocliMember',
+    pocliMembersController.validatePocliMember,
+    pocliMembersController.pocliMemberExists,
+    pocliMembersController.updatedPocliMember
+  );
+
+  server.delete(
+    '/api/pocliMembers/:idPocliMember,',
+    pocliMembersController.pocliMemberExists,
+    pocliMembersController.deletePocliMember
   );
 
   // TABLE PAYMENTMETHODS

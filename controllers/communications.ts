@@ -18,7 +18,7 @@ const validateCommunication = (
   }
   const errors = Joi.object({
     object: Joi.string().max(100).presence(required),
-    date: Joi.date().max(100).presence(required),
+    date: Joi.date().allow(null),
     content: Joi.string().max(3000).presence(required),
     idAdmin: Joi.number().presence(required),
     isBanner: Joi.number().presence(required),
