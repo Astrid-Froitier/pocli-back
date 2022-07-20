@@ -90,6 +90,26 @@ const recipientExists = (async (
   }
 }) as RequestHandler;
 
+// updates an recipient
+
+const updateRecipient = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { idRecipient } = req.params;
+    const recipientUpdated = await Recipient.updateRecipient(
+      Number(idRecipient),
+      req.body as IRecipient
+    );
+    if (recipientUpdated) {
+      const recipient = await Recipient.getRecipientById(Number(idRecipient));
+      res.status(200).send(recipient); // react-admin needs this response
+    } else {
+      throw new ErrorHandler(500, `Recipient cannot be updated`);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 const deleteRecipient = async (
   req: Request,
   res: Response,
@@ -117,5 +137,6 @@ export default {
   getOneRecipient,
   addRecipient,
   recipientExists,
+  updateRecipient,
   deleteRecipient,
 };
