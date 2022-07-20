@@ -11,7 +11,9 @@ import familyMemberEventsController from './controllers/familyMemberEvents';
 import familyMembersController from './controllers/familyMembers';
 import linkedDocumentsController from './controllers/linkedDocuments';
 import newslettersController from './controllers/newsletters';
+import documentTypesController from './controllers/documentTypes';
 import partnersController from './controllers/partners';
+import pocliMembersController from './controllers/pocliMembers';
 import paymentMethodsController from './controllers/paymentMethods';
 import paymentRecordsController from './controllers/paymentRecords';
 import postTypesController from './controllers/postTypes';
@@ -22,7 +24,11 @@ import { Express } from 'express';
 const setupRoutes = (server: Express) => {
   // LOGIN
   server.post('/api/login', authController.validateLogin, authController.login);
-  server.post('/api/admins/login', authController.validateLogin, authController.loginAdmin);
+  server.post(
+    '/api/admins/login',
+    authController.validateLogin,
+    authController.loginAdmin
+  );
 
   // TABLE ACTIVITIES
   server.get('/api/activities', activitiesController.getAllActivities);
@@ -107,10 +113,16 @@ const setupRoutes = (server: Express) => {
     communicationsController.getOneCommunication
   );
   server.post(
-    '/api/communications/',
+    '/api/communications',
+    communicationsController.validateCommunication,
+    communicationsController.addCommunication
+  );
+
+  server.put(
+    '/api/communications/:idCommunication',
     communicationsController.validateCommunication,
     communicationsController.communicationExists,
-    communicationsController.addCommunication
+    communicationsController.updateCommunication
   );
 
   server.delete(
@@ -173,6 +185,32 @@ const setupRoutes = (server: Express) => {
     '/api/documents/:idDocument',
     documentsController.documentExists,
     documentsController.deleteDocument
+  );
+
+  // TABLE DocumentType
+  server.get('/api/documentTypes', documentTypesController.getAllDocumentTypes);
+  server.get(
+    '/api/documentTypes/:idDocumentType',
+    documentTypesController.getOneDocumentType
+  );
+
+  server.post(
+    '/api/documentTypes',
+    documentTypesController.validateDocumentType,
+    documentTypesController.addDocumentType
+  );
+
+  server.put(
+    '/api/documentTypes/:idDocumentType',
+    documentTypesController.validateDocumentType,
+    documentTypesController.documentTypeExists,
+    documentTypesController.updateDocumentType
+  );
+
+  server.delete(
+    '/api/documentTypes/:idDocumentType',
+    documentTypesController.documentTypeExists,
+    documentTypesController.deleteDocumentType
   );
 
   // TABLE EVENTS
@@ -306,7 +344,8 @@ const setupRoutes = (server: Express) => {
   server.put(
     '/api/familyMemberEvents/:idFamilyMemberEvent',
     familyMemberEventsController.validateFamilyMemberEvent,
-    familyMemberEventsController.familyMemberEventExists
+    familyMemberEventsController.familyMemberEventExists,
+    familyMemberEventsController.updateFamilyMemberEvent
   );
 
   server.delete(
@@ -340,9 +379,6 @@ const setupRoutes = (server: Express) => {
   server.put(
     '/api/linkedDocuments/:idLinkedDocument',
     linkedDocumentsController.validateLinkedDocument,
-    linkedDocumentsController.linkedDocumentExists,
-    linkedDocumentsController.idEventExists,
-    linkedDocumentsController.idDocumentExists,
     linkedDocumentsController.updateLinkedDocument
   );
 
@@ -391,13 +427,40 @@ const setupRoutes = (server: Express) => {
   server.put(
     '/api/partners/:idPartner',
     partnersController.validatePartner,
-    partnersController.partnerExists
+    partnersController.partnerExists,
+    partnersController.updatedPartner
   );
 
   server.delete(
     '/api/partners/:idPartner,',
     partnersController.partnerExists,
     partnersController.deletePartner
+  );
+
+  // TABLE POCLIMEMBERS
+  server.get('/api/pocliMembers', pocliMembersController.getAllPocliMembers);
+  server.get(
+    '/api/pocliMembers/:idPocliMember',
+    pocliMembersController.getOnePocliMember
+  );
+
+  server.post(
+    '/api/pocliMembers',
+    pocliMembersController.validatePocliMember,
+    pocliMembersController.addPocliMember
+  );
+
+  server.put(
+    '/api/pocliMembers/:idPocliMember',
+    pocliMembersController.validatePocliMember,
+    pocliMembersController.pocliMemberExists,
+    pocliMembersController.updatedPocliMember
+  );
+
+  server.delete(
+    '/api/pocliMembers/:idPocliMember,',
+    pocliMembersController.pocliMemberExists,
+    pocliMembersController.deletePocliMember
   );
 
   // TABLE PAYMENTMETHODS
@@ -465,7 +528,8 @@ const setupRoutes = (server: Express) => {
   server.put(
     '/api/recipients/:idRecipient',
     recipientsController.validateRecipient,
-    recipientsController.recipientExists
+    recipientsController.recipientExists,
+    recipientsController.updateRecipient
   );
 
   server.delete(

@@ -38,6 +38,28 @@ const addRecipient = async (recipient: IRecipient): Promise<number> => {
   return results[0].insertId;
 };
 
+const updateRecipient = async (
+  idRecipient: number,
+  recipient: IRecipient
+): Promise<boolean> => {
+  let sql = 'UPDATE recipients SET ';
+  const sqlValues: Array<string | number> = [];
+  let oneValue = false;
+
+  if (recipient.name) {
+    sql += 'numberParticipantsMax = ? ';
+    sqlValues.push(recipient.name);
+    oneValue = true;
+  }
+  sql += ' WHERE id = ?';
+  sqlValues.push(idRecipient);
+
+  const results = await connection
+    .promise()
+    .query<ResultSetHeader>(sql, sqlValues);
+  return results[0].affectedRows === 1;
+};
+
 const deleteRecipient = async (idRecipient: number): Promise<boolean> => {
   const results = await connection
     .promise()
@@ -52,5 +74,6 @@ export {
   getRecipientById,
   getRecipientByName,
   addRecipient,
+  updateRecipient,
   deleteRecipient,
 };

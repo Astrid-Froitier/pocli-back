@@ -32,7 +32,7 @@ const updateActivity = async (
   idActivity: number,
   activity: IActivity
 ): Promise<boolean> => {
-  let sql = 'UPDATE activities SET';
+  let sql = 'UPDATE activities SET ';
   const sqlValues: Array<string | number | boolean> = [];
   let oneValue = false;
   if (activity.name) {

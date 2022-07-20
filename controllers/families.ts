@@ -12,14 +12,15 @@ const validateFamily = (req: Request, res: Response, next: NextFunction) => {
     required = 'required';
   }
   const errors = Joi.object({
-    name: Joi.string().max(255).presence(required),
+    name: Joi.string().max(100).presence(required),
     streetNumber: Joi.number().presence(required),
     address: Joi.string().max(255).presence(required),
     phoneNumber: Joi.number().presence(required),
-    email: Joi.string().max(255).presence(required),
+    email: Joi.string().max(100).presence(required),
     password: Joi.string().min(8).max(15).presence(required),
     idCity: Joi.number().presence(required),
     idRecipient: Joi.number().presence(required),
+    id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
     next(new ErrorHandler(422, errors.message));

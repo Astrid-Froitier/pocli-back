@@ -8,7 +8,7 @@ import IFamilyMember from '../interfaces/IFamilyMember';
 const getAllFamilyMembers = async (sortBy = ''): Promise<IFamilyMember[]> => {
   let sql = 'SELECT * FROM familyMembers';
   if (sortBy) {
-    sql += `ORDER BY ${sortBy}`;
+    sql += ` ORDER BY ${sortBy}`;
   }
   const results = await connection.promise().query<IFamilyMember[]>(sql);
   return results[0];

@@ -27,6 +27,8 @@ const validateLinkedDocument = (
   }
   const errors = Joi.object({
     idDocument: Joi.number().presence(required),
+    date: Joi.date().allow(null),
+    idActivity: Joi.number().allow(null),
     idEvent: Joi.number().allow(null),
     idCommunication: Joi.number().allow(null),
     idFamilyMember: Joi.number().allow(null),
