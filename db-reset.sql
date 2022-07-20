@@ -34,7 +34,7 @@ CREATE TABLE `partners` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL,
     `logo` VARCHAR(100) NOT NULL,
-    `url` VARCHAR(100) NOT NULL
+    `url` VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE `familyMemberEvents`(
@@ -46,7 +46,7 @@ CREATE TABLE `familyMemberEvents`(
 CREATE TABLE `communications`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `object` VARCHAR(255) NOT NULL,
-    `content` VARCHAR(255) NOT NULL,
+    `content` TEXT NOT NULL,
     `date` DATETIME NOT NULL,
     `idAdmin` INT NOT NULL,
     `isBanner` TINYINT(1) NOT NULL
@@ -93,11 +93,11 @@ CREATE TABLE `familyMembers`(
 
 CREATE TABLE `families`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
     `streetNumber` INT NOT NULL,
     `address` VARCHAR(255) NOT NULL,
     `phoneNumber` INT NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(100) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `idCity` INT NOT NULL,
     `idRecipient` INT NOT NULL

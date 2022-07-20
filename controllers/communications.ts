@@ -19,8 +19,8 @@ const validateCommunication = (
   const errors = Joi.object({
     firstname: Joi.string().max(100).presence(required),
     object: Joi.string().max(100).presence(required),
-    date: Joi.string().max(100).presence(required),
-    content: Joi.string().email().max(255).presence(required),
+    date: Joi.date().max(100).presence(required),
+    content: Joi.string().max(3000).presence(required),
     idAdmin: Joi.number().presence(required),
     isBanner: Joi.number().presence(required),
     id: Joi.number().optional(), // pour react-Communication

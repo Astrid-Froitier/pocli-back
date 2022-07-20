@@ -19,10 +19,10 @@ const validatePaymentRecord = (
     dateStart: Joi.date().presence(required),
     dateEnd: Joi.date().presence(required),
     amount: Joi.number().max(1500).presence(required),
-    idPaymentMethod: Joi.number().max(100).presence(required),
-    idFamily: Joi.number().max(100).presence(required),
-    idFamilyMember: Joi.number().max(100).allow(null),
-    idActivity: Joi.number().max(100).allow(null),
+    idPaymentMethod: Joi.number().presence(required),
+    idFamily: Joi.number().presence(required),
+    idFamilyMember: Joi.number().allow(null),
+    idActivity: Joi.number().allow(null),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
