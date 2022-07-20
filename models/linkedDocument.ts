@@ -41,7 +41,7 @@ const addLinkedDocument = async (
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO linkedDocuments (idDocument, date, idActivity, idEvent, idCommunication, idFamilyMember, idFamily) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO linkedDocuments (idDocument, date, idActivity, idEvent, idCommunication, idFamilyMember, idFamily, isOpened) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [
         linkedDocument.idDocument,
         linkedDocument.date,
@@ -50,6 +50,7 @@ const addLinkedDocument = async (
         linkedDocument.idCommunication,
         linkedDocument.idFamilyMember,
         linkedDocument.idFamily,
+        linkedDocument.isOpened
       ]
     );
   return results[0].insertId;
@@ -96,6 +97,11 @@ const updateLinkedDocument = async (
   if (linkedDocument.idFamily) {
     sql += oneValue ? ', idFamily = ? ' : ' idFamily = ? ';
     sqlValues.push(linkedDocument.idFamily);
+    oneValue = true;
+  }
+  if (linkedDocument.isOpened) {
+    sql += oneValue ? ', isOpened = ? ' : ' isOpened = ? ';
+    sqlValues.push(linkedDocument.isOpened);
     oneValue = true;
   }
   sql += ' WHERE id = ?';

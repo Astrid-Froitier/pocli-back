@@ -12,7 +12,8 @@ CREATE TABLE `linkedDocuments`(
     `idEvent` INT NULL,
     `idCommunication` INT NULL,
     `idFamilyMember` INT NULL,
-    `idFamily` INT NULL
+    `idFamily` INT NULL,
+    `isOpened` TINYINT(1) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `communicationMembers`(

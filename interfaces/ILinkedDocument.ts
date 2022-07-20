@@ -9,4 +9,5 @@ export default interface ILinkedDocument extends RowDataPacket {
   idCommunication?: number;
   idFamilyMember?: number;
   idFamily?: number;
+  isOpened: number;
 }
