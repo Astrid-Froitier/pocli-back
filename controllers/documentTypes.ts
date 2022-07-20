@@ -40,7 +40,7 @@ const getAllDocumentTypes = (async (
 
     res.setHeader(
       'Content-Range',
-      `DocumentTypes : 0-${documentTypes.length}/${documentTypes.length + 1}`
+      `documentTypes : 0-${documentTypes.length}/${documentTypes.length + 1}`
     );
     return res.status(200).json(documentTypes);
   } catch (err) {

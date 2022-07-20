@@ -187,7 +187,7 @@ const setupRoutes = (server: Express) => {
     documentsController.deleteDocument
   );
 
-  // TABLE DocumentType
+  // TABLE DOCUMENTTYPES
   server.get('/api/documentTypes', documentTypesController.getAllDocumentTypes);
   server.get(
     '/api/documentTypes/:idDocumentType',
