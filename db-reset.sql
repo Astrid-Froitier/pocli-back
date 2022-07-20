@@ -60,14 +60,14 @@ CREATE TABLE `communications`(
     `object` VARCHAR(255) NOT NULL,
     `content` TEXT NOT NULL,
     `idAdmin` INT NOT NULL,
-    `isBanner` TINYINT(1) NOT NULL
+    `isBanner` TINYINT(1) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `events`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `idPostType` INT NOT NULL,
     `idActivity` INT NULL,
-    `date` DATETIME NOT NULL,
+    `date` DATETIME NOT NULL DEFAULT NOW(),
     `description` VARCHAR(100) NOT NULL,
     `text` TEXT NULL,
     `podcastLink` VARCHAR(255) NULL,
