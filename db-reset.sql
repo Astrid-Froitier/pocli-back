@@ -12,7 +12,8 @@ CREATE TABLE `linkedDocuments`(
     `idEvent` INT NULL,
     `idCommunication` INT NULL,
     `idFamilyMember` INT NULL,
-    `idFamily` INT NULL
+    `idFamily` INT NULL,
+    `isOpened` TINYINT(1) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `communicationMembers`(
@@ -121,7 +122,8 @@ CREATE TABLE `documentTypes`(
 CREATE TABLE `documents`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL,
-    `url` VARCHAR(255) NOT NULL
+    `url` VARCHAR(255) NOT NULL,
+    `idDocumentType` INT NOT NULL
 );
 
 CREATE TABLE `activities`(
@@ -238,6 +240,11 @@ ADD
     CONSTRAINT `linkeddocuments_iddocument_foreign` FOREIGN KEY(`idDocument`) REFERENCES `documents`(`id`);
 
 ALTER TABLE
+    `documents`
+ADD
+    CONSTRAINT `documents_iddocumenttype_foreign` FOREIGN KEY(`idDocumentType`) REFERENCES `documentTypes`(`id`);
+
+ALTER TABLE
     `linkedDocuments`
 ADD
     CONSTRAINT `linkeddocuments_idevent_foreign` FOREIGN KEY(`idEvent`) REFERENCES `events`(`id`);
@@ -320,6 +327,14 @@ VALUES
     ('Activité'),
     ('Article'),
     ('Podcast');
+
+-- DOCUMENT TYPES
+INSERT INTO
+    documentTypes (`name`)
+VALUES
+    ('IMAGE'),
+    ('PODCAST'),
+    ('PDF');
 
 -- POCLI MEMBERS
 INSERT INTO
@@ -927,95 +942,117 @@ VALUES
 
 -- DOCUMENTS
 INSERT INTO
-    documents (`name`, `url`)
+    documents (`name`, `url`, `idDocumentType`)
 VALUES
     (
         "avatar-rabbit",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-rabbit.png?alt=media&token=fe208f96-05fc-4034-85f8-a4c40d7fafb6"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-rabbit.png?alt=media&token=fe208f96-05fc-4034-85f8-a4c40d7fafb6",
+        1
     ),
     (
         "avatar-deer",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-deer.png?alt=media&token=c08d7f1f-cbe2-44c3-812e-2f93faaae6a1"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-deer.png?alt=media&token=c08d7f1f-cbe2-44c3-812e-2f93faaae6a1",
+        1
     ),
     (
         "avatar-panda",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-panda.png?alt=media&token=e809e19b-a498-4d4e-83a1-9b83d27d920f"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-panda.png?alt=media&token=e809e19b-a498-4d4e-83a1-9b83d27d920f",
+        1
     ),
     (
         "avatar-fox",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-fox.png?alt=media&token=937eb25b-c25e-49b0-91b8-10ac93abe083"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-fox.png?alt=media&token=937eb25b-c25e-49b0-91b8-10ac93abe083",
+        1
     ),
     (
         "avatar-bear",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-bear.png?alt=media&token=5477cf9b-fcb1-461b-8881-c1b4b4a1d97d"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-bear.png?alt=media&token=5477cf9b-fcb1-461b-8881-c1b4b4a1d97d",
+        1
     ),
     (
         "avatar-owl",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-owl.png?alt=media&token=b82a795b-7915-4643-b5ac-b96be3791d76"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-owl.png?alt=media&token=b82a795b-7915-4643-b5ac-b96be3791d76",
+        1
     ),
     (
         "avatar-beaver",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-beaver.png?alt=media&token=9fdc7e51-7e1f-4404-90d7-5a27b89c26c9"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-beaver.png?alt=media&token=9fdc7e51-7e1f-4404-90d7-5a27b89c26c9",
+        1
     ),
     (
         "avatar-raccoon",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-raccoon.png?alt=media&token=2215a583-ce33-4d84-96df-396d5badb7ee"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Donn%C3%A9es%20serveur%20-%20ne%20pas%20modifier%2FAvatars%2Favatar-raccoon.png?alt=media&token=2215a583-ce33-4d84-96df-396d5badb7ee",
+        1
     ),
     (
         "cadeaux",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20211216-141722.jpeg?alt=media&token=0430b50c-2cb9-4a6a-a015-3253ec9272e7"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20211216-141722.jpeg?alt=media&token=0430b50c-2cb9-4a6a-a015-3253ec9272e7",
+        1
     ),
     (
         "enfants-peinture",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20170707-094557.jpeg?alt=media&token=afac2feb-72f2-49de-83d9-2ff3417798ed"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20170707-094557.jpeg?alt=media&token=afac2feb-72f2-49de-83d9-2ff3417798ed",
+        1
     ),
     (
         "ânes",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2FPartages-juin.jpeg?alt=media&token=ef90b5a6-d3c4-4e5e-8e01-e683d05ef264"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2FPartages-juin.jpeg?alt=media&token=ef90b5a6-d3c4-4e5e-8e01-e683d05ef264",
+        1
     ),
     (
         "enfants-atelier-découpage",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20210929-101149-1.jpeg?alt=media&token=940cfc04-96d2-4e94-8db4-b95ca5beffca"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20210929-101149-1.jpeg?alt=media&token=940cfc04-96d2-4e94-8db4-b95ca5beffca",
+        1
     ),
     (
         "réunion",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2Fconf-college.jpeg?alt=media&token=124711d3-77ab-4331-82c3-47dfe2877b57"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2Fconf-college.jpeg?alt=media&token=124711d3-77ab-4331-82c3-47dfe2877b57",
+        1
     ),
     (
         "papi-enfants",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20170614-152502.jpeg?alt=media&token=694e3758-1f2f-45dc-856d-b2c88aef4a8f"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20170614-152502.jpeg?alt=media&token=694e3758-1f2f-45dc-856d-b2c88aef4a8f",
+        1
     ),
     (
         "jeux",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20210429-171847.jpeg?alt=media&token=ec23aef0-0e20-4be9-857a-5c16da493ccc"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F20210429-171847.jpeg?alt=media&token=ec23aef0-0e20-4be9-857a-5c16da493ccc",
+        1
     ),
     (
         "pilate",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2FIMG-8295.jpeg?alt=media&token=4db1b26b-8108-4c7b-870b-a1ec9b1911be"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2FIMG-8295.jpeg?alt=media&token=4db1b26b-8108-4c7b-870b-a1ec9b1911be",
+        1
     ),
     (
         "gym-douce",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2Fgym-douce.jpeg?alt=media&token=0044e73c-20a3-42f0-b61d-7aeb4a5fc229"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2Fgym-douce.jpeg?alt=media&token=0044e73c-20a3-42f0-b61d-7aeb4a5fc229",
+        1
     ),
     (
         "gym",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2FIMG-0463.jpeg?alt=media&token=7462bfff-af8d-47fc-a955-f68e0d8a03a5"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2FIMG-0463.jpeg?alt=media&token=7462bfff-af8d-47fc-a955-f68e0d8a03a5",
+        1
     ),
     (
         "Compostelle",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F560x315-img-0734002.webp?alt=media&token=0250565d-1d17-4aec-8e07-5a48a0c091f7"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20fictifs%2F560x315-img-0734002.webp?alt=media&token=0250565d-1d17-4aec-8e07-5a48a0c091f7",
+        1
     ),
     (
         "collage",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20r%C3%A9els%2Fcollage-actions-Po-CLi.png?alt=media&token=bbbda796-a419-4a8d-a026-5c58aeb8cee3"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20r%C3%A9els%2Fcollage-actions-Po-CLi.png?alt=media&token=bbbda796-a419-4a8d-a026-5c58aeb8cee3",
+        1
     ),
     (
         "gare",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20r%C3%A9els%2FPhotos-gare.jpeg?alt=media&token=f36bfffd-670c-4b66-b9b2-55e7718b1490"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20r%C3%A9els%2FPhotos-gare.jpeg?alt=media&token=f36bfffd-670c-4b66-b9b2-55e7718b1490",
+        1
     ),
     (
         "fête de la musique",
-        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20r%C3%A9els%2FResized-1656009810667-0-Resized-20220622-182830-2316.jpeg?alt=media&token=869c3b08-95a0-44ab-a1d1-d46c026f6694"
+        "https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Ev%C3%A8nements%2FWild%20-%20%C3%89v%C3%A9nements%20r%C3%A9els%2FResized-1656009810667-0-Resized-20220622-182830-2316.jpeg?alt=media&token=869c3b08-95a0-44ab-a1d1-d46c026f6694",
+        1
     );
 
 -- LINKED DOCUMENTS
@@ -1137,10 +1174,3 @@ VALUES
     (21, null, 11, 1, 0, 0),
     (1, null, 51, 1, 0, 0),
     (11, null, 21, 1, 1, 1);
-
-INSERT INTO
-    documentTypes (`name`)
-VALUES
-    ('IMAGE'),
-    ('PODCAST'),
-    ('PDF');

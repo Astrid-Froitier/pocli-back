@@ -71,7 +71,7 @@ const updateCommunication = async (
   }
   if (communication.isBanner) {
     sql += oneValue ? ', isBanner = ? ' : ' isBanner = ? ';
-    sqlValues.push(communication.isTrashed);
+    sqlValues.push(communication.isBanner);
     oneValue = true;
   }
   sql += ' WHERE id = ?';

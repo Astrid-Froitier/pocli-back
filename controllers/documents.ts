@@ -14,6 +14,7 @@ const validateDocument = (req: Request, res: Response, next: NextFunction) => {
   const errors = Joi.object({
     name: Joi.string().max(100).presence(required),
     url: Joi.string().max(255).presence(required),
+    idDocumentType: Joi.number().presence(required),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {

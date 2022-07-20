@@ -44,12 +44,10 @@ const updateRecipient = async (
 ): Promise<boolean> => {
   let sql = 'UPDATE recipients SET ';
   const sqlValues: Array<string | number> = [];
-  let oneValue = false;
 
   if (recipient.name) {
     sql += 'numberParticipantsMax = ? ';
     sqlValues.push(recipient.name);
-    oneValue = true;
   }
   sql += ' WHERE id = ?';
   sqlValues.push(idRecipient);

@@ -33,6 +33,7 @@ const validateLinkedDocument = (
     idCommunication: Joi.number().allow(null),
     idFamilyMember: Joi.number().allow(null),
     idFamily: Joi.number().allow(null),
+    isOpened: Joi.number().allow(null),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {

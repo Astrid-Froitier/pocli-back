@@ -21,9 +21,10 @@ const getDocumentById = async (idDocument: number): Promise<IDocument> => {
 const addDocument = async (document: IDocument): Promise<number> => {
   const results = await connection
     .promise()
-    .query<ResultSetHeader>('INSERT INTO documents (name, url) VALUES (?, ?)', [
+    .query<ResultSetHeader>('INSERT INTO documents (name, url, idDocumentType) VALUES (?, ?, ?)', [
       document.name,
       document.url,
+      document.idDocumentType
     ]);
   return results[0].insertId;
 };
@@ -44,6 +45,11 @@ const updateDocument = async (
   if (document.url) {
     sql += oneValue ? ', url = ? ' : ' url = ? ';
     sqlValues.push(document.url);
+    oneValue = true;
+  }
+  if (document.idDocumentType) {
+    sql += oneValue ? ', idDocumentType = ? ' : ' idDocumentType = ? ';
+    sqlValues.push(document.idDocumentType);
     oneValue = true;
   }
   sql += ' WHERE id = ?';
