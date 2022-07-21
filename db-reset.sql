@@ -1157,9 +1157,9 @@ INSERT INTO
         `isBanner`
     )
 VALUES
-    (1, null, 1, 1, 1, null, null),
-    (21, null, 11, 1, null, null, null),
-    (null, null, 51, 1, null, null, null),
-    (null, null, 21, 1, 1, 1, null),
-    (null, null, 31, null, null, null, 1),
-    (null, null, 41, null, null, null, 1);
+    (1, null, 1, 1, 1, 0, 0),
+    (21, null, 11, 1, 0, 0, 0),
+    (null, null, 51, 1, 0, 0, 0),
+    (null, null, 21, 1, 1, 1, 0),
+    (null, null, 31, null, 0, 0, 1),
+    (null, null, 41, null, 0, 0, 1);
