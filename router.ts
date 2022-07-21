@@ -6,7 +6,6 @@ import citiesController from './controllers/cities';
 import documentsController from './controllers/documents';
 import eventsController from './controllers/events';
 import familiesController from './controllers/families';
-import familyMemberActivitiesController from './controllers/familyMemberActivities';
 import familyMemberEventsController from './controllers/familyMemberEvents';
 import familyMembersController from './controllers/familyMembers';
 import linkedDocumentsController from './controllers/linkedDocuments';
@@ -301,31 +300,6 @@ const setupRoutes = (server: Express) => {
     '/api/familyMembers/:idFamilyMember',
     familyMembersController.familyMemberExists,
     familyMembersController.deleteFamilyMember
-  );
-
-  // TABLE FAMILYMEMBERACTIVITIES
-  server.get(
-    '/api/familyMemberActivities',
-    familyMemberActivitiesController.getAllFamilyMemberActivities,
-    familyMemberActivitiesController.getOneFamilyMemberActivity
-  );
-
-  server.post(
-    '/api/familyMemberActivities',
-    familyMemberActivitiesController.validateFamilyMemberActivity,
-    familyMemberActivitiesController.addFamilyMemberActivity
-  );
-
-  server.put(
-    '/api/familyMemberActivities/:idFamilyMemberActivity',
-    familyMemberActivitiesController.validateFamilyMemberActivity,
-    familyMemberActivitiesController.familyMemberActivityExists
-  );
-
-  server.delete(
-    '/api/familyMemberActivities/:idFamilyMemberActivity',
-    familyMemberActivitiesController.familyMemberActivityExists,
-    familyMemberActivitiesController.deleteFamilyMemberActivity
   );
 
   // TABLE FAMILYMEMBEREVENTS

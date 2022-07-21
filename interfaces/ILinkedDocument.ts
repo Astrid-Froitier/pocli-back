@@ -6,7 +6,6 @@ export default interface ILinkedDocument extends RowDataPacket {
   date: string;
   idActivity?: number;
   idEvent?: number;
-  idCommunication?: number;
   idFamilyMember?: number;
   idFamily?: number;
   isOpened: number;

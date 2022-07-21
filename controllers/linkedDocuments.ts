@@ -30,7 +30,6 @@ const validateLinkedDocument = (
     date: Joi.date().allow(null),
     idActivity: Joi.number().allow(null),
     idEvent: Joi.number().allow(null),
-    idCommunication: Joi.number().allow(null),
     idFamilyMember: Joi.number().allow(null),
     idFamily: Joi.number().allow(null),
     isOpened: Joi.number().allow(null),
