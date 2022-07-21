@@ -8,4 +8,5 @@ export default interface ICommunicationMember extends RowDataPacket {
   idCommunication: number;
   isOpened: number;
   isTrashed: number;
+  isBanner: number;
 }

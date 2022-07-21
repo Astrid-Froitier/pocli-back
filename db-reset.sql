@@ -10,7 +10,6 @@ CREATE TABLE `linkedDocuments`(
     `date` DATETIME NOT NULL DEFAULT NOW(),
     `idActivity` INT NULL,
     `idEvent` INT NULL,
-    `idCommunication` INT NULL,
     `idFamilyMember` INT NULL,
     `idFamily` INT NULL,
     `isOpened` TINYINT(1) NOT NULL DEFAULT 0
@@ -23,7 +22,8 @@ CREATE TABLE `communicationMembers`(
     `idActivity` INT NULL,
     `idCommunication` INT NOT NULL,
     `isOpened` TINYINT(1) NOT NULL DEFAULT 0,
-    `isTrashed` TINYINT(1) NOT NULL DEFAULT 0
+    `isTrashed` TINYINT(1) NOT NULL DEFAULT 0,
+    `isBanner` TINYINT(1) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `admins` (
@@ -60,8 +60,7 @@ CREATE TABLE `communications`(
     `date` DATETIME NOT NULL DEFAULT NOW(),
     `object` VARCHAR(255) NOT NULL,
     `content` TEXT NOT NULL,
-    `idAdmin` INT NOT NULL,
-    `isBanner` TINYINT(1) NOT NULL DEFAULT 0
+    `idAdmin` INT NOT NULL
 );
 
 CREATE TABLE `events`(
@@ -248,11 +247,6 @@ ALTER TABLE
     `linkedDocuments`
 ADD
     CONSTRAINT `linkeddocuments_idevent_foreign` FOREIGN KEY(`idEvent`) REFERENCES `events`(`id`);
-
-ALTER TABLE
-    `linkedDocuments`
-ADD
-    CONSTRAINT `linkeddocuments_idcommunication_foreign` FOREIGN KEY(`idCommunication`) REFERENCES `communications`(`id`);
 
 ALTER TABLE
     `linkedDocuments`
@@ -1061,28 +1055,27 @@ INSERT INTO
         `idDocument`,
         `idActivity`,
         `idEvent`,
-        `idCommunication`,
         `idFamilyMember`,
         `idFamily`
     )
 VALUES
-    (91, null, 1, null, null, null),
-    (101, null, 1, null, null, null),
-    (111, null, 1, null, null, null),
-    (121, null, 1, null, null, null),
-    (81, null, 11, null, null, null),
-    (131, null, 11, null, null, null),
-    (141, null, 11, null, null, null),
-    (151, null, 21, null, null, null),
-    (161, null, 21, null, null, null),
-    (171, null, 31, null, null, null),
-    (161, null, 41, null, null, null),
-    (181, null, 51, null, null, null),
-    (211, null, 61, null, null, null),
-    (191, null, 71, null, null, null),
-    (201, null, 91, null, null, null),
-    (181, null, null, null, null, 1),
-    (191, null, null, null, null, 1);
+    (91, null, 1, null, null),
+    (101, null, 1, null, null),
+    (111, null, 1, null, null),
+    (121, null, 1, null, null),
+    (81, null, 11, null, null),
+    (131, null, 11, null, null),
+    (141, null, 11, null, null),
+    (151, null, 21, null, null),
+    (161, null, 21, null, null),
+    (171, null, 31, null, null),
+    (161, null, 41, null, null),
+    (181, null, 51, null, null),
+    (211, null, 61, null, null),
+    (191, null, 71, null, null),
+    (201, null, 91, null, null),
+    (181, null, null, null, 1),
+    (191, null, null, null, 1);
 
 -- ADMINS
 INSERT INTO
@@ -1112,51 +1105,44 @@ INSERT INTO
         `object`,
         `content`,
         `date`,
-        `idAdmin`,
-        `isBanner`
+        `idAdmin`
     )
 VALUES
     (
         'Informations',
         'Lorem ipsum dolor sit amet consectetur adipisicing elit',
         "2021-10-06 00:00:00",
-        1,
-        0
+        1
     ),
     (
         'Fermeture',
         'Nous fermerons nos portes du 10 au 20/06',
         "2021-10-06 00:00:00",
-        11,
-        0
+        11
     ),
     (
         'Atelier',
         'Future Atelier parent - enfant',
         "2021-10-06 00:00:00",
-        1,
-        0
+        1
     ),
     (
         'Nouveau site web',
         'Nous avons le plaisir de vous annoncer que notre nouveau site web sera accessible dès le 30/07/22',
         "2022-07-30 00:00:00",
-        1,
         1
     ),
     (
         'Vacances',
         'PoCLi vous souhaite à toutes et tous de très belles vacances d''été',
         "2022-07-01 00:00:00",
-        1,
         1
     ),
     (
         "Bienvenue !",
         "L'équipe PoCLi vous souhaite la bienvenue dans votre espace personnel ! Vous pouvez désormais accèder à tous nos évènements sans attendre, vous inscrire, nous contacter et bien plus encore. Laissez-vous guider par notre magnifique site internet pour y découvrir un contenu des plus interressant ;)",
         "2021-10-06 00:00:00",
-        1,
-        0
+        1
     );
 
 -- COMMUNICATION MEMBERS
@@ -1167,10 +1153,13 @@ INSERT INTO
         `idCommunication`,
         `idFamily`,
         `isOpened`,
-        `isTrashed`
+        `isTrashed`,
+        `isBanner`
     )
 VALUES
-    (1, null, 1, 1, 1, 0),
-    (21, null, 11, 1, 0, 0),
-    (1, null, 51, 1, 0, 0),
-    (11, null, 21, 1, 1, 1);
+    (1, null, 1, 1, 1, 0, 0),
+    (21, null, 11, 1, 0, 0, 0),
+    (null, null, 51, 1, 0, 0, 0),
+    (null, null, 21, 1, 1, 1, 0),
+    (null, null, 31, null, 0, 0, 1),
+    (null, null, 41, null, 0, 0, 1);

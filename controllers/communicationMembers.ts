@@ -22,6 +22,7 @@ const validateCommunicationMember = (
     idCommunication: Joi.number().presence(required),
     isOpened: Joi.number().allow(null),
     isTrashed: Joi.number().allow(null),
+    isBanner: Joi.number().allow(null),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
