@@ -43,7 +43,7 @@ const addCommunicationMember = async (
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO communicationMembers (idFamilyMember, idFamily, idActivity, idCommunication, isOpened, isTrashed) VALUES (?, ?, ?, ?, ?, ?)',
+      'INSERT INTO communicationMembers (idFamilyMember, idFamily, idActivity, idCommunication, isOpened, isTrashed, isBanner) VALUES (?, ?, ?, ?, ?, ?, ?)',
       [
         communicationMember.idFamilyMember,
         communicationMember.idFamily,
@@ -51,6 +51,7 @@ const addCommunicationMember = async (
         communicationMember.idCommunication,
         communicationMember.isOpened,
         communicationMember.isTrashed,
+        communicationMember.isBanner
       ]
     );
   return results[0].insertId;
@@ -92,6 +93,11 @@ const updateCommunicationMember = async (
   if (communicationMember.isTrashed) {
     sql += oneValue ? ', isTrashed = ? ' : ' isTrashed = ? ';
     sqlValues.push(communicationMember.isTrashed);
+    oneValue = true;
+  }
+  if (communicationMember.isBanner) {
+    sql += oneValue ? ', isBanner = ? ' : ' isBanner = ? ';
+    sqlValues.push(communicationMember.isBanner);
     oneValue = true;
   }
   sql += ' WHERE id = ?';

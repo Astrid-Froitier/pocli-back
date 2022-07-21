@@ -3,7 +3,7 @@ import ICommunication from '../interfaces/ICommunication';
 import { ResultSetHeader } from 'mysql2';
 
 const getAllCommunications = async (sortBy = ''): Promise<ICommunication[]> => {
-  let sql = `SELECT id, object, content, date, idAdmin, isBanner FROM communications`;
+  let sql = `SELECT * FROM communications`;
   if (sortBy) {
     sql += ` ORDER BY ${sortBy}`;
   }
@@ -17,7 +17,7 @@ const getCommunicationById = async (
   const [results] = await connection
     .promise()
     .query<ICommunication[]>(
-      'SELECT id, object, content, date, idAdmin, isBanner FROM communications WHERE id = ?',
+      'SELECT * FROM communications WHERE id = ?',
       [idCommunication]
     );
   return results[0];
@@ -29,13 +29,12 @@ const addCommunication = async (
   const results = await connection
     .promise()
     .query<ResultSetHeader>(
-      'INSERT INTO communications (object, content, date, idAdmin, isBanner) VALUES (?, ?, ?, ?, ?)',
+      'INSERT INTO communications (object, content, date, idAdmin) VALUES (?, ?, ?, ?)',
       [
         communication.object,
         communication.content,
         communication.date,
-        communication.idAdmin,
-        communication.isBanner,
+        communication.idAdmin
       ]
     );
   return results[0].insertId;
@@ -67,11 +66,6 @@ const updateCommunication = async (
   if (communication.idAdmin) {
     sql += oneValue ? ', idAdmin = ? ' : ' idAdmin = ? ';
     sqlValues.push(communication.idAdmin);
-    oneValue = true;
-  }
-  if (communication.isBanner) {
-    sql += oneValue ? ', isBanner = ? ' : ' isBanner = ? ';
-    sqlValues.push(communication.isBanner);
     oneValue = true;
   }
   sql += ' WHERE id = ?';
