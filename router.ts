@@ -305,7 +305,11 @@ const setupRoutes = (server: Express) => {
   // TABLE FAMILYMEMBEREVENTS
   server.get(
     '/api/familyMemberEvents',
-    familyMemberEventsController.getAllFamilyMemberEvents,
+    familyMemberEventsController.getAllFamilyMemberEvents
+  );
+
+  server.get(
+    '/api/familyMemberEvents/:idFamilyMemberEvent',
     familyMemberEventsController.getOneFamilyMemberEvent
   );
 
@@ -406,7 +410,7 @@ const setupRoutes = (server: Express) => {
   );
 
   server.delete(
-    '/api/partners/:idPartner,',
+    '/api/partners/:idPartner',
     partnersController.partnerExists,
     partnersController.deletePartner
   );
