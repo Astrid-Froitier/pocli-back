@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 const corsOptions: cors.CorsOptions = {
-  origin: ['http://localhost:3001', 'http://localhost:3000', 'https://pocli.vercel.app/'],
+  origin: ['http://localhost:3002', 'http://localhost:3000', 'https://pocli.vercel.app'],
   credentials: true,
 };
 

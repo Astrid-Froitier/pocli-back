@@ -33,6 +33,7 @@ const validateLinkedDocument = (
     idFamilyMember: Joi.number().allow(null),
     idFamily: Joi.number().allow(null),
     isOpened: Joi.number().allow(null),
+    linkType: Joi.string().allow(null),
     id: Joi.number().optional(), // pour react-admin
   }).validate(req.body, { abortEarly: false }).error;
   if (errors) {
@@ -74,10 +75,8 @@ const getAllLinkedDocumentsByIdFamily = (async (
   try {
     const { idFamily } = req.params;
     const linkedDocumentsByIdFamily =
-      await LinkedDocument.getAllLinkedDocumentsByIdFamily(
-        Number(idFamily)
-      );
-      linkedDocumentsByIdFamily
+      await LinkedDocument.getAllLinkedDocumentsByIdFamily(Number(idFamily));
+    linkedDocumentsByIdFamily
       ? res.status(200).json(linkedDocumentsByIdFamily)
       : res.sendStatus(404);
   } catch (err) {

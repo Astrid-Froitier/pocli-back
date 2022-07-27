@@ -411,7 +411,7 @@ VALUES
     ),
     (
         'Castillon-Pujols',
-        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2FCastillon%20Pujols.png?alt=media&token=dab82a55-7056-4d63-b0a3-5f012d78f708',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2Flogo%20castillon-pujols.jpeg?alt=media&token=64aa3d62-7ed9-45bd-a0ce-24511425ad07',
         'https://www.castillonpujols.fr/'
     ),
     (
@@ -426,7 +426,7 @@ VALUES
     ),
     (
         'MSA',
-        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2FMSA.jpg?alt=media&token=4fd10d4c-c7f7-4538-8636-24007e357040',
+        'https://firebasestorage.googleapis.com/v0/b/pocli-bbb50.appspot.com/o/Logos%20partenaires%2Flogo%20msa.png?alt=media&token=8bc290a2-d843-41ff-adcd-2db1aa6a1aa8',
         'https://www.msa.fr/'
     ),
     (
