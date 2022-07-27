@@ -52,7 +52,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 const calculateToken = (familyEmail = '', idFamily = 0) => {
   return jwt.sign(
     { email: familyEmail, id: idFamily },
-    process.env.PRIVATE_KEY as string
+    `${process.env.PRIVATE_KEY}` as string
   );
 };
 
@@ -86,7 +86,7 @@ const loginAdmin = async (req: Request, res: Response, next: NextFunction) => {
 const calculateTokenAdmin = (adminEmail = '', idAdmin = 0) => {
   return jwt.sign(
     { email: adminEmail, id: idAdmin },
-    process.env.PRIVATE_KEY as string
+    `${process.env.PRIVATE_KEY}` as string
   );
 };
 
@@ -103,7 +103,7 @@ const getCurrentSession = (req: Request, res: Response, next: NextFunction) => {
       myCookie.user_token || req.headers.authorization || '';
     req.userInfo = jwt.verify(
       token,
-      process.env.PRIVATE_KEY as string
+      `${process.env.PRIVATE_KEY}` as string
     ) as IFamilyInfo;
     if (req.userInfo === undefined) {
       next(new ErrorHandler(401, 'Unauthorized user, please login'));
