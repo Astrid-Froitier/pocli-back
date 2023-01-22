@@ -18,6 +18,18 @@ const getEventById = async (idEvent: number): Promise<IEvent> => {
   return results[0];
 };
 
+// const getEventByIdFamilyMemberEvent = async (
+//   idEvent: number
+// ): Promise<IEvent[]> => {
+//   const results = await connection
+//     .promise()
+//     .query<IEvent[]>(
+//       'SELECT * FROM events INNER JOIN familyMemberEvents ON events.id=familyMemberEvents.idEvent INNER JOIN familyMembers ON familyMemberEvents.idFamilyMember=familyMembers.id WHERE familyMembers.idFamily = ?',
+//       [idEvent]
+//     );
+//   return results[0];
+// };
+
 const getEventByPostType = async (idPostType: number): Promise<IEvent[]> => {
   const results = await connection
     .promise()
@@ -26,11 +38,11 @@ const getEventByPostType = async (idPostType: number): Promise<IEvent[]> => {
 };
 
 const getEventByActivity = async (idActivity: number): Promise<IEvent[]> => {
-    const results = await connection
-      .promise()
-      .query<IEvent[]>('SELECT * FROM events WHERE idActivity = ?', [idActivity]);
-    return results[0];
-  };
+  const results = await connection
+    .promise()
+    .query<IEvent[]>('SELECT * FROM events WHERE idActivity = ?', [idActivity]);
+  return results[0];
+};
 
 const addEvent = async (event: IEvent): Promise<number> => {
   const results = await connection
@@ -124,16 +136,20 @@ const deleteEvent = async (idEvent: number): Promise<boolean> => {
 const deleteEventByPostType = async (idPostType: number): Promise<boolean> => {
   const results = await connection
     .promise()
-    .query<ResultSetHeader>('DELETE FROM events WHERE idPostType = ?', [idPostType]);
+    .query<ResultSetHeader>('DELETE FROM events WHERE idPostType = ?', [
+      idPostType,
+    ]);
   return results[0].affectedRows > 1;
 };
 
 const deleteEventByActivity = async (idActivity: number): Promise<boolean> => {
-    const results = await connection
-      .promise()
-      .query<ResultSetHeader>('DELETE FROM events WHERE idActivity = ?', [idActivity]);
-    return results[0].affectedRows > 1;
-  };
+  const results = await connection
+    .promise()
+    .query<ResultSetHeader>('DELETE FROM events WHERE idActivity = ?', [
+      idActivity,
+    ]);
+  return results[0].affectedRows > 1;
+};
 
 export {
   getAllEvents,
@@ -141,6 +157,7 @@ export {
   updateEvent,
   deleteEvent,
   getEventById,
+  // getEventByIdFamilyMemberEvent,
   getEventByPostType,
   getEventByActivity,
   deleteEventByPostType,

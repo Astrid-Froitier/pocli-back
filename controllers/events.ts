@@ -101,7 +101,11 @@ const getAllEventsByActivity = (async (
 }) as RequestHandler;
 
 // checks if an event exists before update or delete
-const eventExists = (async (req: Request, res: Response, next: NextFunction) => {
+const eventExists = (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { idEvent } = req.params;
 
   const eventExists: IEvent = await Event.getEventById(Number(idEvent));
