@@ -5,6 +5,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "^19.4.0"
+  },
   "scripts": {
     "dev": "nodemon index.js",
     "ts": "tsc -w",
